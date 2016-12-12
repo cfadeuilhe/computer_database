@@ -3,16 +3,20 @@ import java.util.*;
 
 public class Computer {
 	
+	private int ID;
 	private String name;
+	private int manufacturerID;
 	private String manufacturer;
-	Date introductionDate;
-	Date discontinutionDate;
+	private Date introductionDate;
+	private Date discontinutionDate;
 	
 	
-	public Computer(String name, String manufacturer, Date introductionDate, Date discontinutionDate) {
+	public Computer(int ID,String name, int manufacturerID, String manufacturer, Date introductionDate, Date discontinutionDate) {
 		super();
+		this.ID = ID;
 		this.name = name;
 		this.manufacturer = manufacturer;
+		this.manufacturerID = manufacturerID;
 		this.introductionDate = introductionDate;
 		this.discontinutionDate = discontinutionDate;
 	}
@@ -21,23 +25,44 @@ public class Computer {
 		super();
 	}
 
-	public Computer(String name) {
+	public Computer(int ID, String name) {
 		super();
+		this.ID = ID;
 		this.name = name;
 	}
 	
+	public void setComputer(int ID, String name,int manufacturerID,Date introductionDate,Date discontinutionDate){
+		this.ID = ID;
+		this.name = name;
+		this.manufacturerID = manufacturerID;
+		this.introductionDate = introductionDate;
+		this.discontinutionDate = discontinutionDate;
+	}
+
+	public int getID() {
+		return ID;
+	}
+	public void setID(int ID) {
+		this.ID = ID;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	public int getManufacturerID() {
+		return manufacturerID;
+	}
+	public void setManufacturerID(int manufacturerID) {
+		this.manufacturerID = manufacturerID;
+	}/*
 	public String getManufacturer() {
 		return manufacturer;
 	}
 	public void setManufacturer(String manufacturer) {
 		this.manufacturer = manufacturer;
-	}
+	}*/
 	public Date getIntroductionDate() {
 		return introductionDate;
 	}
@@ -53,7 +78,7 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return "Computer [name=" + name + ", manufacturer=" + manufacturer + ", introductionDate=" + introductionDate
-				+ ", discontinutionDate=" + discontinutionDate + "]";
+		return "\nComputer n°"+ ID +": [Name=" + name + ", Manufacturer=" + ((manufacturer != null)?manufacturer:"Unknown manufacturer") + ", Introduced on=" + ((introductionDate != null)?introductionDate.toString():"Date undefined")
+				+ ", Discontinued on=" + ((discontinutionDate != null)?discontinutionDate.toString():"Date undefined") + "]";
 	}
 }

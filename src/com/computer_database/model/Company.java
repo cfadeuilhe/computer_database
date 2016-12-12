@@ -2,24 +2,25 @@ package com.computer_database.model;
 
 public class Company {
 
-	String name;
+	private int ID;
+	private String name;
 
 	
 	
-	public Company(String name) {
+	public Company(int ID, String name) {
 		super();
+		this.ID = ID;
 		this.name = name;
 	}
-
+	public int getID() {
+		return ID;
+	}
 	public String getName() {
 		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	@Override
 	public String toString() {
-		return "Company [name=" + name + "]";
+		return "\nCompany n°"+ID+" -> " + name;
 	}
 }

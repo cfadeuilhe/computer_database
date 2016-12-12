@@ -1,42 +1,80 @@
 package com.computer_database.userinterface;
 import java.io.*;
+import java.text.*;
+import java.util.Date;
+
 import com.computer_database.persistence.ReadDataBase;
+import com.computer_database.persistence.WriteDataBase;
 
 public class interfaceMenu {
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		int choix;
-		
+	public static void main(String[] args) throws IOException, ParseException {
+		String userChoice, choiceName, choiceManuf, choiceIntroDate, choiceDiscoDate;
+		Date intro=null, disco=null;
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	  do{	
-		System.out.println("Menu :\n1) List computers\n2) List companies\n3) Show computer details\n4) Create a computer\n5)Update a computer\n6) Delete a computer");
-		choix = reader.read();
-		
-		switch(choix){
-		case 1: //List computers
+		System.out.println("Menu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) Quit");
+		userChoice = reader.readLine();
+		switch(userChoice){
+		case "1": //List computers
 			ReadDataBase.listComputers();
 			break;
-		case 2: //List companies
+		case "2": //List companies
 			ReadDataBase.listCompanies();
 			break;
-		case 3: //Show computer details (info of one specific computer)
+		case "3": //Show computer details (info of one specific computer)
+			System.out.println("Enter computer ID [There are currently "+ReadDataBase.numberOfComputers()+" computers in the database]");
+			userChoice = reader.readLine();
+			ReadDataBase.showComputerDetails(Integer.parseInt(userChoice));
+			break;
+		case "4": //Create a computer
+			do{
+			System.out.println("Enter name (mandatory)");
+			choiceName = reader.readLine();
+			}while(choiceName.equals(""));
+			System.out.println("Enter manufacturer from the following list :");
+			ReadDataBase.listCompanies();
+			choiceManuf = reader.readLine();
+			System.out.println("Enter introduction date. [dd/mm/yyyy] t) for today's date");
+			choiceIntroDate = reader.readLine();
+			if(choiceIntroDate.equals("t")){
+				intro = new Date();
+			}else if(choiceIntroDate.equals("")){
+				intro = null;
+			}else{
+				intro = df.parse(choiceIntroDate);
+			}
+			System.out.println("Enter discontinution date. [dd/mm/yyyy] t) for today's date");
+			choiceDiscoDate = reader.readLine();
+			if(choiceDiscoDate.equals("t")){
+				disco = new Date();
+			}else if(choiceDiscoDate.equals("")){
+				disco = null;
+			}else{
+				disco = df.parse(choiceDiscoDate);
+			} 
+			WriteDataBase.createComputer(choiceName, Integer.parseInt(choiceManuf), intro, disco);
 			
 			break;
-		case 4: //Create a computer
-			
+		case "5": //Update a computer
+			System.out.println("Enter id of computer to update (0 to "+ReadDataBase.numberOfComputers()+")");
+			userChoice = reader.readLine();
+			WriteDataBase.updateComputer(Integer.parseInt(userChoice));
 			break;
-		case 5: //Update a computer
-			
+		case "6": //Delete a computer
+			System.out.println("Enter id of the computer to delete");
+			userChoice = reader.readLine();
+			WriteDataBase.deleteComputer(Integer.parseInt(userChoice));
 			break;
-		case 6: //Delete a computer
-			
+		case "7": //Quit
+			System.out.println("Bubye :)");
 			break;
 		default:
-			System.out.println("try again");
+			System.out.println("try again, stupid");
 			break;
 		}
-	  }while(choix != 7);
+	  }while(!userChoice.equals("7"));
 	}
 
 }
