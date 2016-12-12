@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.computer_database.persistence.ReadDataBase;
 import com.computer_database.persistence.WriteDataBase;
+import com.computer_database.service.Page;
 
 public class interfaceMenu {
 
@@ -14,7 +15,7 @@ public class interfaceMenu {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	  do{	
-		System.out.println("Menu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) Quit");
+		System.out.println("Menu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) By Pages\n\t8) Quit");
 		userChoice = reader.readLine();
 		switch(userChoice){
 		case "1": //List computers
@@ -67,7 +68,14 @@ public class interfaceMenu {
 			userChoice = reader.readLine();
 			WriteDataBase.deleteComputer(Integer.parseInt(userChoice));
 			break;
-		case "7": //Quit
+		case "7": //Pages
+			System.out.println("Enter the number of elements per page wanted");
+			userChoice = reader.readLine();
+			System.out.println("Enter the number of the page to display");
+			String choicePage = reader.readLine();
+			Page.listXElements("computer", Integer.parseInt(userChoice), Integer.parseInt(choicePage));
+			break;
+		case "8": //Quit
 			System.out.println("Bubye :)");
 			break;
 		default:
