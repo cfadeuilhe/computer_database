@@ -1,4 +1,6 @@
 package com.computer_database.model;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Computer {
@@ -78,7 +80,8 @@ public class Computer {
 	
 	@Override
 	public String toString() {
-		return "\nComputer n°"+ ID +": [Name=" + name + ", Manufacturer=" + ((manufacturer != null)?manufacturer:"Unknown manufacturer") + ", Introduced on=" + ((introductionDate != null)?introductionDate.toString():"Date undefined")
-				+ ", Discontinued on=" + ((discontinutionDate != null)?discontinutionDate.toString():"Date undefined") + "]";
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		return "\nComputer n°"+ ID +": [Name=" + name + ", Manufacturer=" + ((manufacturer != null)?manufacturer:"Unknown manufacturer") + ", Introduced on=" + ((introductionDate != null)?df.format(introductionDate):"Date undefined")
+				+ ", Discontinued on=" + ((discontinutionDate != null)?df.format(discontinutionDate):"Date undefined") + "]";
 	}
 }

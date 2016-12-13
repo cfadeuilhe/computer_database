@@ -24,7 +24,7 @@ public class WriteDataBase {
 	}
 	
 	public static void createComputer(String name, int manufID, Date intro, Date disco){
-		Computer c = new Computer(ReadDataBase.lastComputerId()+1,name, manufID, "", null, null);
+		Computer c = new Computer(ReadDataBase.lastComputerId()+1,name, manufID, ReadDataBase.getManufacturer(manufID), intro, disco);
 		write(c,"create");
 	}public static void createComputer(String name){
 		Computer c = new Computer(ReadDataBase.lastComputerId()+1,name);
@@ -111,7 +111,7 @@ public class WriteDataBase {
 				Date dD=c.getDiscontinutionDate();if(dD==null){dDS=null;} else {dDS="'"+df.format(dD)+"'";}
 				
 				sql = ("INSERT INTO computer VALUES ("+(ReadDataBase.lastComputerId()+1)+",'"+c.getName()+"',"+dIS+","+dDS+","+((manufID==0)?null:manufID)+");");
-				System.out.println(sql);
+				//System.out.println(sql);
 				st.executeUpdate(sql);
 				System.out.print("New Computer :"+c);
 				break;

@@ -60,6 +60,42 @@ public class ReadDataBase {
 		return list.size();
 	}
 	
+	public static String getManufacturer(int id){
+		String url = "jdbc:mysql://localhost/computer-database-db";
+		String login = "admincdb";
+		String password = "qwerty1234";
+		Connection cn = null; 
+		Statement st = null; 
+		ResultSet rs = null;
+		String manuf=null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			cn = DriverManager.getConnection(url, login, password);
+			st = cn.createStatement();
+			String sqlManu = "SELECT * FROM company WHERE id="+id;
+			Statement stB = null; ResultSet rsB = null;
+			//stB = cn.createStatement(); 
+			rs = st.executeQuery(sqlManu);
+			rs.next();
+			manuf = rs.getString("name");
+		}catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				cn.close();
+				st.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return manuf;
+	}
+	
 	public static void read(List<Computer> list, List<Company> listB, String tableToRead, int id){
 		
 		String url = "jdbc:mysql://localhost/computer-database-db";
