@@ -4,10 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-public class Computer {
+public class Computer extends Entity {
 
-	private long id;
-	private String name;
 	private Company company;
 	private LocalDate introducedDate;
 	private LocalDate discontinuedDate;
@@ -18,23 +16,6 @@ public class Computer {
 		this.company = builder.company;
 		this.introducedDate = builder.introducedDate;
 		this.discontinuedDate = builder.discontinuedDate;
-	}
-
-	public Computer() {
-	}
-
-	public Computer(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public void setComputer(long id, String name, Company company, LocalDate introducedDate,
-			LocalDate discontinuedDate) {
-		this.id = id;
-		this.name = name;
-		this.company = company;
-		this.introducedDate = introducedDate;
-		this.discontinuedDate = discontinuedDate;
 	}
 
 	public long getid() {

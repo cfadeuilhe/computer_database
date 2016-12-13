@@ -1,9 +1,6 @@
 package com.computer_database.model;
 
-public class Company {
-
-	private long id;
-	private String name;
+public class Company extends Entity{
 
 	public Company(long id, String name) {
 		this.id = id;
@@ -18,8 +15,8 @@ public class Company {
 		return id;
 	}
 
-	public void setid(int id) {
-		id = id;
+	public void setid(long id) {
+		this.id = id;
 	}
 
 	public void setName(String name) {
