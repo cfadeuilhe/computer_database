@@ -1,7 +1,5 @@
 package com.computer_database.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 public class Computer extends Entity {
@@ -60,11 +58,9 @@ public class Computer extends Entity {
 
 	@Override
 	public String toString() {
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		return "\nComputer n°" + id + ": [Name=" + name + ", Company="
-				+ ((company != null) ? company.getName() : "Company unknown") + ", Introduced on="
-				+ ((introducedDate != null) ? df.format(introducedDate) : "Date undefined") + ", Discontinued on="
-				+ ((discontinuedDate != null) ? df.format(discontinuedDate) : "Date undefined") + "]";
+		return "\nComputer n°" + id + ": [Name=" + name + ", Company=" + ((company != null) ? company.getName() : "XX")
+				+ ", Introduced=" + ((introducedDate != null) ? (introducedDate) : "XX") + ", Discontinued="
+				+ ((discontinuedDate != null) ? (discontinuedDate) : "XX") + "]";
 	}
 
 	@Override
