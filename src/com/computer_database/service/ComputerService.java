@@ -1,56 +1,39 @@
 package com.computer_database.service;
 
-import java.sql.*;
 import java.util.*;
 
 import com.computer_database.model.Computer;
 import com.computer_database.model.Entity;
 import com.computer_database.model.Page;
 import com.computer_database.persistence.ComputerDAO;
-import com.computer_database.persistence.ConnectionDAO;
 
 public class ComputerService {
 
-	ComputerDAO computerDAO = new ComputerDAO();
-	ConnectionDAO connection = new ConnectionDAO();
+	private final static ComputerDAO COMPUTER_DAO = new ComputerDAO();
 
 	public List<Entity> listComputers() {
 		List<Entity> list = new ArrayList<Entity>();
-		Statement st = null;
-		st = connection.getConnection();
-		list = computerDAO.read(st);
-		connection.closeConnection();
+		list = COMPUTER_DAO.read();
 		return list;
 	}
 
 	public List<Entity> readPages(Page p) {
 		List<Entity> list = new ArrayList<Entity>();
-		Statement st = null;
-		st = connection.getConnection();
-		list = computerDAO.readPages(st, p);
-		connection.closeConnection();
+		list = COMPUTER_DAO.readPages(p);
 		return list;
 	}
 
 	public Computer read(long id) {
-		Statement st = null;
-		st = connection.getConnection();
-		Computer c = computerDAO.readOne(st, id);
-		connection.closeConnection();
+		Computer c = COMPUTER_DAO.readOne(id);
 		return c;
 	}
 
 	public void create(Computer computer) {
-		Statement st = null;
-		st = connection.getConnection();
-		computerDAO.create(st, computer);
-		connection.closeConnection();
+		COMPUTER_DAO.create(computer);
 	}
 
 	public void update(long computerId, Computer computer) {
-		Statement st = null;
-		st = connection.getConnection();
-		Computer c = computerDAO.readOne(st, computerId);
+		Computer c = COMPUTER_DAO.readOne(computerId);
 		if (!c.equals(computer)) {
 			if (!c.getName().equals(computer.getName()))
 				c.setName(computer.getName());
@@ -64,15 +47,11 @@ public class ComputerService {
 				if (!c.getDiscontinuedDate().equals(computer.getDiscontinuedDate()))
 					c.setDiscontinuedDate(computer.getDiscontinuedDate());
 			}
-			computerDAO.update(st, computerId, c);
+			COMPUTER_DAO.update(computerId, c);
 		}
-		connection.closeConnection();
 	}
 
 	public void delete(long id) {
-		Statement st = null;
-		st = connection.getConnection();
-		computerDAO.delete(st, id);
-		connection.closeConnection();
+		COMPUTER_DAO.delete(id);
 	}
 }

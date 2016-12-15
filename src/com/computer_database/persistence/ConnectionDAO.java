@@ -13,9 +13,9 @@ import java.sql.Statement;
  */
 public class ConnectionDAO {
 
-	private final String URL = "jdbc:mysql://localhost/computer-database-db";
-	private final String LOGIN = "admincdb";
-	private final String PASSWORD = "qwerty1234";
+	private final static String URL = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
+	private final static String LOGIN = "admincdb";
+	private final static String PASSWORD = "qwerty1234";
 	private Connection cn = null;
 	private Statement st = null;
 
@@ -24,8 +24,10 @@ public class ConnectionDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e); // to exit program because driver not
-											// found
+			// Exit program because driver not found
+			System.out.println("Driver not found");
+			throw new RuntimeException(e);
+
 		}
 	}
 
