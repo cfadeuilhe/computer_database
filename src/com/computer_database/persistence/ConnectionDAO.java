@@ -3,7 +3,6 @@ package com.computer_database.persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * ConnectionDAO : management of the database connection
@@ -17,7 +16,6 @@ public class ConnectionDAO {
 	private final static String LOGIN = "admincdb";
 	private final static String PASSWORD = "qwerty1234";
 	private Connection cn = null;
-	private Statement st = null;
 
 	static {
 		try {
@@ -31,19 +29,18 @@ public class ConnectionDAO {
 		}
 	}
 
-	public Statement getConnection() {
+	public Connection getConnection() {
 		try {
 			cn = DriverManager.getConnection(URL, LOGIN, PASSWORD);
-			st = cn.createStatement();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Connection failed");
 		}
-		return st;
+		return cn;
 	}
 
 	public void closeConnection() {
 		try {
-			st.close();
 			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

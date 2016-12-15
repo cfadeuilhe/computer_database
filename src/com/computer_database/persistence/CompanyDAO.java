@@ -8,67 +8,72 @@ import com.computer_database.model.*;
 
 public class CompanyDAO implements InterfaceDAO {
 
+	private final static ConnectionDAO CONNECTION_FACTORY = new ConnectionDAO();
 	private final static RsToObjectMapper RS_TO_COMPUTER = new RsToObjectMapper();
 	private final static String SQL_READ = "SELECT * FROM company;";
-	private final static ConnectionDAO CONNECTION = new ConnectionDAO();
+	private final static String SQL_READ_PAGES = "SELECT * FROM company LIMIT ? OFFSET ?;";
+	private final static String SQL_READ_ONE = "SELECT * FROM company WHERE id=?;";
+	private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?');";
 
 	public List<Entity> read() {
-		Statement st = CONNECTION.getConnection();
+		Connection cn = CONNECTION_FACTORY.getConnection();
 		List<Entity> companyList = new ArrayList<Entity>();
-		try (ResultSet rs = st.executeQuery(SQL_READ)) {
+		try (PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery();) {
 			while (rs.next()) {
 				companyList.add(new Company(rs.getInt("id"), rs.getString("name")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("error in sql :" + SQL_READ);
+			System.out.println("mySQL error : " + SQL_READ);
 		}
-		CONNECTION.closeConnection();
+		CONNECTION_FACTORY.closeConnection();
 		return companyList;
 	}
 
 	public List<Entity> readPages(Page p) {
-		Statement st = CONNECTION.getConnection();
-		String sql = "SELECT * FROM company LIMIT " + p.getNbElementsPerPage() + " OFFSET "
-				+ (p.getPageNumber() * p.getNbElementsPerPage()) + ";";
+		Connection cn = CONNECTION_FACTORY.getConnection();
 		List<Entity> companyList = new ArrayList<Entity>();
-		try (ResultSet rs = st.executeQuery(sql)) {
+		try (PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES);) {
+			st.setLong(1, p.getNbElementsPerPage());
+			st.setLong(2, p.getOffset());
+			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				companyList.add(RS_TO_COMPUTER.rsToCompany(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("error in sql :" + sql);
+			System.out.println("mySQL error : " + SQL_READ_PAGES);
 		}
-		CONNECTION.closeConnection();
+		CONNECTION_FACTORY.closeConnection();
 		return companyList;
 	}
 
 	public Entity readOne(long id) {
-		Statement st = CONNECTION.getConnection();
-		String sql = "SELECT * FROM company WHERE id=" + id + ";";
+		Connection cn = CONNECTION_FACTORY.getConnection();
 		Company company = null;
-		try (ResultSet rs = st.executeQuery(sql)) {
+		try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE);) {
+			st.setLong(1, id);
+			ResultSet rs = st.executeQuery();
 			rs.next();
 			company = new Company(rs.getInt("id"), rs.getString("name"));
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("error in sql :" + sql);
+			System.out.println("mySQL error : " + SQL_READ_ONE);
 		}
-		CONNECTION.closeConnection();
+		CONNECTION_FACTORY.closeConnection();
 		return company;
 	}
 
 	public void create(Entity entity) {
-		Statement st = CONNECTION.getConnection();
+		Connection cn = CONNECTION_FACTORY.getConnection();
 		Company c = (Company) entity;
-		String sql = ("INSERT INTO company (name) VALUES ('" + c.getName() + "';");
-		try {
-			st.executeUpdate(sql);
+		try (PreparedStatement st = cn.prepareStatement(SQL_CREATE);) {
+			st.setString(1, c.getName());
+			st.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("error in sql :" + sql);
+			System.out.println("mySQL error : " + SQL_CREATE);
 		}
-		CONNECTION.closeConnection();
+		CONNECTION_FACTORY.closeConnection();
 	}
 }
