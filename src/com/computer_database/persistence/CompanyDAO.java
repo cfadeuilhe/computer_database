@@ -6,6 +6,12 @@ import java.util.*;
 import com.computer_database.mapper.RsToObjectMapper;
 import com.computer_database.model.*;
 
+/**
+ * Class CompanyDAO
+ * 
+ * @author juanita
+ *
+ */
 public class CompanyDAO implements InterfaceDAO {
 
 	private final static ConnectionDAO CONNECTION_FACTORY = new ConnectionDAO();
@@ -15,6 +21,11 @@ public class CompanyDAO implements InterfaceDAO {
 	private final static String SQL_READ_ONE = "SELECT * FROM company WHERE id=?;";
 	private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?');";
 
+	/**
+	 * read - get all Company from database
+	 * 
+	 * @return List<Company>
+	 */
 	public List<Entity> read() {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		List<Entity> companyList = new ArrayList<Entity>();
@@ -30,6 +41,12 @@ public class CompanyDAO implements InterfaceDAO {
 		return companyList;
 	}
 
+	/**
+	 * readPages - sort by pages and return a specific page
+	 * 
+	 * @param Page
+	 * @return List<Company>
+	 */
 	public List<Entity> readPages(Page p) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		List<Entity> companyList = new ArrayList<Entity>();
@@ -48,6 +65,12 @@ public class CompanyDAO implements InterfaceDAO {
 		return companyList;
 	}
 
+	/**
+	 * readOne - get a specific Company from database
+	 * 
+	 * @param id
+	 * @return Company
+	 */
 	public Entity readOne(long id) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Company company = null;
@@ -64,6 +87,11 @@ public class CompanyDAO implements InterfaceDAO {
 		return company;
 	}
 
+	/**
+	 * create - new Company in database
+	 * 
+	 * @param Company
+	 */
 	public void create(Entity entity) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Company c = (Company) entity;

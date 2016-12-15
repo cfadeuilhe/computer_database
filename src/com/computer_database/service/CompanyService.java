@@ -7,6 +7,12 @@ import com.computer_database.model.Company;
 import com.computer_database.model.Entity;
 import com.computer_database.persistence.CompanyDAO;
 
+/**
+ * class CompanuService
+ * 
+ * @author juanita
+ *
+ */
 public class CompanyService {
 
 	private final static CompanyDAO COMPANY_DAO = new CompanyDAO();

@@ -6,8 +6,15 @@ import java.util.*;
 import com.computer_database.mapper.RsToObjectMapper;
 import com.computer_database.model.*;
 
+/**
+ * class ComputerDAO
+ * 
+ * @author juanita
+ *
+ */
 public class ComputerDAO implements InterfaceDAO {
 
+	private final static ConnectionDAO CONNECTION_FACTORY = new ConnectionDAO();
 	private final static RsToObjectMapper RS_TO_COMPUTER = new RsToObjectMapper();
 	private final static String SQL_READ = "SELECT * FROM computer;";
 	private final static String SQL_READ_PAGES = "SELECT * FROM computer LIMIT ? OFFSET ?;";
@@ -16,17 +23,15 @@ public class ComputerDAO implements InterfaceDAO {
 	private final static String SQL_UPDATE = ("UPDATE computer SET name=\"?\", introduced=?, discontinued=?, company_id=? WHERE id=?;");
 	private final static String SQL_DELETE = ("DELETE FROM computer WHERE id=?;");
 
-	private final static ConnectionDAO CONNECTION_FACTORY = new ConnectionDAO();
-
 	/**
-	 * read database
+	 * read - get all Computer from database
 	 * 
-	 * @return list of entities (computers)
+	 * @return List<Computer>
 	 */
 	public List<Entity> read() {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		List<Entity> computerList = new ArrayList<Entity>();
-		try (PreparedStatement st = cn.prepareStatement(SQL_READ); ) {
+		try (PreparedStatement st = cn.prepareStatement(SQL_READ);) {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				computerList.add(RS_TO_COMPUTER.rsToComputer(rs));
@@ -39,6 +44,12 @@ public class ComputerDAO implements InterfaceDAO {
 		return computerList;
 	}
 
+	/**
+	 * readPages - sort by pages and return a specific page
+	 * 
+	 * @param Page
+	 * @return List<Computer>
+	 */
 	public List<Entity> readPages(Page p) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		List<Entity> computerList = new ArrayList<Entity>();
@@ -59,7 +70,13 @@ public class ComputerDAO implements InterfaceDAO {
 		return computerList;
 	}
 
-	public Computer readOne(long id) {
+	/**
+	 * readOne - get a specific Computer from database
+	 * 
+	 * @param id
+	 * @return Computer
+	 */
+	public Entity readOne(long id) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Computer computer = null;
 		try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
@@ -75,6 +92,11 @@ public class ComputerDAO implements InterfaceDAO {
 		return computer;
 	}
 
+	/**
+	 * create - new Computer in database
+	 * 
+	 * @param Computer
+	 */
 	public void create(Entity entity) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Computer computer = (Computer) entity;
@@ -91,6 +113,12 @@ public class ComputerDAO implements InterfaceDAO {
 		CONNECTION_FACTORY.closeConnection();
 	}
 
+	/**
+	 * update - update a certain Computer in database
+	 * 
+	 * @param id
+	 * @param Computer
+	 */
 	public void update(long id, Entity entity) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Computer computer = (Computer) entity;
@@ -111,6 +139,11 @@ public class ComputerDAO implements InterfaceDAO {
 		CONNECTION_FACTORY.closeConnection();
 	}
 
+	/**
+	 * delete - delete a certain Computer from database
+	 * 
+	 * @param id
+	 */
 	public void delete(long id) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		try (PreparedStatement st = cn.prepareStatement(SQL_DELETE)) {

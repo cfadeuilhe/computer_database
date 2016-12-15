@@ -7,13 +7,18 @@ import com.computer_database.model.*;
 import com.computer_database.model.Computer.ComputerBuilder;
 import com.computer_database.service.CompanyService;
 
+/**
+ * class RsToObjectMapper
+ * @author juanita
+ *
+ */
 public class RsToObjectMapper {
 
 	/**
 	 * Mapper from ResultSet to Computer
 	 * 
-	 * @param rs
-	 * @return
+	 * @param ResultSet
+	 * @return Computer
 	 */
 	public Computer rsToComputer(ResultSet rs) {
 		ComputerBuilder cBuilder = new ComputerBuilder();
@@ -26,7 +31,8 @@ public class RsToObjectMapper {
 			cBuilder.id(rs.getInt("id")).name(rs.getString("name")).company(company);
 			if (rs.getDate("introduced") != null) {
 				cBuilder.introducedDate(rs.getDate("introduced").toLocalDate());
-			}if (rs.getDate("discontinued") != null) {
+			}
+			if (rs.getDate("discontinued") != null) {
 				cBuilder.discontinuedDate(rs.getDate("discontinued").toLocalDate());
 			}
 		} catch (SQLException e) {
@@ -35,6 +41,12 @@ public class RsToObjectMapper {
 		return cBuilder.build();
 	}
 
+	/**
+	 * Mapper from ResultSet to Company
+	 * 
+	 * @param ResultSet
+	 * @return Company
+	 */
 	public Company rsToCompany(ResultSet rs) {
 		Company company = new Company();
 		try {

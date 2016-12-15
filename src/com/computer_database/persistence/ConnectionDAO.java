@@ -29,6 +29,11 @@ public class ConnectionDAO {
 		}
 	}
 
+	/**
+	 * getConnection (to sql database)
+	 * 
+	 * @return Connection
+	 */
 	public Connection getConnection() {
 		try {
 			cn = DriverManager.getConnection(URL, LOGIN, PASSWORD);
@@ -39,6 +44,9 @@ public class ConnectionDAO {
 		return cn;
 	}
 
+	/**
+	 * closeConnection
+	 */
 	public void closeConnection() {
 		try {
 			cn.close();

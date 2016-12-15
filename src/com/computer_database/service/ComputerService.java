@@ -7,33 +7,68 @@ import com.computer_database.model.Entity;
 import com.computer_database.model.Page;
 import com.computer_database.persistence.ComputerDAO;
 
+/**
+ * class ComputerService
+ * 
+ * @author juanita
+ *
+ */
 public class ComputerService {
 
 	private final static ComputerDAO COMPUTER_DAO = new ComputerDAO();
 
+	/**
+	 * listComputers - call DAO to get the list of all Computer from database
+	 * 
+	 * @return List<Computer>
+	 */
 	public List<Entity> listComputers() {
 		List<Entity> list = new ArrayList<Entity>();
 		list = COMPUTER_DAO.read();
 		return list;
 	}
 
+	/**
+	 * readPages - call DAO to get a specific Page of Computer from database
+	 * 
+	 * @param Page
+	 * @return List<Computer>
+	 */
 	public List<Entity> readPages(Page p) {
 		List<Entity> list = new ArrayList<Entity>();
 		list = COMPUTER_DAO.readPages(p);
 		return list;
 	}
 
-	public Computer read(long id) {
-		Computer c = COMPUTER_DAO.readOne(id);
+	/**
+	 * readOne - call DAO to get a specific Computer from database
+	 * 
+	 * @param id
+	 * @return Computer
+	 */
+	public Computer readOne(long id) {
+		Computer c = (Computer) COMPUTER_DAO.readOne(id);
 		return c;
 	}
 
+	/**
+	 * create - call DAO to create a new Computer in database
+	 * 
+	 * @param Computer
+	 */
 	public void create(Computer computer) {
 		COMPUTER_DAO.create(computer);
 	}
 
-	public void update(long computerId, Computer computer) {
-		Computer c = COMPUTER_DAO.readOne(computerId);
+	/**
+	 * update - sets the Computer object, then calls DAO to update a specific
+	 * Computer in database
+	 * 
+	 * @param id
+	 * @param Computer
+	 */
+	public void update(long id, Computer computer) {
+		Computer c = (Computer) COMPUTER_DAO.readOne(id);
 		if (!c.equals(computer)) {
 			if (!c.getName().equals(computer.getName()))
 				c.setName(computer.getName());
@@ -47,10 +82,15 @@ public class ComputerService {
 				if (!c.getDiscontinuedDate().equals(computer.getDiscontinuedDate()))
 					c.setDiscontinuedDate(computer.getDiscontinuedDate());
 			}
-			COMPUTER_DAO.update(computerId, c);
+			COMPUTER_DAO.update(id, c);
 		}
 	}
 
+	/**
+	 * delete - call DAO to delete a specific Computer from database
+	 * 
+	 * @param id
+	 */
 	public void delete(long id) {
 		COMPUTER_DAO.delete(id);
 	}

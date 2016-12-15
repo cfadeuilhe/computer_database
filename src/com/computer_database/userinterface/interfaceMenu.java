@@ -22,12 +22,18 @@ public class interfaceMenu {
 		switchMenu();
 	}
 
+	/**
+	 * switchMenu - main menu of the program
+	 * 
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public static void switchMenu() throws IOException, ParseException {
-		String userChoice, choicePage;
+		String userInput, userInputPage;
 		do {
-			userChoice = askUser(
+			userInput = askUser(
 					"Menu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) By Pages\n\t8) Quit");
-			switch (userChoice) {
+			switch (userInput) {
 			case "1": // List computers
 				System.out.println(COMPUTER_SERVICE.listComputers());
 				break;
@@ -37,62 +43,48 @@ public class interfaceMenu {
 			case "3": // Show computer details (info of one specific computer)
 				// VALIDATION : is userChoice an integer ?
 				do {
-					userChoice = askUser("Enter computer ID");
-				} while (!validateStringToInt(userChoice));
+					userInput = askUser("Enter computer ID");
+				} while (!validateStringToInt(userInput));
 
-				System.out.println((COMPUTER_SERVICE.read(Integer.parseInt(userChoice)) != null)
-						? (COMPUTER_SERVICE.read(Integer.parseInt(userChoice))) : ("Unknown ID"));
+				System.out.println((COMPUTER_SERVICE.readOne(Integer.parseInt(userInput)) != null)
+						? (COMPUTER_SERVICE.readOne(Integer.parseInt(userInput))) : ("Unknown ID"));
 				break;
 			case "4": // Create a computer
 				createComputer();
 				break;
 			case "5": // Update a computer
 				do {
-					userChoice = askUser("Enter id of computer to update");
-				} while (!validateStringToInt(userChoice));
-				updateComputer(Integer.parseInt(userChoice));
+					userInput = askUser("Enter id of computer to update");
+				} while (!validateStringToInt(userInput));
+				updateComputer(Integer.parseInt(userInput));
 				break;
 			case "6": // Delete a computer
 				do {
-					userChoice = askUser("Enter id of the computer to delete");
-				} while (!validateStringToInt(userChoice));
-				deleteComputer(Integer.parseInt(userChoice));
+					userInput = askUser("Enter id of the computer to delete");
+				} while (!validateStringToInt(userInput));
+				deleteComputer(Integer.parseInt(userInput));
 				break;
 			case "7": // Pages
 				do {
-					userChoice = askUser("Enter the number of elements per page wanted");
-				} while (!validateStringToInt(userChoice));
+					userInput = askUser("Enter the number of elements per page wanted");
+				} while (!validateStringToInt(userInput));
 				do {
-					choicePage = askUser("Enter the number of the page to display");
-				} while (!validateStringToInt(choicePage));
+					userInputPage = askUser("Enter the number of the page to display");
+				} while (!validateStringToInt(userInputPage));
 				Page p = new Page();
-				p.setNbElementsPerPage(Integer.parseInt(userChoice));
-				p.setPageNumber(Integer.parseInt(choicePage));
+				p.setNbElementsPerPage(Integer.parseInt(userInput));
+				p.setPageNumber(Integer.parseInt(userInputPage));
 				System.out.println(p);
 				showPage(p);
 				break;
 			case "8": // Quit
-				printString("Bubye :)");
+				System.out.println("Bubye :)");
 				break;
 			default:
-				printString("try again, stupid");
+				System.out.println("try again, stupid");
 				break;
 			}
-		} while (!userChoice.equals("8"));
-	}
-
-	public static boolean validateStringToInt(String userChoice) {
-		try {
-			Integer.parseInt(userChoice);
-		} catch (NumberFormatException e) {
-			printString("You must enter a number..");
-			return false;
-		}
-		if (Integer.parseInt(userChoice) <= 0) {
-			printString("Number must be > 0");
-			return false;
-		}
-		return true;
+		} while (!userInput.equals("8"));
 	}
 
 	public static void createComputer() {
@@ -103,17 +95,27 @@ public class interfaceMenu {
 		COMPUTER_SERVICE.delete(id);
 	}
 
+	/**
+	 * showPage
+	 * 
+	 * @param Page
+	 */
 	public static void showPage(Page p) {
 		System.out.println((COMPUTER_SERVICE.readPages(p).isEmpty()) ? "You reached the end of the database"
 				: COMPUTER_SERVICE.readPages(p));
 		pagesMenu(p);
 	}
 
+	/**
+	 * pagesMenu - pageable feature
+	 * 
+	 * @param Page
+	 */
 	public static void pagesMenu(Page p) {
 		String newNumber;
-		String userChoice = askUser(
+		String userInput = askUser(
 				"Choose an option: \n\tp- for previous page, \n\tn- next page, \n\to- other page, \n\tc- change nb of elements, \n\tq- quit");
-		switch (userChoice) {
+		switch (userInput) {
 		case "p":
 			if (p.getPageNumber() > 1) {
 				p.setPageNumber(p.getPageNumber() - 1);
@@ -155,17 +157,42 @@ public class interfaceMenu {
 		}
 	}
 
+	/**
+	 * validateStringToInt - validate user input
+	 * 
+	 * @param String
+	 *            userInput
+	 * @return boolean
+	 */
+	public static boolean validateStringToInt(String userInput) {
+		try {
+			Integer.parseInt(userInput);
+		} catch (NumberFormatException e) {
+			System.out.println("You must enter a number..");
+			return false;
+		}
+		if (Integer.parseInt(userInput) <= 0) {
+			System.out.println("Number must be > 0");
+			return false;
+		}
+		return true;
+	}
+
 	public static void updateComputer(long userChoice) {
 		COMPUTER_SERVICE.update(userChoice, askComputerDetails());
 	}
 
+	/**
+	 * askComputerDetails - creates new Computer with user inputs
+	 * 
+	 * @return Computer
+	 */
 	public static Computer askComputerDetails() {
 		String choiceName, choiceCompany, choiceIntroDate, choiceDiscoDate;
 		LocalDate intro, disco;
 		do {
 			choiceName = askUser("Enter name (mandatory)");
 		} while (choiceName.equals(""));
-		// lister les companies ?
 		System.out.println(COMPANY_SERVICE.listCompanies());
 		choiceCompany = askUser("Choose a company from the previous list.");
 		Company c = COMPANY_SERVICE.readOne(Integer.parseInt(choiceCompany));
@@ -177,27 +204,37 @@ public class interfaceMenu {
 		return COMPUTER_BUILDER.name(choiceName).company(c).introducedDate(intro).discontinuedDate(disco).build();
 	}
 
+	/**
+	 * askUser - get user input
+	 * 
+	 * @param String
+	 *            question
+	 * @return userInput
+	 */
 	public static String askUser(String question) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		printString(question);
-		String result = null;
+		System.out.println(question);
+		String userInput = null;
 		try {
 			do {
-				result = reader.readLine();
-				if (result == null || result.isEmpty()) {
+				userInput = reader.readLine();
+				if (userInput == null || userInput.isEmpty()) {
 					System.out.println("Invalid input.");
 				}
-			} while (result == null || result.isEmpty());
+			} while (userInput == null || userInput.isEmpty());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return userInput;
 	}
 
-	public static void printString(String toPrint) {
-		System.out.println(toPrint);
-	}
-
+	/**
+	 * formatDate
+	 * 
+	 * @param String
+	 *            date
+	 * @return LocalDate
+	 */
 	public static LocalDate formatDate(String date) {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate dateResult;
