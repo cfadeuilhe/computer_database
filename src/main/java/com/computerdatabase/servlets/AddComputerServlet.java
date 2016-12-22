@@ -65,6 +65,9 @@ public class AddComputerServlet extends HttpServlet {
 		
 		ComputerDto computerDto = COMPUTER_MAPPER.computerToDto(computer);
 
+		//VALIDATION
+		
+		
 		COMPUTER_SERVICE.create(computerDto);
 
 		List<Entity> list = new ArrayList<Entity>();
