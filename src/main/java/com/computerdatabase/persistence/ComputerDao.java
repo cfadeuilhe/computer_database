@@ -19,9 +19,9 @@ public class ComputerDao implements InterfaceDao {
 	private final static String SQL_READ = "SELECT * FROM computer;";
 	private final static String SQL_READ_PAGES = "SELECT * FROM computer LIMIT ? OFFSET ?;";
 	private final static String SQL_READ_ONE = "SELECT * FROM computer WHERE id=?;";
-	private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES ('?','?','?',?);";
-	private final static String SQL_UPDATE = ("UPDATE computer SET name=\"?\", introduced=?, discontinued=?, company_id=? WHERE id=?;");
-	private final static String SQL_DELETE = ("DELETE FROM computer WHERE id=?;");
+	private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?);";
+	private final static String SQL_UPDATE = "UPDATE computer SET name=\"?\", introduced=?, discontinued=?, company_id=? WHERE id=?;";
+	private final static String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
 
 	/**
 	 * read - get all Computer from database
@@ -102,13 +102,26 @@ public class ComputerDao implements InterfaceDao {
 		Computer computer = (Computer) entity;
 		try (PreparedStatement st = cn.prepareStatement(SQL_CREATE)) {
 			st.setString(1, computer.getName());
-			st.setString(2, computer.getIntroducedDate().toString());
-			st.setString(3, computer.getDiscontinuedDate().toString());
-			st.setLong(4, computer.getCompany().getid());
+			if (computer.getIntroducedDate() != null) {
+				st.setString(2, computer.getIntroducedDate().toString());
+			} else {
+				st.setString(2, null);
+			}
+			if (computer.getDiscontinuedDate() != null) {
+				st.setString(3, computer.getDiscontinuedDate().toString());
+				System.out.println(computer.getDiscontinuedDate());
+			} else {
+				st.setString(3, null);
+			}
+			if (computer.getCompany() != null && computer.getCompany().getid() != 0) {
+				st.setLong(4, computer.getCompany().getid());
+			} else {
+				st.setString(4, null);
+			}
 			st.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("error in sql :" + SQL_CREATE);
+			System.out.println("error in sql when creating computer");
 		}
 		CONNECTION_FACTORY.closeConnection();
 	}

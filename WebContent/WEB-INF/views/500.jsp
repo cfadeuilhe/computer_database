@@ -4,14 +4,14 @@
 	<title>Computer Database</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Bootstrap -->
-	<link href="/computer_database/css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="/computer_database/css/font-awesome.css" rel="stylesheet" media="screen">
-	<link href="/computer_database/css/main.css" rel="stylesheet" media="screen">
+	<link href="/computerdatabase/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/computerdatabase/css/font-awesome.css" rel="stylesheet" media="screen">
+	<link href="/computerdatabase/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
 		</div>
 	</header>
 
@@ -25,9 +25,9 @@
 		</div>
 	</section>
 
-	<script src="/computer_database/js/jquery.min.js"></script>
-	<script src="/computer_database/js/bootstrap.min.js"></script>
-	<script src="/computer_database/js/dashboard.js"></script>
+	<script src="/computerdatabase/js/jquery.min.js"></script>
+	<script src="/computerdatabase/js/bootstrap.min.js"></script>
+	<script src="/computerdatabase/js/dashboard.js"></script>
 
 </body>
 </html>

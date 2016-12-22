@@ -84,7 +84,7 @@ public class InterfaceMenu {
 	}
 
 	public void createComputer() {
-		COMPUTER_SERVICE.create(askComputerDetails());
+		//COMPUTER_SERVICE.create(askComputerDetails());
 	}
 
 	public void deleteComputer(long id) {

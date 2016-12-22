@@ -35,15 +35,34 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
-			<version>1.2.1</version>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>8.5.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.5</version>
+			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>

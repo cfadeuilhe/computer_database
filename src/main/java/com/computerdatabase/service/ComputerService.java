@@ -2,9 +2,12 @@ package main.java.com.computerdatabase.service;
 
 import java.util.*;
 
+import main.java.com.computerdatabase.dtos.ComputerDto;
+import main.java.com.computerdatabase.mapper.Mapper;
 import main.java.com.computerdatabase.model.Computer;
 import main.java.com.computerdatabase.model.Entity;
 import main.java.com.computerdatabase.model.Page;
+import main.java.com.computerdatabase.model.Computer.ComputerBuilder;
 import main.java.com.computerdatabase.persistence.ComputerDao;
 
 /**
@@ -16,7 +19,8 @@ import main.java.com.computerdatabase.persistence.ComputerDao;
 public class ComputerService {
 
 	private ComputerDao COMPUTER_DAO = new ComputerDao();
-
+	private final Mapper COMPUTER_MAPPER = new Mapper();
+	
     public ComputerService(ComputerDao computerDao) {
         this.COMPUTER_DAO = computerDao;
     }
@@ -64,7 +68,8 @@ public class ComputerService {
 	 * 
 	 * @param Computer
 	 */
-	public void create(Computer computer) {
+	public void create(ComputerDto computerDto) {
+		Computer computer = COMPUTER_MAPPER.dtoToComputer(computerDto);
 		COMPUTER_DAO.create(computer);
 	}
 

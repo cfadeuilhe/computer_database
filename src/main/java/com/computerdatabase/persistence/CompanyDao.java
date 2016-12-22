@@ -75,7 +75,10 @@ public class CompanyDao implements InterfaceDao {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Company company = null;
 		try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE);) {
-			st.setLong(1, id);
+			if( id != 0)
+				st.setLong(1, id);
+			else
+				st.setString(1, null);
 			ResultSet rs = st.executeQuery();
 			rs.next();
 			company = new Company(rs.getInt("id"), rs.getString("name"));
