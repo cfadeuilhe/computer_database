@@ -19,14 +19,13 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
 public class ComputerService {
 
     private ComputerDao COMPUTER_DAO = new ComputerDao();
-    private final RsMapper COMPUTER_MAPPER = new RsMapper();
 
     public ComputerService(ComputerDao computerDao) {
         this.COMPUTER_DAO = computerDao;
     }
 
     public ComputerService() {
-        // TODO Auto-generated constructor stub
+
     }
 
     /**
@@ -40,6 +39,12 @@ public class ComputerService {
         return list;
     }
 
+    public List<Entity> listSearch(String search) {
+        List<Entity> list = new ArrayList<Entity>();
+        list = COMPUTER_DAO.readSearch(search);
+        return list;
+    }
+
     /**
      * readPages - call DAO to get a specific Page of Computer from database
      * 
@@ -49,6 +54,12 @@ public class ComputerService {
     public List<Entity> readPages(Page p) {
         List<Entity> list = new ArrayList<Entity>();
         list = COMPUTER_DAO.readPages(p);
+        return list;
+    }
+
+    public List<Entity> searchPages(Page p) {
+        List<Entity> list = new ArrayList<Entity>();
+        list = COMPUTER_DAO.searchPages(p);
         return list;
     }
 

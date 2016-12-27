@@ -19,7 +19,9 @@ public class ComputerDao implements InterfaceDao {
 	private final static ConnectionDao CONNECTION_FACTORY = new ConnectionDao();
 	private final static RsMapper RS_TO_COMPUTER = new RsMapper();
 	private final static String SQL_READ = "SELECT * FROM computer";
+    private final static String SQL_READ_SEARCH = "SELECT * FROM computer JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ?";
 	private final static String SQL_READ_PAGES = "SELECT * FROM computer LIMIT ? OFFSET ?";
+    private final static String SQL_SEARCH_PAGES = "SELECT * FROM computer JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ? LIMIT ? OFFSET ?";
 	private final static String SQL_READ_ONE = "SELECT * FROM computer WHERE id=?";
 	private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
 	private final static String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
@@ -47,6 +49,26 @@ public class ComputerDao implements InterfaceDao {
 		CONNECTION_FACTORY.closeConnection();
 		return computerList;
 	}
+	
+	public List<Entity> readSearch(String search) {
+        Connection cn = CONNECTION_FACTORY.getConnection();
+        List<Entity> computerList = new ArrayList<Entity>();
+        try (PreparedStatement st = cn.prepareStatement(SQL_READ_SEARCH);) {
+            st.setString(1, "%"+search+"%");
+            st.setString(2, "%"+search+"%");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Computer c = RS_TO_COMPUTER.rsToComputer(rs);
+                ComputerValidator.validator(c);
+                computerList.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("mySQL error : " + SQL_READ_SEARCH);
+        }
+        CONNECTION_FACTORY.closeConnection();
+        return computerList;
+    }
 
 	/**
 	 * readPages - sort by pages and return a specific page
@@ -76,6 +98,36 @@ public class ComputerDao implements InterfaceDao {
 		return computerList;
 	}
 
+	/**
+     * Search pages - sort by pages and return a specific page
+     * 
+     * @param Page
+     * @return List<Computer>
+     */
+    public List<Entity> searchPages(Page p) {
+        Connection cn = CONNECTION_FACTORY.getConnection();
+        List<Entity> computerList = new ArrayList<Entity>();
+        if (p.getOffset() >= 0) {
+            try (PreparedStatement st = cn.prepareStatement(SQL_SEARCH_PAGES)) {
+                st.setString(1, "%"+p.getSearch()+"%");
+                st.setString(2, "%"+p.getSearch()+"%");
+                st.setLong(3, p.getPageSize());
+                st.setLong(4, p.getOffset());
+                ResultSet rs = st.executeQuery();
+                while (rs.next()) {
+                    Computer c = RS_TO_COMPUTER.rsToComputer(rs);
+                    ComputerValidator.validator(c);
+                    computerList.add(c);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("error in sql :" + SQL_SEARCH_PAGES);
+            }
+        }
+        CONNECTION_FACTORY.closeConnection();
+        return computerList;
+    }
+	
 	/**
 	 * readOne - get a specific Computer from database
 	 * 
@@ -116,7 +168,6 @@ public class ComputerDao implements InterfaceDao {
 			}
 			if (computer.getDiscontinuedDate() != null) {
 				st.setString(3, computer.getDiscontinuedDate().toString());
-				System.out.println(computer.getDiscontinuedDate());
 			} else {
 				st.setString(3, null);
 			}
@@ -142,9 +193,6 @@ public class ComputerDao implements InterfaceDao {
 	public void update(long id, Entity entity) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Computer computer = (Computer) entity;
-		System.out.println(id);
-		System.out.println(entity);
-		System.out.println(SQL_UPDATE);
 		try (PreparedStatement st = cn.prepareStatement(SQL_UPDATE)) {
 			st.setString(1, computer.getName());
 			st.setString(2,

@@ -32,7 +32,7 @@
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
+							class="form-control" placeholder="Search name" value="${page.search }" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
@@ -100,21 +100,22 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<myTag:pagination currentPage="${page.currentPage }"
-					pageSize="${page.pageSize }" pageCount="${page.pageCount }">
+				<myTag:pagination currentPage="${page.currentPage }" 
+					pageSize="${page.pageSize }" searchValue="${page.search }"
+					pageCount="${page.pageCount }">
 				</myTag:pagination>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<myTag:link cssClass="btn btn-default"
-					currentPage="${page.currentPage}" pageSize="10" target="dashboard"
-					text="10"></myTag:link>
+					currentPage="${page.currentPage}" searchValue="${page.search }"
+					pageSize="10" target="dashboard" text="10"></myTag:link>
 				<myTag:link cssClass="btn btn-default"
-					currentPage="${page.currentPage}" pageSize="50" target="dashboard"
-					text="50"></myTag:link>
+					currentPage="${page.currentPage}" searchValue="${page.search }"
+					pageSize="50" target="dashboard" text="50"></myTag:link>
 				<myTag:link cssClass="btn btn-default"
-					currentPage="${page.currentPage}" pageSize="100" target="dashboard"
-					text="100"></myTag:link>
+					currentPage="${page.currentPage}" searchValue="${page.search }"
+					pageSize="100" target="dashboard" text="100"></myTag:link>
 			</div>
 		</div>
 	</footer>

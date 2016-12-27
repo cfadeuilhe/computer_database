@@ -7,6 +7,7 @@ public class Page {
 	private int currentPage;
 	private long pageSize;
 	private long pageCount;
+	String search=null;
 	List<Entity> computerList = new ArrayList<Entity>();
 	
 	public Page() {
@@ -48,6 +49,14 @@ public class Page {
 
     public void setComputerList(List<Entity> computerList) {
         this.computerList = computerList;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
     }
 
     public long getOffset() {

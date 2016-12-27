@@ -18,13 +18,24 @@ public class RequestMapper {
     public static Page requestToPage(HttpServletRequest request) {
 
         List<Entity> list = new ArrayList<Entity>();
-        list = COMPUTER_SERVICE.listComputers();
+        String search = request.getParameter("search");
+        if (search != null) {
+            list = COMPUTER_SERVICE.listSearch(search);
+        } else {
+            list = COMPUTER_SERVICE.listComputers();
+        }
         int currentPage = (int) checkParameter(request.getParameter("page"), 1);
         long pageSize = checkParameter(request.getParameter("limit"), 10),
                 pageCount = (list.size() % 10 == 0) ? (list.size() / pageSize) : (list.size() / pageSize + 1);
 
         Page page = new Page(currentPage, pageSize, pageCount);
-        page.setComputerList(COMPUTER_SERVICE.readPages(page));
+        if (search != null) {
+            page.setSearch(search);
+            page.setComputerList(COMPUTER_SERVICE.searchPages(page));
+        } else {
+            page.setComputerList(COMPUTER_SERVICE.readPages(page));
+        }
+
         return page;
     }
 
