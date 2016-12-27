@@ -32,9 +32,9 @@
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" value="${page.search }" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+							class="form-control" placeholder="Search name"
+							value="${page.search }" /> <input type="submit"
+							id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
@@ -61,7 +61,7 @@
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
+									class="fa fa-trash-o"></i>
 							</a>
 						</span></th>
 						<th><c:out value="Computer Name"></c:out></th>
@@ -80,7 +80,7 @@
 
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value=${item.id }></td>
 							<td><a
 								href="editComputer?id=${item.id }&computerName=${item.name }&introduced=${item.introducedDate}&discontinued=${item.discontinuedDate}&companyId=${item.company.id}"
 								onclick="">${item.name}</a></td>
@@ -100,7 +100,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<myTag:pagination currentPage="${page.currentPage }" 
+				<myTag:pagination currentPage="${page.currentPage }"
 					pageSize="${page.pageSize }" searchValue="${page.search }"
 					pageCount="${page.pageCount }">
 				</myTag:pagination>

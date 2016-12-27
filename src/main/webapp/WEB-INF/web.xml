@@ -10,8 +10,8 @@
     <servlet-name>DashboardServlet</servlet-name>
     <url-pattern>/dashboard</url-pattern>
   </servlet-mapping>
-  <servlet>
   
+  <servlet>
     <servlet-name>AddComputerServlet</servlet-name>
     <servlet-class>com.excilys.computerdatabase.servlets.AddComputerServlet
 			</servlet-class>
@@ -19,6 +19,17 @@
   <servlet-mapping>
     <servlet-name>AddComputerServlet</servlet-name>
     <url-pattern>/addComputer</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+  
+    <servlet-name>DeleteComputerServlet</servlet-name>
+    <servlet-class>com.excilys.computerdatabase.servlets.DeleteComputerServlet
+            </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteComputerServlet</servlet-name>
+    <url-pattern>/deleteComputer</url-pattern>
   </servlet-mapping>
   
   <servlet>

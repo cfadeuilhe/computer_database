@@ -20,7 +20,11 @@ public class RequestMapper {
         List<Entity> list = new ArrayList<Entity>();
         String search = request.getParameter("search");
         if (search != null) {
-            list = COMPUTER_SERVICE.listSearch(search);
+            if (!search.isEmpty()) {
+                list = COMPUTER_SERVICE.listSearch(search);
+            } else {
+                list = COMPUTER_SERVICE.listComputers();
+            }
         } else {
             list = COMPUTER_SERVICE.listComputers();
         }
@@ -30,8 +34,12 @@ public class RequestMapper {
 
         Page page = new Page(currentPage, pageSize, pageCount);
         if (search != null) {
-            page.setSearch(search);
-            page.setComputerList(COMPUTER_SERVICE.searchPages(page));
+            if (!search.isEmpty()) {
+                page.setSearch(search);
+                page.setComputerList(COMPUTER_SERVICE.searchPages(page));
+            } else {
+                page.setComputerList(COMPUTER_SERVICE.readPages(page));
+            }
         } else {
             page.setComputerList(COMPUTER_SERVICE.readPages(page));
         }

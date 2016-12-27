@@ -11,7 +11,7 @@
 
 <c:choose>
 	<c:when test="${currentPage > 1}">
-		<li><c:out value="&larr;"></c:out><myTag:link cssClass="First" currentPage="1"
+		<li><myTag:link cssClass="First" currentPage="1"
 				searchValue="${page.search }" pageSize="${pageSize}"
 				target="dashboard" text="&larr;"></myTag:link></li>
 		<li><myTag:link cssClass="Previous"
