@@ -13,6 +13,14 @@ public class ComputerDto {
         this.discontinuedDate = discontinuedDate;
         this.companyId = companyId;
     }
+    
+    public ComputerDto(long id, String name, String introducedDate, String discontinuedDate, long companyId) {
+        this.id = id;
+        this.name = name;
+        this.introducedDate = introducedDate;
+        this.discontinuedDate = discontinuedDate;
+        this.companyId = companyId;
+    }
 
     public ComputerDto() {
         
@@ -56,6 +64,12 @@ public class ComputerDto {
 
     public void setCompanyId(long companyId) {
         this.companyId = companyId;
+    }
+
+    @Override
+    public String toString() {
+        return "ComputerDto [id=" + id + ", name=" + name + ", introducedDate=" + introducedDate + ", discontinuedDate="
+                + discontinuedDate + ", companyId=" + companyId + "]";
     }
 
 }

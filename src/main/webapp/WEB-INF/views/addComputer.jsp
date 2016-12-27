@@ -2,21 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><c:out value="Computer Database"></c:out></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="/computerdatabase/css/bootstrap.min.css" rel="stylesheet"
-	media="screen">
-<link href="/computerdatabase/css/font-awesome.css" rel="stylesheet"
-	media="screen">
-<link href="/computerdatabase/css/main.css" rel="stylesheet"
-	media="screen">
+<link href="/Cdb/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/Cdb/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="/Cdb/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"><c:out
+					value="Application - Computer Database"></c:out></a>
 		</div>
 	</header>
 
@@ -28,33 +25,58 @@
 					<form action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" name="computerName" class="form-control"
-									id="computerName" placeholder="Computer name">
+								<label for="computerName"><c:out value="Computer name"></c:out></label>
+								<c:if test="${computerWrong.name != null }">
+									<input type="text" name="computerName" class="form-control"
+										id="computerName" value=${computerWrong.name }>
+								</c:if>
+								<c:if test="${computerWrong.name == null }">
+									<input type="text" name="computerName" class="form-control"
+										id="computerName" placeholder="Computer name">
+								</c:if>
 							</div>
 
 							<c:forEach items="${errors}" var="item">
-								<c:if test="${item.equals('NoName') }">
+								<c:if test="${item == 'NoName' }">
 									<p>
-										<font color="red"><c:out value="testest"></c:out></font>
+										<font color="red"><c:out value="The name is mandatory"></c:out></font>
+									</p>
+								</c:if>
+								<c:if test="${item == 'NameTooShort' }">
+									<p>
+										<font color="red"><c:out
+												value="The name must contain more than 2 characters"></c:out></font>
 									</p>
 								</c:if>
 							</c:forEach>
 
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
-									type="date" name="introduced" class="form-control"
-									id="introduced" placeholder="Introduced date">
+								<label for="introduced"><c:out value="Introduced date"></c:out></label>
+								<input type="date" name="introduced" class="form-control"
+									id="introduced" placeholder="Introduced date"
+									value="${computerWrong.introducedDate }">
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" name="discontinued" class="form-control"
-									id="discontinued" placeholder="Discontinued date">
+								<label for="discontinued"><c:out
+										value="Discontinued date"></c:out></label> <input type="date"
+									name="discontinued" class="form-control" id="discontinued"
+									placeholder="Discontinued date"
+									value="${computerWrong.discontinuedDate }">
 							</div>
+
+							<c:forEach items="${errors}" var="item">
+								<c:if test="${item == 'DateOrderWrong' }">
+									<p>
+										<font color="red"><c:out
+												value="The introduced date must be before the discontinued date"></c:out></font>
+									</p>
+								</c:if>
+							</c:forEach>
+
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
+								<label for="companyId"><c:out value="Company"></c:out></label> <select
 									class="form-control" name="companyId" id="companyId">
-									<option value=0>--</option>
+									<option value=0><c:out value="--"></c:out></option>
 									<c:forEach items="${companyList}" var="item">
 										<option value=${item.id }>${item.name}</option>
 									</c:forEach>

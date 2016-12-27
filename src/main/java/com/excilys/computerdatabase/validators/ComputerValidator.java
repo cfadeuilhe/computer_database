@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.validators;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +27,16 @@ public class ComputerValidator {
 		}
 	}
 	
-	public static void validator(Computer c){
+	public static void dateValidator(LocalDate date){
+	    
+	}
+	
+	public static List<String> validator(Computer c){
 	    //List<String> list = new ArrayList<String>();
-	    c.setErrorsList(list);
+        list.clear();
+
+        ComputerDtoValidator.nameValidator(c.getName());
+        
+        return list;
 	}
 }

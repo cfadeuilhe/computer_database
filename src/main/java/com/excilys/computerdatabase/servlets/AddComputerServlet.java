@@ -10,14 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computerdatabase.dto.ComputerDto;
+import com.excilys.computerdatabase.mapper.DtoMapper;
 import com.excilys.computerdatabase.mapper.RequestMapper;
+import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
+import com.excilys.computerdatabase.persistence.ComputerDao;
 import com.excilys.computerdatabase.service.CompanyService;
+import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class AddComputerServlet extends HttpServlet {
 
     private final static CompanyService COMPANY_SERVICE = new CompanyService();
+    private final static ComputerService COMPUTER_SERVICE = new ComputerService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,10 +39,14 @@ public class AddComputerServlet extends HttpServlet {
 
         ComputerDto computerDto = RequestMapper.toComputerDto(request);
         List<String> errorsList = ComputerDtoValidator.validator(computerDto);
+        
         if (errorsList.isEmpty()) {
-            // do whatever
+            // create computer
+            Computer computer = DtoMapper.dtoToComputer(computerDto);
+            COMPUTER_SERVICE.create(computer);
             request.setAttribute("computer", computerDto);
         } else {
+            request.setAttribute("computerWrong", computerDto);
             request.setAttribute("errors", errorsList);
         }
         doGet(request, response);

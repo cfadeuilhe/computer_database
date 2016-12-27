@@ -9,11 +9,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computerdatabase.dto.ComputerDto;
+import com.excilys.computerdatabase.mapper.DtoMapper;
+import com.excilys.computerdatabase.mapper.RequestMapper;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class EditComputerServlet extends HttpServlet {
 	
@@ -25,26 +29,32 @@ public class EditComputerServlet extends HttpServlet {
 		List<Entity> list = new ArrayList<Entity>();
 		list = COMPANY_SERVICE.listCompanies();
 		request.setAttribute("companyList", list);
-		
+
+        ComputerDto computerDto = RequestMapper.toComputerDto(request);
+        request.setAttribute("computerToEdit", computerDto);
+        
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 	}
 	
 	
-	@Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          
-        String name = req.getParameter("computerName");
-        String introduced = req.getParameter("introduced");
-        String discontinued = req.getParameter("discontinued");
-        String companyId = req.getParameter("companyId");
-        
-        Computer computer = COMPUTER_BUILDER.name(name).build();
-        //COMPUTER_SERVICE.create(computer);
-        
-        //RequestDispatcher rd = req.getRequestDispatcher("/dashboard");
-        //rd.forward(req, resp);
-         
+        ComputerDto computerDto = RequestMapper.toComputerDto(request);
+        System.out.println(computerDto);
+        List<String> errorsList = ComputerDtoValidator.validator(computerDto);
+        System.out.println(errorsList);
+        if (errorsList.isEmpty()) {
+            // update computer
+            Computer computer = DtoMapper.dtoToComputer(computerDto);
+            COMPUTER_SERVICE.update(computer.getId(), computer);
+            request.setAttribute("computer", computerDto);
+        } else {
+            request.setAttribute("computerWrong", computerDto);
+            request.setAttribute("errors", errorsList);
+        }
+        doGet(request, response);
     }
 	
 }

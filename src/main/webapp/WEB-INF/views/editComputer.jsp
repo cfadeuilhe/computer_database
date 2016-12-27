@@ -2,54 +2,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><c:out value="Computer Database"></c:out></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="/computerdatabase/css/bootstrap.min.css" rel="stylesheet"
-	media="screen">
-<link href="/computerdatabase/css/font-awesome.css" rel="stylesheet"
-	media="screen">
-<link href="/computerdatabase/css/main.css" rel="stylesheet"
-	media="screen">
+<link href="/Cdb/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/Cdb/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="/Cdb/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"><c:out
+					value="Application - Computer Database"></c:out></a>
 		</div>
 	</header>
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<div class="label label-default pull-right">id: 0</div>
+					<div class="label label-default pull-right">
+						<c:out value="id: ${computerToEdit.id }"></c:out>
+					</div>
 					<h1>Edit Computer</h1>
-
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="0" id="id" />
-						<!-- TODO: Change this value with the computer id -->
+						<input type="hidden" name="id" value="${computerToEdit.id }" id="id" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									placeholder="Computer name">
+								<label for="computerName">Computer name</label>
+								<c:if test="${computerToEdit.name != null }">
+									<input type="text" name="computerName" class="form-control"
+										id="computerName" value="${computerToEdit.name }">
+								</c:if>
+								<c:if test="${computerToEdit.name == null }">
+									<input type="text" name="computerName" class="form-control" id="computerName"
+										placeholder="Computer name">
+								</c:if>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									placeholder="Introduced date">
+									type="date" name="introduced" class="form-control" id="introduced"
+									placeholder="Introduced date"
+									value="${computerToEdit.introducedDate }">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									placeholder="Discontinued date">
+									type="date" name="discontinued" class="form-control" id="discontinued"
+									placeholder="Discontinued date"
+									value="${computerToEdit.discontinuedDate }">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId">
+									class="form-control" name="companyId" id="companyId">
+									<option value=0>--</option>
 									<c:forEach items="${companyList}" var="item">
-										<option value=i>${item.name}</option>
+
+										<c:if test="${computerToEdit.companyId  == item.id}">
+											<option selected value=${item.id }>${item.name}</option>
+										</c:if>
+										<c:if test="${computerToEdit.companyId  != item.id}">
+											<option value=${item.id }>${item.name}</option>
+										</c:if>
+
 									</c:forEach>
 								</select>
 							</div>

@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.persistence;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 
 import com.excilys.computerdatabase.mapper.RsMapper;
@@ -141,13 +142,15 @@ public class ComputerDao implements InterfaceDao {
 	public void update(long id, Entity entity) {
 		Connection cn = CONNECTION_FACTORY.getConnection();
 		Computer computer = (Computer) entity;
+		System.out.println(id);
+		System.out.println(entity);
 		System.out.println(SQL_UPDATE);
 		try (PreparedStatement st = cn.prepareStatement(SQL_UPDATE)) {
 			st.setString(1, computer.getName());
 			st.setString(2,
-					(computer.getIntroducedDate() != null ? ("\"" + computer.getIntroducedDate() + "\"") : (null)));
+					(computer.getIntroducedDate() != null ? (computer.getIntroducedDate().toString()) : (null)));
 			st.setString(3,
-					(computer.getDiscontinuedDate() != null ? ("\"" + computer.getDiscontinuedDate() + "\"") : (null)));
+					(computer.getDiscontinuedDate() != null ? (computer.getDiscontinuedDate().toString()) : (null)));
 			st.setLong(4, computer.getCompany().getid());
 			st.setLong(5, id);
 			st.executeUpdate();

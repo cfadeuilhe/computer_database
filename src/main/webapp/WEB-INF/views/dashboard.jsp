@@ -3,28 +3,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><c:out value="Computer Database"></c:out></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="/computerdatabase/css/bootstrap.min.css" rel="stylesheet"
-	media="screen">
-<link href="/computerdatabase/css/font-awesome.css" rel="stylesheet"
-	media="screen">
-<link href="/computerdatabase/css/main.css" rel="stylesheet"
-	media="screen">
+<link href="/Cdb/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/Cdb/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="/Cdb/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"> <c:out
+					value="Application - Computer
+				Database">
+				</c:out>
+			</a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${completeList.size()} Computers found</h1>
+			<h1 id="homeTitle">
+				<c:out value="${completeList.size()} Computers found"></c:out>
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -36,9 +38,10 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><c:out
+							value="Add Computer"></c:out></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><c:out
+							value="Edit"></c:out></a>
 				</div>
 			</div>
 		</div>
@@ -61,12 +64,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><c:out value="Computer Name"></c:out></th>
+						<th><c:out value="Introduced date"></c:out></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><c:out value="Discontinued date"></c:out></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><c:out value="Company"></c:out></th>
 
 					</tr>
 				</thead>
@@ -78,10 +81,12 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick="$.fn.toggleEditMode();">${item.name}</a></td>
-							<td>${item.introducedDate}</td>
-							<td>${item.discontinuedDate}</td>
-							<td>${item.company.name}</td>
+							<td><a
+								href="editComputer?id=${item.id }&computerName=${item.name }&introduced=${item.introducedDate}&discontinued=${item.discontinuedDate}&companyId=${item.company.id}"
+								onclick="">${item.name}</a></td>
+							<td><c:out value="${item.introducedDate}"></c:out></td>
+							<td><c:out value="${item.discontinuedDate}"></c:out></td>
+							<td><c:out value="${item.company.name}"></c:out></td>
 						</tr>
 
 					</c:forEach>
@@ -96,25 +101,27 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<myTag:pagination currentPage="${page.currentPage }"
-					pageSize="${page.pageSize }"
-					pageCount="${page.pageCount }">
+					pageSize="${page.pageSize }" pageCount="${page.pageCount }">
 				</myTag:pagination>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<myTag:link cssClass="btn btn-default" currentPage="${page.currentPage}"
-					pageSize="10" target="dashboard" text="10"></myTag:link>
-				<myTag:link cssClass="btn btn-default" currentPage="${page.currentPage}"
-					pageSize="50" target="dashboard" text="50"></myTag:link>
-				<myTag:link cssClass="btn btn-default" currentPage="${page.currentPage}"
-					pageSize="100" target="dashboard" text="100"></myTag:link>
+				<myTag:link cssClass="btn btn-default"
+					currentPage="${page.currentPage}" pageSize="10" target="dashboard"
+					text="10"></myTag:link>
+				<myTag:link cssClass="btn btn-default"
+					currentPage="${page.currentPage}" pageSize="50" target="dashboard"
+					text="50"></myTag:link>
+				<myTag:link cssClass="btn btn-default"
+					currentPage="${page.currentPage}" pageSize="100" target="dashboard"
+					text="100"></myTag:link>
 			</div>
 		</div>
 	</footer>
 
-	<script src="/computerdatabase/js/jquery.min.js"></script>
-	<script src="/computerdatabase/js/bootstrap.min.js"></script>
-	<script src="/computerdatabase/js/dashboard.js"></script>
+	<script src="/Cdb/js/jquery.min.js"></script>
+	<script src="/Cdb/js/bootstrap.min.js"></script>
+	<script src="/Cdb/js/dashboard.js"></script>
 
 </body>
 </html>

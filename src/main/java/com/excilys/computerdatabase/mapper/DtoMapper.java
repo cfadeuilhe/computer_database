@@ -42,10 +42,10 @@ public class DtoMapper {
         }
 
         computerBuilder.id(computerDto.getId()).name(computerDto.getName()).company(company);
-        if (computerDto.getIntroducedDate() != null) {
+        if (computerDto.getIntroducedDate() != "") {
             computerBuilder.introducedDate(LocalDate.parse(computerDto.getIntroducedDate()));
         }
-        if (computerDto.getDiscontinuedDate() != null) {
+        if (computerDto.getDiscontinuedDate() != "") {
             computerBuilder.discontinuedDate(LocalDate.parse(computerDto.getDiscontinuedDate()));
         }
 
