@@ -22,7 +22,6 @@
   </servlet-mapping>
   
     <servlet>
-  
     <servlet-name>DeleteComputerServlet</servlet-name>
     <servlet-class>com.excilys.computerdatabase.servlets.DeleteComputerServlet
             </servlet-class>

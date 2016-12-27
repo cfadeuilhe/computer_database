@@ -15,7 +15,7 @@ import com.excilys.computerdatabase.persistence.CompanyDao;
  */
 public class CompanyService {
 
-	private final static CompanyDao COMPANY_DAO = new CompanyDao();
+	private final static CompanyDao COMPANY_DAO = CompanyDao.INSTANCE;
 
 	public List<Entity> listCompanies() {
 		List<Entity> list = new ArrayList<Entity>();
@@ -27,4 +27,8 @@ public class CompanyService {
 		Company c = (Company) COMPANY_DAO.readOne(id);
 		return c;
 	}
+
+    public void delete(long id) {
+        COMPANY_DAO.delete(id);
+    }
 }

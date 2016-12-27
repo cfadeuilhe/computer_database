@@ -1,6 +1,5 @@
 package com.excilys.computerdatabase.mapper;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import com.excilys.computerdatabase.service.ComputerService;
 
 public class RequestMapper {
 
-    private final static ComputerService COMPUTER_SERVICE = new ComputerService();
+    private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
     public static Page requestToPage(HttpServletRequest request) {
 

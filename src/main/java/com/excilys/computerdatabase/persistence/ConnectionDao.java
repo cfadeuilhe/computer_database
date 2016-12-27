@@ -12,13 +12,14 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author juanita
  *
  */
-public class ConnectionDao {
+public enum ConnectionDao {
+    INSTANCE;
 
     //private final static String URL = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
     //private final static String LOGIN = "admincdb";
     //private final static String PASSWORD = "qwerty1234";
     private HikariDataSource ds = new HikariDataSource();
-    /*private HikariConfig config = new HikariConfig("../credentials.properties");
+    /*private HikariConfig config = new HikariConfig("/credentials.properties");
     private HikariDataSource ds = new HikariDataSource(config);*/
     private Connection cn = null;
 /*

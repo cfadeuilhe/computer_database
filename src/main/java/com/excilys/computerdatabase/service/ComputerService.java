@@ -18,16 +18,24 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  */
 public class ComputerService {
 
-    private ComputerDao COMPUTER_DAO = new ComputerDao();
+    private static ComputerService INSTANCE=null;
+    private static ComputerDao COMPUTER_DAO;
 
-    public ComputerService(ComputerDao computerDao) {
+    private ComputerService(ComputerDao computerDao) {
         this.COMPUTER_DAO = computerDao;
     }
 
-    public ComputerService() {
+    private ComputerService() {
 
     }
 
+    public static ComputerService getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new ComputerService(ComputerDao.INSTANCE);
+        }
+        return INSTANCE;
+    }
+    
     /**
      * listComputers - call DAO to get the list of all Computer from database
      * 

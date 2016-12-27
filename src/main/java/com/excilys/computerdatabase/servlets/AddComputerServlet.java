@@ -22,7 +22,7 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 public class AddComputerServlet extends HttpServlet {
 
     private final static CompanyService COMPANY_SERVICE = new CompanyService();
-    private final static ComputerService COMPUTER_SERVICE = new ComputerService();
+    private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

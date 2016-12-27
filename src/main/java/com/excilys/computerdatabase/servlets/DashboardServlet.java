@@ -21,7 +21,7 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class DashboardServlet extends HttpServlet {
 
-    private final static ComputerService COMPUTER_SERVICE = new ComputerService();
+    private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
     private final static CompanyService COMPANY_SERVICE = new CompanyService();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

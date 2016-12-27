@@ -14,7 +14,7 @@ import com.excilys.computerdatabase.service.ComputerService;
 
 public class InterfaceMenu {
 
-	private final static ComputerService COMPUTER_SERVICE = new ComputerService();
+	private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 	private final static CompanyService COMPANY_SERVICE = new CompanyService();
 	private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
 

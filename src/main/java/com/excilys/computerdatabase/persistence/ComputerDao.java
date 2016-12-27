@@ -14,9 +14,11 @@ import com.excilys.computerdatabase.validators.ComputerValidator;
  * @author juanita
  *
  */
-public class ComputerDao implements InterfaceDao {
+public enum ComputerDao implements InterfaceDao {
 
-	private final static ConnectionDao CONNECTION_FACTORY = new ConnectionDao();
+    INSTANCE;
+    
+	private final static ConnectionDao CONNECTION_FACTORY = ConnectionDao.INSTANCE;
 	private final static RsMapper RS_TO_COMPUTER = new RsMapper();
 	private final static String SQL_READ = "SELECT * FROM computer";
     private final static String SQL_READ_SEARCH = "SELECT * FROM computer JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ?";
