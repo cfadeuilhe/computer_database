@@ -28,6 +28,7 @@ public enum ComputerDao implements InterfaceDao {
     private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
     private final static String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
     private final static String SQL_DELETE = "DELETE FROM computer WHERE id=?";
+    private final static String SQL_COUNT = "SELECT COUNT(*) AS count FROM computer";
 
     /**
      * read - get all Computer from database
@@ -44,8 +45,6 @@ public enum ComputerDao implements InterfaceDao {
                 if (rs.getInt("company_id") != 0) {
                     c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                 }
-                ComputerValidator.validator(c);
-                System.out.println(c);
                 computerList.add(c);
             }
         } catch (SQLException e) {
@@ -54,6 +53,27 @@ public enum ComputerDao implements InterfaceDao {
         }
         CONNECTION_FACTORY.closeConnection();
         return computerList;
+    }
+
+    public long count(String search) {
+        Connection cn = CONNECTION_FACTORY.getConnection();
+        long count = 0;
+        String sqlCount = SQL_COUNT;
+        if (search != null && !search.isEmpty()) {
+            sqlCount += " LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%" + search
+                    + "%' or company.name LIKE '" + search + "%'";
+        }
+        try (PreparedStatement st = cn.prepareStatement(sqlCount);) {
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                count = rs.getLong("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("mySQL error : " + sqlCount);
+        }
+        CONNECTION_FACTORY.closeConnection();
+        return count;
     }
 
     public List<Entity> readSearch(String search) {
@@ -68,7 +88,6 @@ public enum ComputerDao implements InterfaceDao {
                 if (rs.getInt("company_id") != 0) {
                     c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                 }
-                ComputerValidator.validator(c);
                 computerList.add(c);
             }
         } catch (SQLException e) {
@@ -92,7 +111,7 @@ public enum ComputerDao implements InterfaceDao {
         if (p.getOffset() >= 0) {
             if (p.getSearch() != null && !(p.getSearch().isEmpty())) {
                 readPages += " WHERE computer.name LIKE '%" + p.getSearch() + "%' or company.name LIKE '"
-                        + p.getSearch() + "'";
+                        + p.getSearch() + "%'";
             }
             readPages += " LIMIT " + p.getPageSize() + " OFFSET " + p.getOffset();
 
@@ -101,9 +120,9 @@ public enum ComputerDao implements InterfaceDao {
                 while (rs.next()) {
                     Computer c = RS_TO_COMPUTER.rsToComputer(rs);
                     if (rs.getInt("company_id") != 0) {
-                        c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
+                        c.setCompany(
+                                new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                     }
-                    ComputerValidator.validator(c);
                     computerList.add(c);
                 }
             } catch (SQLException e) {
@@ -129,7 +148,6 @@ public enum ComputerDao implements InterfaceDao {
             ResultSet rs = st.executeQuery();
             if (rs.next())
                 computer = RS_TO_COMPUTER.rsToComputer(rs);
-            ComputerValidator.validator(computer);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in sql :" + SQL_READ_ONE);

@@ -40,6 +40,10 @@ public class ComputerService {
         list = COMPUTER_DAO.read();
         return list;
     }
+    
+    public long countComputers(String search){
+        return COMPUTER_DAO.count(search);
+    }
 
     public List<Entity> listSearch(String search) {
         List<Entity> list = new ArrayList<Entity>();

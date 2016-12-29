@@ -49,6 +49,11 @@ public class ComputerDtoValidator {
         return true;
     }
 
+    public static boolean isDateValidator(LocalDate introducedDate, LocalDate discontinuedDate) {
+        //est ce que c'est une date lol
+        return false;
+    }
+
     public static List<String> validate(ComputerDto c) {
         List<String> list = new ArrayList<>();
 

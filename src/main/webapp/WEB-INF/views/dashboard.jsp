@@ -25,7 +25,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<c:out value="${completeList.size()} Computers found"></c:out>
+				<c:out value="${count} Computers found"></c:out>
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">

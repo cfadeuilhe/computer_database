@@ -47,6 +47,11 @@ public class ComputerValidator {
         }
         return true;
     }
+    
+    public static boolean isDateValidator(LocalDate introducedDate, LocalDate discontinuedDate) {
+        //est ce que c'est une date lol
+        return false;
+    }
 
     public static List<String> validator(Computer c) {
 
