@@ -3,6 +3,9 @@ package com.excilys.computerdatabase.persistence;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -15,6 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
 public enum ConnectionDao {
 
     INSTANCE;
+    private final static Logger logger = LoggerFactory.getLogger(ConnectionDao.class);
 
     // private final static String URL =
     // "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
@@ -53,10 +57,35 @@ public enum ConnectionDao {
 
             // DriverManager.getConnection(URL, LOGIN, PASSWORD);
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Connection failed");
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         return cn;
+    }
+
+    public Connection initTransaction() {
+        Connection connection = this.getConnection();
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+        }
+        return connection;
+    }
+
+    public void commitTransaction(Connection connection) {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+        }
+    }
+
+    public void rollbackConnection(Connection connection) {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+        }
     }
 
     /**
@@ -66,7 +95,7 @@ public enum ConnectionDao {
         try {
             cn.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
     }
 }

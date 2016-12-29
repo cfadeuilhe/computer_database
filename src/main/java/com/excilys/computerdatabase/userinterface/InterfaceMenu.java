@@ -5,15 +5,20 @@ import java.text.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
+import com.excilys.computerdatabase.persistence.ComputerDao;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
 
 public class InterfaceMenu {
-
+    
+    private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 	private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 	private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
 	private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
@@ -28,7 +33,7 @@ public class InterfaceMenu {
 		String userInput, userInputPage;
 		do {
 			userInput = askUser(
-					"Menu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) By Pages\n\t8) Quit");
+					"Menu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) Delete a company\n\t8) By Pages\n\t9) Quit");
 			switch (userInput) {
 			case "1": // List computers
 				System.out.println(COMPUTER_SERVICE.listComputers());
@@ -60,7 +65,13 @@ public class InterfaceMenu {
 				} while (!validateStringToInt(userInput));
 				deleteComputer(Integer.parseInt(userInput));
 				break;
-			case "7": // Pages
+            case "7": // Delete a company & all computers from that company
+                do {
+                    userInput = askUser("Enter id of the company to delete");
+                } while (!validateStringToInt(userInput));
+                deleteCompany(Integer.parseInt(userInput));
+                break;
+			case "8": // Pages
 				do {
 					userInput = askUser("Enter the number of elements per page wanted");
 				} while (!validateStringToInt(userInput));
@@ -70,14 +81,14 @@ public class InterfaceMenu {
 				Page p = new Page();
 				p.setPageSize(Integer.parseInt(userInput));
 				p.setCurrentPage(Integer.parseInt(userInputPage));
-				System.out.println(p);
+				logger.info(p.toString());
 				showPage(p);
 				break;
-			case "8": // Quit
-				System.out.println("Bubye :)");
+			case "9": // Quit
+				logger.info("Bubye :)");
 				break;
 			default:
-				System.out.println("try again, stupid");
+				logger.info("try again, stupid");
 				break;
 			}
 		} while (!userInput.equals("8"));
@@ -90,6 +101,10 @@ public class InterfaceMenu {
 	public void deleteComputer(long id) {
 		COMPUTER_SERVICE.delete(id);
 	}
+	
+    public void deleteCompany(long id) {
+        COMPANY_SERVICE.delete(id);
+    }
 
 	/**
 	 * showPage
@@ -97,8 +112,8 @@ public class InterfaceMenu {
 	 * @param Page
 	 */
 	public void showPage(Page p) {
-		System.out.println((COMPUTER_SERVICE.readPages(p).isEmpty()) ? "You reached the end of the database"
-				: COMPUTER_SERVICE.readPages(p));
+		logger.info((COMPUTER_SERVICE.readPages(p).isEmpty()) ? "You reached the end of the database"
+				: COMPUTER_SERVICE.readPages(p).toString());
 		pagesMenu(p);
 	}
 
@@ -144,10 +159,10 @@ public class InterfaceMenu {
 			showPage(p);
 			break;
 		case "q":
-			System.out.println("the end.");
+			logger.info("the end.");
 			break;
 		default:
-			System.out.println("Wrong character. Try again");
+			logger.info("Wrong character. Try again");
 			pagesMenu(p);
 			break;
 		}
@@ -164,11 +179,11 @@ public class InterfaceMenu {
 		try {
 			Integer.parseInt(userInput);
 		} catch (NumberFormatException e) {
-			System.out.println("You must enter a number..");
+			logger.error("You must enter a number..");
 			return false;
 		}
 		if (Integer.parseInt(userInput) <= 0) {
-			System.out.println("Number must be > 0");
+			logger.error("Number must be > 0");
 			return false;
 		}
 		return true;
@@ -189,7 +204,7 @@ public class InterfaceMenu {
 		do {
 			choiceName = askUser("Enter name (mandatory)");
 		} while (choiceName.equals(""));
-		System.out.println(COMPANY_SERVICE.listCompanies());
+		logger.info(COMPANY_SERVICE.listCompanies().toString());
 		choiceCompany = askUser("Choose a company from the previous list.");
 		Company c = COMPANY_SERVICE.readOne(Integer.parseInt(choiceCompany));
 		choiceIntroDate = askUser("Enter introduction date. [dd/mm/yyyy] t) for today's date");
@@ -209,7 +224,7 @@ public class InterfaceMenu {
 	 */
 	public String askUser(String question) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		System.out.println(question);
+		logger.info(question);
 		String userInput = null;
 		try {
 			do {
@@ -219,7 +234,7 @@ public class InterfaceMenu {
 				}
 			} while (userInput == null || userInput.isEmpty());
 		} catch (IOException e) {
-			e.printStackTrace();
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
 		}
 		return userInput;
 	}

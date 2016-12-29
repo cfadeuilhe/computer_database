@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.mapper.DtoMapper;
 import com.excilys.computerdatabase.mapper.RequestMapper;
@@ -21,6 +24,7 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class AddComputerServlet extends HttpServlet {
 
+    final Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
     private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 

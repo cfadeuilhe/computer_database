@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;

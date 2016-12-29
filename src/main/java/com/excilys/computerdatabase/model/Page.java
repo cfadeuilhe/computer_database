@@ -7,8 +7,8 @@ public class Page {
 	private int currentPage;
 	private long pageSize;
 	private long pageCount;
-	String search=null;
-	List<Entity> computerList = new ArrayList<Entity>();
+	private String search=null;
+	private List<Entity> computerList = new ArrayList<Entity>();
 	
 	public Page() {
 	}

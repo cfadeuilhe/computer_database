@@ -1,12 +1,18 @@
 package com.excilys.computerdatabase.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.persistence.CompanyDao;
 import com.excilys.computerdatabase.persistence.ComputerDao;
+import com.excilys.computerdatabase.persistence.ConnectionDao;
 
 /**
  * class CompanyService
@@ -16,8 +22,11 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  */
 public class CompanyService {
 
+    private final static Logger logger = LoggerFactory.getLogger(CompanyService.class);
+
     private static CompanyService INSTANCE = new CompanyService(CompanyDao.INSTANCE);
 	private static CompanyDao COMPANY_DAO = CompanyDao.INSTANCE;
+    private static ComputerDao COMPUTER_DAO = ComputerDao.INSTANCE;
 
     private CompanyService(CompanyDao companyDao) {
         this.COMPANY_DAO = companyDao;
@@ -43,6 +52,15 @@ public class CompanyService {
 	}
 
     public void delete(long id) {
-        COMPANY_DAO.delete(id);
+        Connection connection = ConnectionDao.INSTANCE.initTransaction();
+        try {
+            COMPANY_DAO.delete(id,connection);
+            COMPUTER_DAO.deleteByCompany(id,connection);
+            ConnectionDao.INSTANCE.commitTransaction(connection);
+        } catch (SQLException e) {
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            ConnectionDao.INSTANCE.rollbackConnection(connection);
+        }
+        
     }
 }

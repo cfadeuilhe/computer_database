@@ -1,22 +1,23 @@
 package com.excilys.computerdatabase.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.mapper.RequestMapper;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.util.Consts;
 
 public class DashboardServlet extends HttpServlet {
 
+    final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

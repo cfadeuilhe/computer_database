@@ -16,6 +16,7 @@ public final class Consts {
     public static final String COMPUTER_NAME = "computerName";
     public static final String COMPANY_ID = "companyId";
     public static final String SELECTION = "selection";
+    public static final String COUNT = "count";
     
     public static final String COMPANY_ID_DB = "company_id";
     public static final String COMPANY_NAME_DB = "company.name";

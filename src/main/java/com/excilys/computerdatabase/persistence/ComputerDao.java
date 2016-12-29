@@ -4,10 +4,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.*;
 import com.excilys.computerdatabase.util.Consts;
-import com.excilys.computerdatabase.validators.ComputerValidator;
 
 /**
  * class ComputerDAO
@@ -18,7 +20,7 @@ import com.excilys.computerdatabase.validators.ComputerValidator;
 public enum ComputerDao implements InterfaceDao {
 
     INSTANCE;
-
+    private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
     private final static ConnectionDao CONNECTION_FACTORY = ConnectionDao.INSTANCE;
     private final static RsMapper RS_TO_COMPUTER = new RsMapper();
     private final static String SQL_READ = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id";
@@ -28,6 +30,7 @@ public enum ComputerDao implements InterfaceDao {
     private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
     private final static String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
     private final static String SQL_DELETE = "DELETE FROM computer WHERE id=?";
+    private final static String SQL_DELETE_BY_COMPANY = "DELETE FROM computer WHERE company_id=?";
     private final static String SQL_COUNT = "SELECT COUNT(*) AS count FROM computer";
 
     /**
@@ -42,14 +45,13 @@ public enum ComputerDao implements InterfaceDao {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Computer c = RS_TO_COMPUTER.rsToComputer(rs);
-                if (rs.getInt("company_id") != 0) {
+                if (rs.getInt(Consts.COMPANY_ID_DB) != 0) {
                     c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                 }
                 computerList.add(c);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + SQL_READ);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return computerList;
@@ -66,11 +68,10 @@ public enum ComputerDao implements InterfaceDao {
         try (PreparedStatement st = cn.prepareStatement(sqlCount);) {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                count = rs.getLong("count");
+                count = rs.getLong(Consts.COUNT);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + sqlCount);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return count;
@@ -85,14 +86,13 @@ public enum ComputerDao implements InterfaceDao {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Computer c = RS_TO_COMPUTER.rsToComputer(rs);
-                if (rs.getInt("company_id") != 0) {
+                if (rs.getInt(Consts.COMPANY_ID_DB) != 0) {
                     c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                 }
                 computerList.add(c);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + SQL_READ_SEARCH);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return computerList;
@@ -119,15 +119,14 @@ public enum ComputerDao implements InterfaceDao {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
                     Computer c = RS_TO_COMPUTER.rsToComputer(rs);
-                    if (rs.getInt("company_id") != 0) {
+                    if (rs.getInt(Consts.COMPANY_ID_DB) != 0) {
                         c.setCompany(
                                 new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                     }
                     computerList.add(c);
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("error in sql :" + readPages);
+                logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
             }
         }
         CONNECTION_FACTORY.closeConnection();
@@ -146,11 +145,15 @@ public enum ComputerDao implements InterfaceDao {
         try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
             st.setLong(1, id);
             ResultSet rs = st.executeQuery();
-            if (rs.next())
+            if (rs.next()) {
                 computer = RS_TO_COMPUTER.rsToComputer(rs);
+                if (rs.getInt(Consts.COMPANY_ID_DB) != 0) {
+                    computer.setCompany(
+                            new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
+                }
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("error in sql :" + SQL_READ_ONE);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return computer;
@@ -183,8 +186,7 @@ public enum ComputerDao implements InterfaceDao {
             }
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("error in sql when creating computer");
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
     }
@@ -208,8 +210,7 @@ public enum ComputerDao implements InterfaceDao {
             st.setLong(5, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("error in sql :" + SQL_UPDATE);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
     }
@@ -225,9 +226,17 @@ public enum ComputerDao implements InterfaceDao {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("error in sql :" + SQL_DELETE);
+            logger.error(e.toString());
         }
         CONNECTION_FACTORY.closeConnection();
+    }
+
+    public void deleteByCompany(long id, Connection connection) {
+        try (PreparedStatement st = connection.prepareStatement(SQL_DELETE_BY_COMPANY)) {
+            st.setLong(1, id);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+        }
     }
 }

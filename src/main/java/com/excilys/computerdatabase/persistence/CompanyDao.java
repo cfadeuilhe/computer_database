@@ -3,6 +3,9 @@ package com.excilys.computerdatabase.persistence;
 import java.sql.*;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.*;
 import com.excilys.computerdatabase.util.Consts;
@@ -14,8 +17,9 @@ import com.excilys.computerdatabase.util.Consts;
  *
  */
 public enum CompanyDao implements InterfaceDao {
+    
     INSTANCE;
-
+    private final static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
     private final static ConnectionDao CONNECTION_FACTORY = ConnectionDao.INSTANCE;
     private final static RsMapper RS_TO_COMPUTER = new RsMapper();
     private final static String SQL_READ = "SELECT * FROM company;";
@@ -23,7 +27,6 @@ public enum CompanyDao implements InterfaceDao {
     private final static String SQL_READ_ONE = "SELECT * FROM company WHERE id=?;";
     private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?');";
     private final static String SQL_DELETE = "DELETE FROM company WHERE id=?";
-    private final static String SQL_DELETE_COMPUTERS = "DELETE FROM computer WHERE computer.company_id=?";
 
     /**
      * read - get all Company from database
@@ -38,8 +41,7 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + SQL_READ);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return companyList;
@@ -62,8 +64,7 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(RS_TO_COMPUTER.rsToCompany(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + SQL_READ_PAGES);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return companyList;
@@ -87,8 +88,7 @@ public enum CompanyDao implements InterfaceDao {
             rs.next();
             company = new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME));
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + SQL_READ_ONE);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
         return company;
@@ -106,35 +106,17 @@ public enum CompanyDao implements InterfaceDao {
             st.setString(1, c.getName());
             st.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("mySQL error : " + SQL_CREATE);
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
         CONNECTION_FACTORY.closeConnection();
     }
 
-    public void delete(long id) {
-        try (Connection cn = CONNECTION_FACTORY.getConnection();) {
-            cn.setAutoCommit(false);
-
-            try {
-                PreparedStatement stComputer = cn.prepareStatement(SQL_DELETE_COMPUTERS);
-                stComputer.setLong(1, id);
-                stComputer.executeUpdate();
-
-                PreparedStatement stCompany = cn.prepareStatement(SQL_DELETE);
-                stCompany.setLong(1, id);
-                stCompany.executeUpdate();
-            } catch (SQLException e) {
-                cn.rollback();
-                e.printStackTrace();
-                System.out.println("SQL ISSUE -> ROLLBACK");
-            }
-            cn.commit();
-
+    public void delete(long id, Connection connection) throws SQLException {
+        try (PreparedStatement stCompany = connection.prepareStatement(SQL_DELETE)) {
+            stCompany.setLong(1, id);
+            stCompany.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("CONNECTION ISSUE");
+            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
     }
 }

@@ -9,38 +9,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.mapper.DtoMapper;
 import com.excilys.computerdatabase.mapper.RequestMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class EditComputerServlet extends HttpServlet {
-	
-	private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
-	private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Entity> list = new ArrayList<Entity>();
-		list = COMPANY_SERVICE.listCompanies();
-		request.setAttribute("companyList", list);
+
+    final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
+    private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
+    private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Entity> list = new ArrayList<Entity>();
+        list = COMPANY_SERVICE.listCompanies();
+        request.setAttribute("companyList", list);
 
         ComputerDto computerDto = RequestMapper.toComputerDto(request);
         request.setAttribute("computerToEdit", computerDto);
-        
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
-	}
-	
-	
+
+        this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         
+
         ComputerDto computerDto = RequestMapper.toComputerDto(request);
         List<String> errorsList = ComputerDtoValidator.validate(computerDto);
         if (errorsList.isEmpty()) {
@@ -55,5 +57,5 @@ public class EditComputerServlet extends HttpServlet {
         }
         doGet(request, response);
     }
-	
+
 }
