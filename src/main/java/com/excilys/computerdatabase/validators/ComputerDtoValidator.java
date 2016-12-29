@@ -1,5 +1,8 @@
 package com.excilys.computerdatabase.validators;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +12,15 @@ import com.excilys.computerdatabase.util.Consts;
 
 public class ComputerDtoValidator {
 
+    final static String DATE_FORMAT = "yyyy-MM-dd";
+
     /*
      * Convention used : if return false -> error, true -> everything ok
      * 
-     * */
-    
+     */
+
     public static boolean idValidator(long id) {
-        if (id <= 0) {
-            return false;
-        }
-        return true;
+        return (id > 0);
     }
 
     public static void idValidator(String id) {
@@ -31,17 +33,15 @@ public class ComputerDtoValidator {
         }
         return true;
     }
-    
-    public static boolean nameLengthValidator(String name){
-        if (name.length() <= 2) {
-            return false;
-        }
-        return true;
+
+    public static boolean nameLengthValidator(String name) {
+        return (name.length() > 2);
     }
 
     public static boolean dateOrderValidator(String introducedDate, String discontinuedDate) {
         // Check if the introduced date is before the discontinued date
-        if (introducedDate != null && discontinuedDate != null && !introducedDate.isEmpty() && !discontinuedDate.isEmpty()) {
+        if (introducedDate != null && discontinuedDate != null && !introducedDate.isEmpty()
+                && !discontinuedDate.isEmpty()) {
             if (LocalDate.parse(introducedDate).isAfter(LocalDate.parse(discontinuedDate))) {
                 return false;
             }
@@ -49,9 +49,19 @@ public class ComputerDtoValidator {
         return true;
     }
 
-    public static boolean isDateValidator(LocalDate introducedDate, LocalDate discontinuedDate) {
-        //est ce que c'est une date lol
-        return false;
+    public static boolean isDateValidator(String date) {
+        DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+
+        if (date != null && date.length() > 0) {
+            try {
+                format.setLenient(false);
+                format.parse(date);
+                return true;
+            } catch (ParseException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static List<String> validate(ComputerDto c) {
@@ -62,14 +72,20 @@ public class ComputerDtoValidator {
                 list.add(Consts.NEGATIVE_ID);
             }
         }
-        if (!ComputerDtoValidator.nameValidator(c.getName())){
+        if (!ComputerDtoValidator.nameValidator(c.getName())) {
             list.add(Consts.NO_NAME);
         }
-        if (!ComputerDtoValidator.nameLengthValidator(c.getName())){
+        if (!ComputerDtoValidator.nameLengthValidator(c.getName())) {
             list.add(Consts.NAME_TOO_SHORT);
         }
-        if (!ComputerDtoValidator.dateOrderValidator(c.getIntroducedDate(), c.getDiscontinuedDate())){
+        if (!ComputerDtoValidator.dateOrderValidator(c.getIntroducedDate(), c.getDiscontinuedDate())) {
             list.add(Consts.DATE_ORDER_ERROR);
+        }
+        if(!ComputerDtoValidator.isDateValidator(c.getIntroducedDate())){
+            list.add(Consts.DATE_INTRO_FORMAT_ERROR);
+        }
+        if(!ComputerDtoValidator.isDateValidator(c.getDiscontinuedDate())){
+            list.add(Consts.DATE_DISCO_FORMAT_ERROR);
         }
 
         return list;

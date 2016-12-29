@@ -3,7 +3,7 @@
 
     <groupId>com.excilys.computerdatabase</groupId>
     <artifactId>Cdb</artifactId>
-    <version>0.3.5</version>
+    <version>0.3.6</version>
     <name>CDB</name>
 
     <properties>

@@ -56,6 +56,16 @@
 									id="introduced" placeholder="Introduced date"
 									value="${computerWrong.introducedDate }">
 							</div>
+
+							<c:forEach items="${errors}" var="item">
+								<c:if test="${item == 'DateIntroFormatError' }">
+									<p>
+										<font color="red"><c:out
+												value="The introduced date format is wrong"></c:out></font>
+									</p>
+								</c:if>
+							</c:forEach>
+
 							<div class="form-group">
 								<label for="discontinued"><c:out
 										value="Discontinued date"></c:out></label> <input type="date"
@@ -65,7 +75,16 @@
 							</div>
 
 							<c:forEach items="${errors}" var="item">
-								<c:if test="${item == 'DateOrderWrong' }">
+								<c:if test="${item == 'DateIntroFormatError' }">
+									<p>
+										<font color="red"><c:out
+												value="The discontinued date format is wrong"></c:out></font>
+									</p>
+								</c:if>
+							</c:forEach>
+
+							<c:forEach items="${errors}" var="item">
+								<c:if test="${item == 'DateOrderError' }">
 									<p>
 										<font color="red"><c:out
 												value="The introduced date must be before the discontinued date"></c:out></font>
@@ -77,9 +96,23 @@
 								<label for="companyId"><c:out value="Company"></c:out></label> <select
 									class="form-control" name="companyId" id="companyId">
 									<option value=0><c:out value="--"></c:out></option>
-									<c:forEach items="${companyList}" var="item">
-										<option value=${item.id }>${item.name}</option>
-									</c:forEach>
+									<c:if test="${computerWrong.companyId != null }">
+										<c:if test="${computerWrong.companyId == item.id}">
+											<c:forEach items="${companyList}" var="item">
+												<option selected value=${item.id }>${item.name}</option>
+											</c:forEach>
+										</c:if>
+										<c:if test="${computerWrong.companyId != item.id}">
+											<c:forEach items="${companyList}" var="item">
+												<option value=${item.id }>${item.name}</option>
+											</c:forEach>
+										</c:if>
+									</c:if>
+									<c:if test="${computerWrong.companyId == null }">
+											<c:forEach items="${companyList}" var="item">
+												<option value=${item.id }>${item.name}</option>
+											</c:forEach>
+									</c:if>
 								</select>
 							</div>
 						</fieldset>

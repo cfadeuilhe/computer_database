@@ -34,9 +34,8 @@ public enum CompanyDao implements InterfaceDao {
      * @return List<Company>
      */
     public List<Entity> read() {
-        Connection cn = CONNECTION_FACTORY.getConnection();
         List<Entity> companyList = new ArrayList<Entity>();
-        try (PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery();) {
+        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery();) {
             while (rs.next()) {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
@@ -54,9 +53,8 @@ public enum CompanyDao implements InterfaceDao {
      * @return List<Company>
      */
     public List<Entity> readPages(Page p) {
-        Connection cn = CONNECTION_FACTORY.getConnection();
         List<Entity> companyList = new ArrayList<Entity>();
-        try (PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES);) {
+        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES);) {
             st.setLong(1, p.getPageSize());
             st.setLong(2, p.getOffset());
             ResultSet rs = st.executeQuery();
@@ -77,9 +75,9 @@ public enum CompanyDao implements InterfaceDao {
      * @return Company
      */
     public Entity readOne(long id) {
-        Connection cn = CONNECTION_FACTORY.getConnection();
+        
         Company company = null;
-        try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE);) {
+        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE);) {
             if (id != 0)
                 st.setLong(1, id);
             else
@@ -100,9 +98,8 @@ public enum CompanyDao implements InterfaceDao {
      * @param Company
      */
     public void create(Entity entity) {
-        Connection cn = CONNECTION_FACTORY.getConnection();
         Company c = (Company) entity;
-        try (PreparedStatement st = cn.prepareStatement(SQL_CREATE);) {
+        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_CREATE);) {
             st.setString(1, c.getName());
             st.executeUpdate();
         } catch (SQLException e) {

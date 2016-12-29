@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Page {
 	private int currentPage;
-	private long pageSize;
-	private long pageCount;
+	private int pageSize;
+	private int pageCount;
 	private String search=null;
 	private List<Entity> computerList = new ArrayList<Entity>();
 	
 	public Page() {
 	}
 
-	public Page(int currentPage, long pageSize, long pageCount) {
+	public Page(int currentPage, int pageSize, int pageCount) {
 		this.currentPage = currentPage;
 		this.pageSize = pageSize;
 		this.pageCount = pageCount;
@@ -27,19 +27,19 @@ public class Page {
 		this.currentPage = pageNumber;
 	}
 
-	public long getPageSize() {
+	public int getPageSize() {
 		return pageSize;
 	}
 
-	public void setPageSize(long pageSize) {
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public long getPageCount() {
+	public int getPageCount() {
 		return pageCount;
 	}
 
-	public void setPageCount(long last) {
+	public void setPageCount(int last) {
 		this.pageCount = last;
 	}
 	

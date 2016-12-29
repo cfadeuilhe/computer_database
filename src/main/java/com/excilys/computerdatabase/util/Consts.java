@@ -15,6 +15,7 @@ public final class Consts {
     public static final String LIMIT = "limit";
     public static final String COMPUTER_NAME = "computerName";
     public static final String COMPANY_ID = "companyId";
+    public static final String COMPANY_LIST = "companyList";
     public static final String SELECTION = "selection";
     public static final String COUNT = "count";
     
@@ -29,5 +30,13 @@ public final class Consts {
     public static final String NEGATIVE_ID = "NegativeId";
     public static final String NO_NAME = "NoName";
     public static final String NAME_TOO_SHORT = "NameTooShort";
-    public static final String DATE_ORDER_ERROR = "DateOrderWrong";
+    public static final String DATE_ORDER_ERROR = "DateOrderError";
+    public static final String DATE_INTRO_FORMAT_ERROR = "DateIntroFormatError";
+    public static final String DATE_DISCO_FORMAT_ERROR = "DateDiscoFormatError";
+    
+
+    private Consts(){
+      //prevents the creation of Consts objects with a private Constructor
+      throw new AssertionError();
+    }
 }

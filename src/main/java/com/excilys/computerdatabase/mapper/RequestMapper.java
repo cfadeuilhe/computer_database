@@ -30,9 +30,9 @@ public class RequestMapper {
 
         int currentPage = (checkIsNumber(request.getParameter(Consts.PAGE)))
                 ? (Integer.parseInt(request.getParameter(Consts.PAGE))) : PAGE_NUMBER_DEFAULT;
-        long pageSize = (checkIsNumber(request.getParameter(Consts.LIMIT)))
+        int pageSize = (checkIsNumber(request.getParameter(Consts.LIMIT)))
                 ? (Integer.parseInt(request.getParameter(Consts.LIMIT))) : PAGE_SIZE_DEFAULT;
-        long pageCount = (list.size() % 10 == 0) ? (list.size() / pageSize) : (list.size() / pageSize + 1);
+        int pageCount = (list.size() % 10 == 0) ? (list.size() / pageSize) : (list.size() / pageSize + 1);
 
         Page page = new Page(currentPage, pageSize, pageCount);
         if (search != null && !search.trim().isEmpty()) {

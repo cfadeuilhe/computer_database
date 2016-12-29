@@ -1,7 +1,13 @@
 package com.excilys.computerdatabase.persistence;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,43 +25,50 @@ public enum ConnectionDao {
 
     INSTANCE;
     private final static Logger logger = LoggerFactory.getLogger(ConnectionDao.class);
+    private static final String PROPERTIES_FILE = "credentials.properties";
+    HikariDataSource dataSource;
 
-    // private final static String URL =
-    // "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
-    // private final static String LOGIN = "admincdb";
-    // private final static String PASSWORD = "qwerty1234";
-    private HikariDataSource ds = new HikariDataSource();
-    /*
-     * private HikariConfig config = new
-     * HikariConfig("/credentials.properties"); private HikariDataSource ds =
-     * new HikariDataSource(config);
-     */
-    private Connection cn = null;
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace(); // Exit program because
+            System.out.println("Driver not found");
+            throw new RuntimeException(e);
 
-    /*
-     * static { try { Class.forName("com.mysql.cj.jdbc.Driver"); } catch
-     * (ClassNotFoundException e) { e.printStackTrace(); // Exit program because
-     * driver not found System.out.println("Driver not found"); throw new
-     * RuntimeException(e);
-     * 
-     * } }
-     */
+        }
+    }
+
     /**
      * getConnection (to sql database)
      * 
      * @return Connection
      */
     public Connection getConnection() {
+        HikariConfig config;
+        Connection cn = null;
         try {
-            ds.setDataSourceClassName("com.mysql.cj.jdbc.MysqlDataSource");
-            ds.setJdbcUrl("jdbc:mysql://localhost/computer-database-db");
-            ds.setUsername("admincdb");
-            ds.setPassword("qwerty1234");
-            ds.setMaximumPoolSize(20);
-            ds.addDataSourceProperty("databaseName", "computer-database-db");
-            cn = ds.getConnection();
-
-            // DriverManager.getConnection(URL, LOGIN, PASSWORD);
+            config = new HikariConfig();
+            
+            Properties properties = new Properties();
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream propertiesFile = classLoader.getResourceAsStream(PROPERTIES_FILE);
+            logger.info(propertiesFile + " ");
+            try {
+                properties.load(propertiesFile);
+            } catch (IOException e) {
+                logger.error( "ConnectionDao : getConnection() catched FileNotFoundException",e);
+            }
+            
+            
+            config.setJdbcUrl(properties.getProperty("jdbcURL"));
+            config.setUsername(properties.getProperty("user"));
+            config.setPassword(properties.getProperty("password"));
+            
+            dataSource = new HikariDataSource(config);
+            
+            cn = dataSource.getConnection();
+            
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
@@ -92,10 +105,6 @@ public enum ConnectionDao {
      * closeConnection
      */
     public void closeConnection() {
-        try {
-            cn.close();
-        } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
-        }
+        dataSource.close();
     }
 }

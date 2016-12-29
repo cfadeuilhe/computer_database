@@ -20,6 +20,7 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.util.Consts;
 import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class AddComputerServlet extends HttpServlet {
@@ -32,7 +33,7 @@ public class AddComputerServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Entity> list = new ArrayList<Entity>();
         list = COMPANY_SERVICE.listCompanies();
-        request.setAttribute("companyList", list);
+        request.setAttribute(Consts.COMPANY_LIST, list);
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
     }

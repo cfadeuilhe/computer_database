@@ -27,8 +27,8 @@ public class DashboardServlet extends HttpServlet {
         count = COMPUTER_SERVICE.countComputers(search);
         Page p = RequestMapper.requestToPage(request);
 
-        request.setAttribute("count", count);
-        request.setAttribute("page", p);
+        request.setAttribute(Consts.COUNT, count);
+        request.setAttribute(Consts.PAGE, p);
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
     }
