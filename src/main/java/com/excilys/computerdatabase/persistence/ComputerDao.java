@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.*;
+import com.excilys.computerdatabase.util.Consts;
 import com.excilys.computerdatabase.validators.ComputerValidator;
 
 /**
@@ -23,7 +24,6 @@ public enum ComputerDao implements InterfaceDao {
     private final static String SQL_READ = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id";
     private final static String SQL_READ_SEARCH = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ?";
     private final static String SQL_READ_PAGES = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id";
-    private final static String SQL_SEARCH_PAGES = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ? LIMIT ? OFFSET ?";
     private final static String SQL_READ_ONE = "SELECT * FROM computer WHERE id=?";
     private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
     private final static String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
@@ -42,7 +42,7 @@ public enum ComputerDao implements InterfaceDao {
             while (rs.next()) {
                 Computer c = RS_TO_COMPUTER.rsToComputer(rs);
                 if (rs.getInt("company_id") != 0) {
-                    c.setCompany(new Company(rs.getInt("company_id"), rs.getString("company.name")));
+                    c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                 }
                 ComputerValidator.validator(c);
                 System.out.println(c);
@@ -66,7 +66,7 @@ public enum ComputerDao implements InterfaceDao {
             while (rs.next()) {
                 Computer c = RS_TO_COMPUTER.rsToComputer(rs);
                 if (rs.getInt("company_id") != 0) {
-                    c.setCompany(new Company(rs.getInt("company_id"), rs.getString("company.name")));
+                    c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                 }
                 ComputerValidator.validator(c);
                 computerList.add(c);
@@ -101,7 +101,7 @@ public enum ComputerDao implements InterfaceDao {
                 while (rs.next()) {
                     Computer c = RS_TO_COMPUTER.rsToComputer(rs);
                     if (rs.getInt("company_id") != 0) {
-                        c.setCompany(new Company(rs.getInt("company_id"), rs.getString("company.name")));
+                        c.setCompany(new Company(rs.getInt(Consts.COMPANY_ID_DB), rs.getString(Consts.COMPANY_NAME_DB)));
                     }
                     ComputerValidator.validator(c);
                     computerList.add(c);

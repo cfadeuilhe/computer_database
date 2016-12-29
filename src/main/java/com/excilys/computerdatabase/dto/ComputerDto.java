@@ -1,9 +1,5 @@
 package com.excilys.computerdatabase.dto;
 
-import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
-import com.excilys.computerdatabase.validators.ComputerValidator;
-
 public class ComputerDto {
 
     private long id;

@@ -17,6 +17,7 @@ import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.util.Consts;
 import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class DashboardServlet extends HttpServlet {
@@ -27,10 +28,10 @@ public class DashboardServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         List<Entity> list = new ArrayList<Entity>();
-        String search = request.getParameter("search");
+        String search = request.getParameter(Consts.SEARCH);
         if (search != null) {
             if (!search.isEmpty()) {
-                list = COMPUTER_SERVICE.listSearch(request.getParameter("search"));
+                list = COMPUTER_SERVICE.listSearch(request.getParameter(Consts.SEARCH));
             } else {
                 list = COMPUTER_SERVICE.listComputers();
             }
@@ -49,7 +50,7 @@ public class DashboardServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String selection = request.getParameter("selection");
+        String selection = request.getParameter(Consts.SELECTION);
         String[] parse = selection.split(",");
         for(int i=0; i<parse.length; i++){
             COMPUTER_SERVICE.delete(Long.parseLong(parse[i]));

@@ -2,9 +2,6 @@ package com.excilys.computerdatabase.service;
 
 import java.util.*;
 
-import com.excilys.computerdatabase.dto.ComputerDto;
-import com.excilys.computerdatabase.mapper.DtoMapper;
-import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
@@ -61,12 +58,6 @@ public class ComputerService {
         list = COMPUTER_DAO.readPages(p);
         return list;
     }
-/*
-    public List<Entity> searchPages(Page p) {
-        List<Entity> list = new ArrayList<Entity>();
-        list = COMPUTER_DAO.searchPages(p);
-        return list;
-    }*/
 
     /**
      * readOne - call DAO to get a specific Computer from database

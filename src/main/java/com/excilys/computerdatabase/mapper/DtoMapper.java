@@ -4,10 +4,8 @@ import java.time.LocalDate;
 
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.dto.ComputerDto.ComputerDtoBuilder;
-import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
-import com.excilys.computerdatabase.service.CompanyService;
 
 public class DtoMapper {
 

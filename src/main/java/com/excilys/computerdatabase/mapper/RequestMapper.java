@@ -10,6 +10,7 @@ import com.excilys.computerdatabase.dto.ComputerDto.ComputerDtoBuilder;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.service.ComputerService;
+import com.excilys.computerdatabase.util.Consts;
 
 public class RequestMapper {
 
@@ -20,17 +21,17 @@ public class RequestMapper {
     public static Page requestToPage(HttpServletRequest request) {
 
         List<Entity> list = new ArrayList<Entity>();
-        String search = request.getParameter("search");
+        String search = request.getParameter(Consts.SEARCH);
         if (search != null && !search.trim().isEmpty()) {
             list = COMPUTER_SERVICE.listSearch(search);
         } else {
             list = COMPUTER_SERVICE.listComputers();
         }
 
-        int currentPage = (checkIsNumber(request.getParameter("page")))
-                ? (Integer.parseInt(request.getParameter("page"))) : PAGE_NUMBER_DEFAULT;
-        long pageSize = (checkIsNumber(request.getParameter("limit")))
-                ? (Integer.parseInt(request.getParameter("limit"))) : PAGE_SIZE_DEFAULT;
+        int currentPage = (checkIsNumber(request.getParameter(Consts.PAGE)))
+                ? (Integer.parseInt(request.getParameter(Consts.PAGE))) : PAGE_NUMBER_DEFAULT;
+        long pageSize = (checkIsNumber(request.getParameter(Consts.LIMIT)))
+                ? (Integer.parseInt(request.getParameter(Consts.LIMIT))) : PAGE_SIZE_DEFAULT;
         long pageCount = (list.size() % 10 == 0) ? (list.size() / pageSize) : (list.size() / pageSize + 1);
 
         Page page = new Page(currentPage, pageSize, pageCount);
@@ -45,15 +46,15 @@ public class RequestMapper {
     public static ComputerDto toComputerDto(HttpServletRequest request) {
         ComputerDtoBuilder computerDtoBuilder = new ComputerDtoBuilder();
 
-        computerDtoBuilder.name(request.getParameter("computerName")).introducedDate(request.getParameter("introduced"))
-                .discontinuedDate(request.getParameter("discontinued"));
+        computerDtoBuilder.name(request.getParameter(Consts.COMPUTER_NAME)).introducedDate(request.getParameter(Consts.INTRODUCED_DATE))
+                .discontinuedDate(request.getParameter(Consts.DISCONTINUED_DATE));
 
-        if (request.getParameter("companyId") != null && (!request.getParameter("companyId").trim().isEmpty())) {
-            computerDtoBuilder.companyId(Integer.parseInt(request.getParameter("companyId")));
+        if (request.getParameter(Consts.COMPANY_ID) != null && (!request.getParameter(Consts.COMPANY_ID).trim().isEmpty())) {
+            computerDtoBuilder.companyId(Integer.parseInt(request.getParameter(Consts.COMPANY_ID)));
 
         }
-        if (request.getParameter("id") != null && (!request.getParameter("id").trim().isEmpty())) {
-            computerDtoBuilder.id(Integer.parseInt(request.getParameter("id")));
+        if (request.getParameter(Consts.ID) != null && (!request.getParameter(Consts.ID).trim().isEmpty())) {
+            computerDtoBuilder.id(Integer.parseInt(request.getParameter(Consts.ID)));
         }
 
         return computerDtoBuilder.build();

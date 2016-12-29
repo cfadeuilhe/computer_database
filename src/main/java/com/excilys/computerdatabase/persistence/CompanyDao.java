@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.*;
+import com.excilys.computerdatabase.util.Consts;
 
 /**
  * Class CompanyDAO
@@ -34,7 +35,7 @@ public enum CompanyDao implements InterfaceDao {
         List<Entity> companyList = new ArrayList<Entity>();
         try (PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery();) {
             while (rs.next()) {
-                companyList.add(new Company(rs.getInt("id"), rs.getString("name")));
+                companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,7 +85,7 @@ public enum CompanyDao implements InterfaceDao {
                 st.setString(1, null);
             ResultSet rs = st.executeQuery();
             rs.next();
-            company = new Company(rs.getInt("id"), rs.getString("name"));
+            company = new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME));
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("mySQL error : " + SQL_READ_ONE);

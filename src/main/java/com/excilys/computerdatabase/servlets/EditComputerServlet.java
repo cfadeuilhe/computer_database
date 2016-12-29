@@ -43,7 +43,7 @@ public class EditComputerServlet extends HttpServlet {
          
         ComputerDto computerDto = RequestMapper.toComputerDto(request);
         System.out.println(computerDto);
-        List<String> errorsList = ComputerDtoValidator.validator(computerDto);
+        List<String> errorsList = ComputerDtoValidator.validate(computerDto);
         System.out.println(errorsList);
         if (errorsList.isEmpty()) {
             // update computer

@@ -38,7 +38,7 @@ public class AddComputerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         ComputerDto computerDto = RequestMapper.toComputerDto(request);
-        List<String> errorsList = ComputerDtoValidator.validator(computerDto);
+        List<String> errorsList = ComputerDtoValidator.validate(computerDto);
         
         if (errorsList.isEmpty()) {
             // create computer
