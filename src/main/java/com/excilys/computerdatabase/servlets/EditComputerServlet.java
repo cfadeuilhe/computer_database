@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.mapper.DtoMapper;
 import com.excilys.computerdatabase.mapper.RequestMapper;
+import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.model.Entity;
@@ -21,9 +22,8 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class EditComputerServlet extends HttpServlet {
 	
-	private final static CompanyService COMPANY_SERVICE = new CompanyService();
+	private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
 	private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
-	private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Entity> list = new ArrayList<Entity>();
@@ -48,6 +48,7 @@ public class EditComputerServlet extends HttpServlet {
         if (errorsList.isEmpty()) {
             // update computer
             Computer computer = DtoMapper.dtoToComputer(computerDto);
+            computer.setCompany(new Company(computerDto.getCompanyId(), computerDto.getCompanyName()));
             COMPUTER_SERVICE.update(computer.getId(), computer);
             request.setAttribute("computer", computerDto);
         } else {

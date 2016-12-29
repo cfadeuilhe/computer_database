@@ -13,28 +13,29 @@ import com.zaxxer.hikari.HikariDataSource;
  *
  */
 public enum ConnectionDao {
+
     INSTANCE;
 
-    //private final static String URL = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
-    //private final static String LOGIN = "admincdb";
-    //private final static String PASSWORD = "qwerty1234";
+    // private final static String URL =
+    // "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
+    // private final static String LOGIN = "admincdb";
+    // private final static String PASSWORD = "qwerty1234";
     private HikariDataSource ds = new HikariDataSource();
-    /*private HikariConfig config = new HikariConfig("/credentials.properties");
-    private HikariDataSource ds = new HikariDataSource(config);*/
+    /*
+     * private HikariConfig config = new
+     * HikariConfig("/credentials.properties"); private HikariDataSource ds =
+     * new HikariDataSource(config);
+     */
     private Connection cn = null;
-/*
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            // Exit program because driver not found
-            System.out.println("Driver not found");
-            throw new RuntimeException(e);
 
-        }
-    }
-*/
+    /*
+     * static { try { Class.forName("com.mysql.cj.jdbc.Driver"); } catch
+     * (ClassNotFoundException e) { e.printStackTrace(); // Exit program because
+     * driver not found System.out.println("Driver not found"); throw new
+     * RuntimeException(e);
+     * 
+     * } }
+     */
     /**
      * getConnection (to sql database)
      * 

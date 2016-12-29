@@ -25,7 +25,8 @@
 					</div>
 					<h1>Edit Computer</h1>
 					<form action="editComputer" method="POST">
-						<input type="hidden" name="id" value="${computerToEdit.id }" id="id" />
+						<input type="hidden" name="id" value="${computerToEdit.id }"
+							id="id" />
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label>
@@ -34,20 +35,20 @@
 										id="computerName" value="${computerToEdit.name }">
 								</c:if>
 								<c:if test="${computerToEdit.name == null }">
-									<input type="text" name="computerName" class="form-control" id="computerName"
-										placeholder="Computer name">
+									<input type="text" name="computerName" class="form-control"
+										id="computerName" placeholder="Computer name">
 								</c:if>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" name="introduced" class="form-control" id="introduced"
-									placeholder="Introduced date"
+									type="date" name="introduced" class="form-control"
+									id="introduced" placeholder="Introduced date"
 									value="${computerToEdit.introducedDate }">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" name="discontinued" class="form-control" id="discontinued"
-									placeholder="Discontinued date"
+									type="date" name="discontinued" class="form-control"
+									id="discontinued" placeholder="Discontinued date"
 									value="${computerToEdit.discontinuedDate }">
 							</div>
 							<div class="form-group">

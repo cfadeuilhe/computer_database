@@ -17,7 +17,7 @@ import com.excilys.computerdatabase.service.CompanyService;
  *
  */
 public class RsMapper {
-    private final static CompanyService COMPANY_SERVICE = new CompanyService();
+    private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
     /**
      * Mapper from ResultSet to Computer
      * 
@@ -26,12 +26,8 @@ public class RsMapper {
      */
     public Computer rsToComputer(ResultSet rs) {
         ComputerBuilder computerBuilder = new ComputerBuilder();
-        Company company = new Company();
         try {
-            if (rs.getInt("company_id") != 0) {
-                company = COMPANY_SERVICE.readOne(rs.getInt("company_id"));
-            }
-            computerBuilder.id(rs.getInt("id")).name(rs.getString("name")).company(company);
+            computerBuilder.id(rs.getInt("id")).name(rs.getString("name"));
             if (rs.getDate("introduced") != null) {
                 computerBuilder.introducedDate(rs.getDate("introduced").toLocalDate());
             }
@@ -53,7 +49,7 @@ public class RsMapper {
     public Company rsToCompany(ResultSet rs) {
         Company company = new Company();
         try {
-            company.setid(rs.getInt("id"));
+            company.setId(rs.getInt("id"));
             company.setName(rs.getString("name"));
         } catch (SQLException e) {
             e.printStackTrace();

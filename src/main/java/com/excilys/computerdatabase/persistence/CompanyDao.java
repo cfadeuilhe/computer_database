@@ -24,10 +24,6 @@ public enum CompanyDao implements InterfaceDao {
     private final static String SQL_DELETE = "DELETE FROM company WHERE id=?";
     private final static String SQL_DELETE_COMPUTERS = "DELETE FROM computer WHERE computer.company_id=?";
 
-    public static void main(String args[]){
-        delete(40);
-    }
-    
     /**
      * read - get all Company from database
      * 
@@ -115,15 +111,15 @@ public enum CompanyDao implements InterfaceDao {
         CONNECTION_FACTORY.closeConnection();
     }
 
-    public static void delete(long id) {
+    public void delete(long id) {
         try (Connection cn = CONNECTION_FACTORY.getConnection();) {
             cn.setAutoCommit(false);
-            
+
             try {
                 PreparedStatement stComputer = cn.prepareStatement(SQL_DELETE_COMPUTERS);
                 stComputer.setLong(1, id);
                 stComputer.executeUpdate();
-                
+
                 PreparedStatement stCompany = cn.prepareStatement(SQL_DELETE);
                 stCompany.setLong(1, id);
                 stCompany.executeUpdate();
@@ -133,7 +129,7 @@ public enum CompanyDao implements InterfaceDao {
                 System.out.println("SQL ISSUE -> ROLLBACK");
             }
             cn.commit();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("CONNECTION ISSUE");

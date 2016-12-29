@@ -18,7 +18,7 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  */
 public class ComputerService {
 
-    private static ComputerService INSTANCE=null;
+    private static ComputerService INSTANCE = new ComputerService(ComputerDao.INSTANCE);
     private static ComputerDao COMPUTER_DAO;
 
     private ComputerService(ComputerDao computerDao) {
@@ -29,13 +29,10 @@ public class ComputerService {
 
     }
 
-    public static ComputerService getInstance(){
-        if(INSTANCE == null){
-            INSTANCE = new ComputerService(ComputerDao.INSTANCE);
-        }
+    public static ComputerService getInstance() {
         return INSTANCE;
     }
-    
+
     /**
      * listComputers - call DAO to get the list of all Computer from database
      * 
@@ -64,12 +61,12 @@ public class ComputerService {
         list = COMPUTER_DAO.readPages(p);
         return list;
     }
-
+/*
     public List<Entity> searchPages(Page p) {
         List<Entity> list = new ArrayList<Entity>();
         list = COMPUTER_DAO.searchPages(p);
         return list;
-    }
+    }*/
 
     /**
      * readOne - call DAO to get a specific Computer from database

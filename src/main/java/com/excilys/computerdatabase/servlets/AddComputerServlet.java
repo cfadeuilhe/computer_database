@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.mapper.DtoMapper;
 import com.excilys.computerdatabase.mapper.RequestMapper;
+import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
-import com.excilys.computerdatabase.persistence.ComputerDao;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class AddComputerServlet extends HttpServlet {
 
-    private final static CompanyService COMPANY_SERVICE = new CompanyService();
+    private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
     @Override
@@ -43,6 +43,7 @@ public class AddComputerServlet extends HttpServlet {
         if (errorsList.isEmpty()) {
             // create computer
             Computer computer = DtoMapper.dtoToComputer(computerDto);
+            computer.setCompany(new Company(computerDto.getCompanyId(), computerDto.getCompanyName()));
             COMPUTER_SERVICE.create(computer);
             request.setAttribute("computer", computerDto);
         } else {

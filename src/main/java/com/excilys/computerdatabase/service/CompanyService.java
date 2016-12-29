@@ -6,6 +6,7 @@ import java.util.List;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.persistence.CompanyDao;
+import com.excilys.computerdatabase.persistence.ComputerDao;
 
 /**
  * class CompanyService
@@ -15,8 +16,21 @@ import com.excilys.computerdatabase.persistence.CompanyDao;
  */
 public class CompanyService {
 
-	private final static CompanyDao COMPANY_DAO = CompanyDao.INSTANCE;
+    private static CompanyService INSTANCE = new CompanyService(CompanyDao.INSTANCE);
+	private static CompanyDao COMPANY_DAO = CompanyDao.INSTANCE;
 
+    private CompanyService(CompanyDao companyDao) {
+        this.COMPANY_DAO = companyDao;
+    }
+
+    private CompanyService() {
+
+    }
+
+    public static CompanyService getInstance() {
+        return INSTANCE;
+    }
+    
 	public List<Entity> listCompanies() {
 		List<Entity> list = new ArrayList<Entity>();
 		list = COMPANY_DAO.read();

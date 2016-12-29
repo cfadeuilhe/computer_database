@@ -64,12 +64,8 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a
-								href="#&orderby=yes"
-								onclick=""><c:out value="Computer Name"></c:out></a>
-						
-						
-							</th>
+						<th><a href="#&orderby=yes" onclick=""><c:out
+									value="Computer Name"></c:out></a></th>
 						<th><c:out value="Introduced date"></c:out></th>
 						<!-- Table header for Discontinued Date -->
 						<th><c:out value="Discontinued date"></c:out></th>
