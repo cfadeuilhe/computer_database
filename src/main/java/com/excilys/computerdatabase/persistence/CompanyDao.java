@@ -41,9 +41,8 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
         } catch (SQLException e) {
-            logger.error( "CompanyDao : read() catched SQLException",e);
+            logger.error( "Cannot read company list. ",e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return companyList;
     }
 
@@ -63,9 +62,8 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(RS_TO_COMPUTER.rsToCompany(rs));
             }
         } catch (SQLException e) {
-            logger.error( "CompanyDao : readPages() catched SQLException",e);
+            logger.error( "Cannot read a specific page of companies. ",e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return companyList;
     }
 
@@ -86,9 +84,8 @@ public enum CompanyDao implements InterfaceDao {
             rs.next();
             company = new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME));
         } catch (SQLException e) {
-            logger.error( "CompanyDao : readOne() catched SQLException",e);
+            logger.error( "Cannot read company with ID ", id,e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return company;
     }
 
@@ -103,9 +100,8 @@ public enum CompanyDao implements InterfaceDao {
             st.setString(1, c.getName());
             st.executeUpdate();
         } catch (SQLException e) {
-            logger.error( "CompanyDao : create() catched SQLException",e);
+            logger.error( "Cannot create new company ",e);
         }
-        CONNECTION_FACTORY.closeConnection();
     }
 
     public void delete(long id, Connection connection) throws PersistenceException {
@@ -113,7 +109,7 @@ public enum CompanyDao implements InterfaceDao {
             stCompany.setLong(1, id);
             stCompany.executeUpdate();
         } catch (SQLException e) {
-            logger.error( "CompanyDao : delete() catched SQLException",e);
+            logger.error( "Cannot delete company with ID ", id,e);
             throw new PersistenceException(e);
         }
     }

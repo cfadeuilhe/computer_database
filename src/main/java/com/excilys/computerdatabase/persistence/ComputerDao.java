@@ -54,7 +54,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return computerList;
     }
 
@@ -74,7 +73,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return count;
     }
 
@@ -95,7 +93,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return computerList;
     }
 
@@ -130,7 +127,6 @@ public enum ComputerDao implements InterfaceDao {
                 logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
             }
         }
-        CONNECTION_FACTORY.closeConnection();
         return computerList;
     }
 
@@ -156,7 +152,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
         return computer;
     }
 
@@ -189,7 +184,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
     }
 
     /**
@@ -213,7 +207,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
         }
-        CONNECTION_FACTORY.closeConnection();
     }
 
     /**
@@ -229,7 +222,6 @@ public enum ComputerDao implements InterfaceDao {
         } catch (SQLException e) {
             logger.error(e.toString());
         }
-        CONNECTION_FACTORY.closeConnection();
     }
 
     public void deleteByCompany(long id, Connection connection) throws PersistenceException {

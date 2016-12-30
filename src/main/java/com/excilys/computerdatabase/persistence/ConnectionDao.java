@@ -23,13 +23,32 @@ public enum ConnectionDao {
     INSTANCE;
     private final static Logger logger = LoggerFactory.getLogger(ConnectionDao.class);
     private static final String PROPERTIES_FILE = "credentials.properties";
-    private HikariDataSource dataSource;
+    private static HikariDataSource dataSource;
 
     private ThreadLocal<Connection> threadLocal = new ThreadLocal<Connection>();
 
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            HikariConfig config;
+            config = new HikariConfig();
+            
+            Properties properties = new Properties();
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream propertiesFile = classLoader.getResourceAsStream(PROPERTIES_FILE);
+            logger.info(propertiesFile + " ");
+            try {
+                properties.load(propertiesFile);
+            } catch (IOException e) {
+                logger.error("ConnectionDao : getConnection() catched FileNotFoundException", e);
+            }
+
+            config.setJdbcUrl(properties.getProperty("jdbcURL"));
+            config.setUsername(properties.getProperty("user"));
+            config.setPassword(properties.getProperty("password"));
+
+            dataSource = new HikariDataSource(config);
+            
         } catch (ClassNotFoundException e) {
             logger.error( "ConnectionDao : () catched ClassNotFoundException",e);
             throw new RuntimeException(e);
@@ -40,35 +59,10 @@ public enum ConnectionDao {
      * getConnection (to sql database)
      * 
      * @return Connection
+     * @throws SQLException 
      */
-    public Connection getConnection() {
-        HikariConfig config;
-        Connection cn = null;
-        config = new HikariConfig();
-
-        Properties properties = new Properties();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream propertiesFile = classLoader.getResourceAsStream(PROPERTIES_FILE);
-        logger.info(propertiesFile + " ");
-        try {
-            properties.load(propertiesFile);
-        } catch (IOException e) {
-            logger.error("ConnectionDao : getConnection() catched FileNotFoundException", e);
-        }
-
-        config.setJdbcUrl(properties.getProperty("jdbcURL"));
-        config.setUsername(properties.getProperty("user"));
-        config.setPassword(properties.getProperty("password"));
-
-        dataSource = new HikariDataSource(config);
-
-        try {
-            cn = dataSource.getConnection();
-        } catch (SQLException e) {
-            logger.error("ConnectionDao : getConnection() catched SQLException", e);
-        }
-
-        return cn;
+    public Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
     }
 
     public Connection initTransaction() {
@@ -115,12 +109,5 @@ public enum ConnectionDao {
             logger.error("ConnectionDao : closeTransactionConnection() catched SQLException", e);
         }
         threadLocal.set(null);
-    }
-
-    /**
-     * closeConnection
-     */
-    public void closeConnection() {
-        dataSource.close();
     }
 }
