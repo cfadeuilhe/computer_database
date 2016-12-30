@@ -6,6 +6,7 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.*;
 import com.excilys.computerdatabase.util.Consts;
@@ -22,10 +23,10 @@ public enum CompanyDao implements InterfaceDao {
     private final static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
     private final static ConnectionDao CONNECTION_FACTORY = ConnectionDao.INSTANCE;
     private final static RsMapper RS_TO_COMPUTER = new RsMapper();
-    private final static String SQL_READ = "SELECT * FROM company;";
-    private final static String SQL_READ_PAGES = "SELECT * FROM company LIMIT ? OFFSET ?;";
-    private final static String SQL_READ_ONE = "SELECT * FROM company WHERE id=?;";
-    private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?');";
+    private final static String SQL_READ = "SELECT * FROM company";
+    private final static String SQL_READ_PAGES = "SELECT * FROM company LIMIT ? OFFSET ?";
+    private final static String SQL_READ_ONE = "SELECT * FROM company WHERE id=?";
+    private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?')";
     private final static String SQL_DELETE = "DELETE FROM company WHERE id=?";
 
     /**
@@ -40,7 +41,7 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error( "CompanyDao : read() catched SQLException",e);
         }
         CONNECTION_FACTORY.closeConnection();
         return companyList;
@@ -62,7 +63,7 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(RS_TO_COMPUTER.rsToCompany(rs));
             }
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error( "CompanyDao : readPages() catched SQLException",e);
         }
         CONNECTION_FACTORY.closeConnection();
         return companyList;
@@ -75,7 +76,6 @@ public enum CompanyDao implements InterfaceDao {
      * @return Company
      */
     public Entity readOne(long id) {
-        
         Company company = null;
         try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE);) {
             if (id != 0)
@@ -86,7 +86,7 @@ public enum CompanyDao implements InterfaceDao {
             rs.next();
             company = new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME));
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error( "CompanyDao : readOne() catched SQLException",e);
         }
         CONNECTION_FACTORY.closeConnection();
         return company;
@@ -103,17 +103,18 @@ public enum CompanyDao implements InterfaceDao {
             st.setString(1, c.getName());
             st.executeUpdate();
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error( "CompanyDao : create() catched SQLException",e);
         }
         CONNECTION_FACTORY.closeConnection();
     }
 
-    public void delete(long id, Connection connection) throws SQLException {
+    public void delete(long id, Connection connection) throws PersistenceException {
         try (PreparedStatement stCompany = connection.prepareStatement(SQL_DELETE)) {
             stCompany.setLong(1, id);
             stCompany.executeUpdate();
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error( "CompanyDao : delete() catched SQLException",e);
+            throw new PersistenceException(e);
         }
     }
 }

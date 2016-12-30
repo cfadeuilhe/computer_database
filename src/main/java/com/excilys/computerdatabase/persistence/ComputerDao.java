@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.mapper.RsMapper;
 import com.excilys.computerdatabase.model.*;
 import com.excilys.computerdatabase.util.Consts;
@@ -58,7 +59,6 @@ public enum ComputerDao implements InterfaceDao {
     }
 
     public long count(String search) {
-        // Connection cn = CONNECTION_FACTORY.getConnection();
         long count = 0;
         String sqlCount = SQL_COUNT;
         if (search != null && !search.isEmpty()) {
@@ -232,12 +232,13 @@ public enum ComputerDao implements InterfaceDao {
         CONNECTION_FACTORY.closeConnection();
     }
 
-    public void deleteByCompany(long id, Connection connection) {
+    public void deleteByCompany(long id, Connection connection) throws PersistenceException {
         try (PreparedStatement st = connection.prepareStatement(SQL_DELETE_BY_COMPANY)) {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error( "ComputerDao : deleteByCompany() catched SQLException",e);
+            throw new PersistenceException(e);
         }
     }
 }

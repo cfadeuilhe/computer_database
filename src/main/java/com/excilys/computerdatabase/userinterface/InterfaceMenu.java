@@ -23,13 +23,23 @@ public class InterfaceMenu {
 	private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
 	private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
 
+	
+	public static void main(String args[]){
+	    try {
+            switchMenu();
+        } catch (IOException e) {
+            logger.error( "InterfaceMenu : main() catched IOException",e);
+        } catch (ParseException e) {
+            logger.error( "InterfaceMenu : main() catched ParseException",e);
+        }
+	}
 	/**
 	 * switchMenu - main menu of the program
 	 * 
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public void switchMenu() throws IOException, ParseException {
+	public static void switchMenu() throws IOException, ParseException {
 		String userInput, userInputPage;
 		do {
 			userInput = askUser(
@@ -94,15 +104,15 @@ public class InterfaceMenu {
 		} while (!userInput.equals("8"));
 	}
 
-	public void createComputer() {
+	public static void createComputer() {
 		//COMPUTER_SERVICE.create(askComputerDetails());
 	}
 
-	public void deleteComputer(long id) {
+	public static void deleteComputer(long id) {
 		COMPUTER_SERVICE.delete(id);
 	}
 	
-    public void deleteCompany(long id) {
+    public static void deleteCompany(long id) {
         COMPANY_SERVICE.delete(id);
     }
 
@@ -111,7 +121,7 @@ public class InterfaceMenu {
 	 * 
 	 * @param Page
 	 */
-	public void showPage(Page p) {
+	public static void showPage(Page p) {
 		logger.info((COMPUTER_SERVICE.readPages(p).isEmpty()) ? "You reached the end of the database"
 				: COMPUTER_SERVICE.readPages(p).toString());
 		pagesMenu(p);
@@ -122,7 +132,7 @@ public class InterfaceMenu {
 	 * 
 	 * @param Page
 	 */
-	public void pagesMenu(Page p) {
+	public static void pagesMenu(Page p) {
 		String newNumber;
 		String userInput = askUser(
 				"Choose an option: \n\tp- for previous page, \n\tn- next page, \n\to- other page, \n\tc- change nb of elements, \n\tq- quit");
@@ -175,7 +185,7 @@ public class InterfaceMenu {
 	 *            userInput
 	 * @return boolean
 	 */
-	public boolean validateStringToInt(String userInput) {
+	public static boolean validateStringToInt(String userInput) {
 		try {
 			Integer.parseInt(userInput);
 		} catch (NumberFormatException e) {
@@ -189,7 +199,7 @@ public class InterfaceMenu {
 		return true;
 	}
 
-	public void updateComputer(long userChoice) {
+	public static void updateComputer(long userChoice) {
 		COMPUTER_SERVICE.update(userChoice, askComputerDetails());
 	}
 
@@ -198,7 +208,7 @@ public class InterfaceMenu {
 	 * 
 	 * @return Computer
 	 */
-	public Computer askComputerDetails() {
+	public static Computer askComputerDetails() {
 		String choiceName, choiceCompany, choiceIntroDate, choiceDiscoDate;
 		LocalDate intro, disco;
 		do {
@@ -222,7 +232,7 @@ public class InterfaceMenu {
 	 *            question
 	 * @return userInput
 	 */
-	public String askUser(String question) {
+	public static String askUser(String question) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		logger.info(question);
 		String userInput = null;
@@ -246,7 +256,7 @@ public class InterfaceMenu {
 	 *            date
 	 * @return LocalDate
 	 */
-	public LocalDate formatDate(String date) {
+	public static LocalDate formatDate(String date) {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate dateResult;
 		if (date.equals("t")) {

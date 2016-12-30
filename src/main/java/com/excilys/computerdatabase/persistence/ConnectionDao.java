@@ -1,8 +1,5 @@
 package com.excilys.computerdatabase.persistence;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -26,16 +23,16 @@ public enum ConnectionDao {
     INSTANCE;
     private final static Logger logger = LoggerFactory.getLogger(ConnectionDao.class);
     private static final String PROPERTIES_FILE = "credentials.properties";
-    HikariDataSource dataSource;
+    private HikariDataSource dataSource;
+
+    private ThreadLocal<Connection> threadLocal = new ThreadLocal<Connection>();
 
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace(); // Exit program because
-            System.out.println("Driver not found");
+            logger.error( "ConnectionDao : () catched ClassNotFoundException",e);
             throw new RuntimeException(e);
-
         }
     }
 
@@ -47,58 +44,77 @@ public enum ConnectionDao {
     public Connection getConnection() {
         HikariConfig config;
         Connection cn = null;
+        config = new HikariConfig();
+
+        Properties properties = new Properties();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream propertiesFile = classLoader.getResourceAsStream(PROPERTIES_FILE);
+        logger.info(propertiesFile + " ");
         try {
-            config = new HikariConfig();
-            
-            Properties properties = new Properties();
-            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            InputStream propertiesFile = classLoader.getResourceAsStream(PROPERTIES_FILE);
-            logger.info(propertiesFile + " ");
-            try {
-                properties.load(propertiesFile);
-            } catch (IOException e) {
-                logger.error( "ConnectionDao : getConnection() catched FileNotFoundException",e);
-            }
-            
-            
-            config.setJdbcUrl(properties.getProperty("jdbcURL"));
-            config.setUsername(properties.getProperty("user"));
-            config.setPassword(properties.getProperty("password"));
-            
-            dataSource = new HikariDataSource(config);
-            
-            cn = dataSource.getConnection();
-            
-        } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            properties.load(propertiesFile);
+        } catch (IOException e) {
+            logger.error("ConnectionDao : getConnection() catched FileNotFoundException", e);
         }
+
+        config.setJdbcUrl(properties.getProperty("jdbcURL"));
+        config.setUsername(properties.getProperty("user"));
+        config.setPassword(properties.getProperty("password"));
+
+        dataSource = new HikariDataSource(config);
+
+        try {
+            cn = dataSource.getConnection();
+        } catch (SQLException e) {
+            logger.error("ConnectionDao : getConnection() catched SQLException", e);
+        }
+
         return cn;
     }
 
     public Connection initTransaction() {
-        Connection connection = this.getConnection();
         try {
-            connection.setAutoCommit(false);
+            threadLocal.set(this.getConnection());
+            threadLocal.get().setAutoCommit(false);
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error("HikariConnectionProvider : beginTransaction() catched SQLException ", e);
         }
-        return connection;
+        return threadLocal.get();
     }
 
-    public void commitTransaction(Connection connection) {
+    public void commitTransaction() {
         try {
-            connection.commit();
+            threadLocal.get().commit();
+            closeTransaction();
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            rollbackTransaction();
+            logger.error("ConnectionDao : commitTransaction() catched SQLException", e);
+        }
+    }
+
+    public void rollbackTransaction() {
+        try {
+            threadLocal.get().rollback();
+        } catch (SQLException e) {
+            logger.error("ConnectionDao : rollbackTransaction() catched SQLException", e);
         }
     }
 
     public void rollbackConnection(Connection connection) {
         try {
             connection.rollback();
+            closeTransaction();
         } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
+            logger.error("ConnectionDao : rollbackConnection() catched SQLException", e);
         }
+    }
+
+    public void closeTransaction() {
+        try {
+            threadLocal.get().close();
+        } catch (SQLException e) {
+            logger.error("ConnectionDao : closeTransactionConnection() catched SQLException", e);
+        }
+        threadLocal.set(null);
     }
 
     /**

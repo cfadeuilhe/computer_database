@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.persistence.CompanyDao;
@@ -54,12 +55,12 @@ public class CompanyService {
     public void delete(long id) {
         Connection connection = ConnectionDao.INSTANCE.initTransaction();
         try {
-            COMPANY_DAO.delete(id,connection);
             COMPUTER_DAO.deleteByCompany(id,connection);
-            ConnectionDao.INSTANCE.commitTransaction(connection);
-        } catch (SQLException e) {
-            logger.error("${enclosing_type} : ${enclosing_method}() catched ${exception_type}", e);
-            ConnectionDao.INSTANCE.rollbackConnection(connection);
+            COMPANY_DAO.delete(id,connection);
+            ConnectionDao.INSTANCE.commitTransaction();
+        } catch (PersistenceException e) {
+            logger.error("delete() catched PersistenceException", e);
+            ConnectionDao.INSTANCE.rollbackTransaction();
         }
         
     }
