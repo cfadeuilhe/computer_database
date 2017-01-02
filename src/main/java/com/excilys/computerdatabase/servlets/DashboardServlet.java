@@ -1,6 +1,8 @@
 package com.excilys.computerdatabase.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +26,8 @@ public class DashboardServlet extends HttpServlet {
 
         long count = 0;
         String search = request.getParameter(Consts.SEARCH);
+        Map<String, String> order = new HashMap<>();
+        
         count = COMPUTER_SERVICE.countComputers(search);
         Page p = RequestMapper.requestToPage(request);
 

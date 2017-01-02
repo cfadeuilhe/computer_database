@@ -58,6 +58,13 @@ $(function() {
 
 }( jQuery ));
 
+//Function to sort by column
+(function ( $ ) {
+    $.fn.columnSort = function(column) {
+    	
+    	
+    };
+}( jQuery ));
 
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ( $ ) {
