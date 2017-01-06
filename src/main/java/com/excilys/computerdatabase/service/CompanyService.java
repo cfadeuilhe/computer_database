@@ -1,7 +1,5 @@
 package com.excilys.computerdatabase.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,27 +39,32 @@ public class CompanyService {
         return INSTANCE;
     }
     
-	public List<Entity> listCompanies() {
+	public List<Entity> listEntities() {
+        ConnectionDao.INSTANCE.initConnection();
 		List<Entity> list = new ArrayList<Entity>();
 		list = COMPANY_DAO.read();
+        ConnectionDao.INSTANCE.closeConnection();
 		return list;
 	}
 
-	public Company readOne(long id) {
+	public Entity readOne(long id) {
+        ConnectionDao.INSTANCE.initConnection();
 		Company c = (Company) COMPANY_DAO.readOne(id);
+        ConnectionDao.INSTANCE.closeConnection();
 		return c;
 	}
 
     public void delete(long id) {
-        Connection connection = ConnectionDao.INSTANCE.initTransaction();
+        ConnectionDao.INSTANCE.initConnection();
+        ConnectionDao.INSTANCE.initTransaction();
         try {
-            COMPUTER_DAO.deleteByCompany(id,connection);
-            COMPANY_DAO.delete(id,connection);
+            COMPUTER_DAO.deleteByCompany(id);
+            COMPANY_DAO.delete(id);
             ConnectionDao.INSTANCE.commitTransaction();
         } catch (PersistenceException e) {
             logger.error("delete() catched PersistenceException", e);
             ConnectionDao.INSTANCE.rollbackTransaction();
         }
-        
+
     }
 }

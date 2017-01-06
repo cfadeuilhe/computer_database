@@ -1,15 +1,25 @@
-package com.excilys.computerdatabase.persistence;
+package com.excilys.computerdatabase.service;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.exceptions.PersistenceException;
+import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.util.Consts;
 
-public interface InterfaceDao {
+public interface InterfaceService {
 
-    public default List<Entity> read() {
+    public void delete(long id);
+
+    public Company readOne(long id);
+
+    public List<Entity> listEntities();
+
+    public default void update(long id, Entity entity) {
+        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
+    }
+
+    public default void create(Entity entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
@@ -17,19 +27,12 @@ public interface InterfaceDao {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default Entity readOne(long id) {
+    public default List<Entity> listSearch(String search) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default int create(Entity entity) {
+    public default long countEntities(String search) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
-
-    public default void update(long id, Entity entity) {
-        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
-    }
-
-    public default void delete(long id) throws PersistenceException {
-        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
-    }
+    
 }

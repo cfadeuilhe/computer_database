@@ -3,7 +3,7 @@
 
     <groupId>com.excilys.computerdatabase</groupId>
     <artifactId>Cdb</artifactId>
-    <version>0.3.6</version>
+    <version>0.4.1</version>
     <name>CDB</name>
 
     <properties>
@@ -16,7 +16,9 @@
         <tomcat.version>8.5.9</tomcat.version>
         <mysql.version>6.0.5</mysql.version>
         <hikari.version>2.5.1</hikari.version>
-        <maven.version>3.6.0</maven.version>
+        <maven-compiler.version>3.6.0</maven-compiler.version>
+        <maven-checkstyle.version>2.17</maven-checkstyle.version>
+        <maven-checkstyle.encoding>UTF-8</maven-checkstyle.encoding>
         <java.version>1.8</java.version>
         <selenium.version>3.0.1</selenium.version>
         <gatling.version>2.2.3</gatling.version>
@@ -82,12 +84,6 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
@@ -111,7 +107,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.version}</version>
+                <version>${maven-compiler.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -121,15 +117,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
+                <version>${maven-checkstyle.version}</version>
                 <executions>
                     <execution>
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
-                            <configLocation>src/main/config/checkstyle/checkstyle.xml</configLocation>
-                            <suppressionLocation>src/main/config/checkstyle/suppressions.xml</suppressionLocation>
-                            <encoding>UTF-8</encoding>
+                            <configLocation>checkstyle.xml</configLocation>
+                            <suppressionLocation>suppressions.xml</suppressionLocation>
+                            <encoding>${maven-checkstyle.encoding}</encoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
                             <linkXRef>false</linkXRef>
@@ -144,7 +140,7 @@
                 <version>${gatling.plugin.version}</version>
                 <executions>
                     <execution>
-                        <phase>test</phase>
+                        <phase>gatlingtest</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>

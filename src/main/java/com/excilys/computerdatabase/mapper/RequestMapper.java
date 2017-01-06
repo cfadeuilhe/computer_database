@@ -25,7 +25,7 @@ public class RequestMapper {
         if (search != null && !search.trim().isEmpty()) {
             list = COMPUTER_SERVICE.listSearch(search);
         } else {
-            list = COMPUTER_SERVICE.listComputers();
+            list = COMPUTER_SERVICE.listEntities();
         }
 
         int currentPage = (checkIsNumber(request.getParameter(Consts.PAGE)))

@@ -35,21 +35,17 @@
 										id="computerName" placeholder="Computer name">
 								</c:if>
 							</div>
-
-							<c:forEach items="${errors}" var="item">
-								<c:if test="${item == 'NoName' }">
-									<p>
-										<font color="red"><c:out value="The name is mandatory"></c:out></font>
-									</p>
-								</c:if>
-								<c:if test="${item == 'NameTooShort' }">
-									<p>
-										<font color="red"><c:out
-												value="The name must contain more than 2 characters"></c:out></font>
-									</p>
-								</c:if>
-							</c:forEach>
-
+							<c:if test="${errors.containsKey('NoName') }">
+								<p>
+									<font color="red"><c:out value="The name is mandatory"></c:out></font>
+								</p>
+							</c:if>
+							<c:if test="${errors.containsKey('NameTooShort') }">
+								<p>
+									<font color="red"><c:out
+											value="The name must contain more than 2 characters"></c:out></font>
+								</p>
+							</c:if>
 							<div class="form-group">
 								<label for="introduced"><c:out value="Introduced date"></c:out></label>
 								<input type="date" name="introduced" class="form-control"
@@ -57,14 +53,12 @@
 									value="${computerWrong.introducedDate }">
 							</div>
 
-							<c:forEach items="${errors}" var="item">
-								<c:if test="${item == 'DateIntroFormatError' }">
-									<p>
-										<font color="red"><c:out
-												value="The introduced date format is wrong"></c:out></font>
-									</p>
-								</c:if>
-							</c:forEach>
+							<c:if test="${errors.containsKey('DateIntroFormatError') }">
+								<p>
+									<font color="red"><c:out
+											value="The introduced date format is wrong"></c:out></font>
+								</p>
+							</c:if>
 
 							<div class="form-group">
 								<label for="discontinued"><c:out
@@ -74,23 +68,19 @@
 									value="${computerWrong.discontinuedDate }">
 							</div>
 
-							<c:forEach items="${errors}" var="item">
-								<c:if test="${item == 'DateIntroFormatError' }">
-									<p>
-										<font color="red"><c:out
-												value="The discontinued date format is wrong"></c:out></font>
-									</p>
-								</c:if>
-							</c:forEach>
+							<c:if test="${errors.containsKey('DateIntroFormatError') }">
+								<p>
+									<font color="red"><c:out
+											value="The discontinued date format is wrong"></c:out></font>
+								</p>
+							</c:if>
 
-							<c:forEach items="${errors}" var="item">
-								<c:if test="${item == 'DateOrderError' }">
-									<p>
-										<font color="red"><c:out
-												value="The introduced date must be before the discontinued date"></c:out></font>
-									</p>
-								</c:if>
-							</c:forEach>
+							<c:if test="${errors.containsKey('DateOrderError') }">
+								<p>
+									<font color="red"><c:out
+											value="The introduced date must be before the discontinued date"></c:out></font>
+								</p>
+							</c:if>
 
 							<div class="form-group">
 								<label for="companyId"><c:out value="Company"></c:out></label> <select
@@ -109,9 +99,9 @@
 										</c:if>
 									</c:if>
 									<c:if test="${computerWrong.companyId == null }">
-											<c:forEach items="${companyList}" var="item">
-												<option value=${item.id }>${item.name}</option>
-											</c:forEach>
+										<c:forEach items="${companyList}" var="item">
+											<option value=${item.id }>${item.name}</option>
+										</c:forEach>
 									</c:if>
 								</select>
 							</div>

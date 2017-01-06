@@ -1,11 +1,12 @@
 package com.excilys.computerdatabase.validators;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.util.Consts;
@@ -23,8 +24,8 @@ public class ComputerDtoValidator {
         return (id > 0);
     }
 
-    public static void idValidator(String id) {
-
+    public static boolean isANumber(String id) {
+        return (id.matches("\\d+"));
     }
 
     public static boolean nameValidator(String name) {
@@ -50,44 +51,42 @@ public class ComputerDtoValidator {
     }
 
     public static boolean isDateValidator(String date) {
-        DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        // DateFormat format = new SimpleDateFormat(DATE_FORMAT);
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
         if (date != null && date.length() > 0) {
-            try {
-                format.setLenient(false);
-                format.parse(date);
-                return true;
-            } catch (ParseException e) {
-                return false;
-            }
+            // format.setLenient(false);
+            format.parse(date);
+            return true;
         }
         return true;
     }
 
-    public static List<String> validate(ComputerDto c) {
-        List<String> list = new ArrayList<>();
+    public static Map<String, String> validate(ComputerDto c) {
+        Map<String, String> map = new HashMap<String, String>();
 
         if (c.getId() != 0) {
             if (!ComputerDtoValidator.idValidator(c.getId())) {
-                list.add(Consts.NEGATIVE_ID);
+                map.put(Consts.NEGATIVE_ID, Consts.NEGATIVE_ID);
             }
         }
         if (!ComputerDtoValidator.nameValidator(c.getName())) {
-            list.add(Consts.NO_NAME);
+            map.put(Consts.NO_NAME, Consts.NO_NAME);
         }
         if (!ComputerDtoValidator.nameLengthValidator(c.getName())) {
-            list.add(Consts.NAME_TOO_SHORT);
+            map.put(Consts.NAME_TOO_SHORT, Consts.NAME_TOO_SHORT);
         }
         if (!ComputerDtoValidator.dateOrderValidator(c.getIntroducedDate(), c.getDiscontinuedDate())) {
-            list.add(Consts.DATE_ORDER_ERROR);
+            map.put(Consts.DATE_ORDER_ERROR, Consts.DATE_ORDER_ERROR);
         }
-        if(!ComputerDtoValidator.isDateValidator(c.getIntroducedDate())){
-            list.add(Consts.DATE_INTRO_FORMAT_ERROR);
+        if (!ComputerDtoValidator.isDateValidator(c.getIntroducedDate())) {
+            map.put(Consts.DATE_INTRO_FORMAT_ERROR, Consts.DATE_INTRO_FORMAT_ERROR);
         }
-        if(!ComputerDtoValidator.isDateValidator(c.getDiscontinuedDate())){
-            list.add(Consts.DATE_DISCO_FORMAT_ERROR);
+        if (!ComputerDtoValidator.isDateValidator(c.getDiscontinuedDate())) {
+            map.put(Consts.DATE_DISCO_FORMAT_ERROR, Consts.DATE_DISCO_FORMAT_ERROR);
         }
 
-        return list;
+        return map;
     }
 }

@@ -46,11 +46,12 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="deleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
+		<input type="hidden" name="order" value="before" id="order" />
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
@@ -61,11 +62,14 @@
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
+									class="fa fa-trash-o"></i>
 							</a>
 						</span></th>
-						<th id="computerName" onclick="$.fn.columnSort('computerName');"><c:out
-								value="Computer Name"></c:out></th>
+						<th class="orderBy" id="computerName"><c:out
+								value="Computer Name	"></c:out><a href="#" id="orderBy"
+							onclick="$.fn.orderBy('computerName');"> <i id="orderArrow"
+								class="fa fa-arrow-down"></i>
+						</a></th>
 						<th><c:out value="Introduced date"></c:out></th>
 						<!-- Table header for Discontinued Date -->
 						<th><c:out value="Discontinued date"></c:out></th>
@@ -83,7 +87,7 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value=${item.id }></td>
 							<td><a
-								href="editComputer?id=${item.id }&computerName=${item.name }&introduced=${item.introducedDate}&discontinued=${item.discontinuedDate}&companyId=${item.company.id}"
+								href="editComputer?id=${item.id }&computerName=${item.name }&introduced=${item.introducedDate}&discontinued=${item.discontinuedDate}&companyId=${item.company.id}&page=${page.currentPage}"
 								onclick="">${item.name}</a></td>
 							<td><c:out value="${item.introducedDate}"></c:out></td>
 							<td><c:out value="${item.discontinuedDate}"></c:out></td>

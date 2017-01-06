@@ -19,7 +19,7 @@ import com.excilys.computerdatabase.util.Consts;
 
 public class DashboardServlet extends HttpServlet {
 
-    final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
+    private final static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,15 +28,16 @@ public class DashboardServlet extends HttpServlet {
         String search = request.getParameter(Consts.SEARCH);
         Map<String, String> order = new HashMap<>();
         
-        count = COMPUTER_SERVICE.countComputers(search);
+        count = COMPUTER_SERVICE.countEntities(search);
         Page p = RequestMapper.requestToPage(request);
-
+        String t = request.getParameter("order");
         request.setAttribute(Consts.COUNT, count);
         request.setAttribute(Consts.PAGE, p);
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
     }
-
+    
+/*
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,6 +48,7 @@ public class DashboardServlet extends HttpServlet {
             COMPUTER_SERVICE.delete(Long.parseLong(parse[i]));
         }
 
-        doGet(request, response);
-    }
+        //this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+        response.sendRedirect("addComputer");
+    }*/
 }

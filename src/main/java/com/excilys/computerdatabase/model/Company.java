@@ -1,5 +1,9 @@
 package com.excilys.computerdatabase.model;
-
+/**
+ *
+ * @author juanita
+ *
+ */
 public class Company extends Entity {
 
     public Company(long id, String name) {

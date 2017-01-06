@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,14 +26,14 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class AddComputerServlet extends HttpServlet {
 
-    final Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
+    private final static Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
     private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Entity> list = new ArrayList<Entity>();
-        list = COMPANY_SERVICE.listCompanies();
+        list = COMPANY_SERVICE.listEntities();
         request.setAttribute(Consts.COMPANY_LIST, list);
 
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
@@ -43,18 +44,19 @@ public class AddComputerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         ComputerDto computerDto = RequestMapper.toComputerDto(request);
-        List<String> errorsList = ComputerDtoValidator.validate(computerDto);
+        Map<String,String> errorsMap = ComputerDtoValidator.validate(computerDto);
         
-        if (errorsList.isEmpty()) {
+        if (errorsMap.isEmpty()) {
             // create computer
             Computer computer = DtoMapper.dtoToComputer(computerDto);
             computer.setCompany(new Company(computerDto.getCompanyId(), computerDto.getCompanyName()));
             COMPUTER_SERVICE.create(computer);
-            request.setAttribute("computer", computerDto);
+            request.getSession().setAttribute("computer", computerDto);
         } else {
-            request.setAttribute("computerWrong", computerDto);
-            request.setAttribute("errors", errorsList);
+            request.getSession().setAttribute("computerWrong", computerDto);
+            request.getSession().setAttribute("errors", errorsMap);
         }
-        doGet(request, response);
+        
+        response.sendRedirect("addComputer");
     }
 }

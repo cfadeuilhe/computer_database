@@ -18,10 +18,10 @@ import com.excilys.computerdatabase.util.Consts;
  *
  */
 public enum CompanyDao implements InterfaceDao {
-    
+
     INSTANCE;
     private final static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
-    private final static ConnectionDao CONNECTION_FACTORY = ConnectionDao.INSTANCE;
+    private final static ConnectionDao CONNECTION_INSTANCE = ConnectionDao.INSTANCE;
     private final static RsMapper RS_TO_COMPUTER = new RsMapper();
     private final static String SQL_READ = "SELECT * FROM company";
     private final static String SQL_READ_PAGES = "SELECT * FROM company LIMIT ? OFFSET ?";
@@ -36,12 +36,13 @@ public enum CompanyDao implements InterfaceDao {
      */
     public List<Entity> read() {
         List<Entity> companyList = new ArrayList<Entity>();
-        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery();) {
+        Connection cn = CONNECTION_INSTANCE.getConnection();
+        try (PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
         } catch (SQLException e) {
-            logger.error( "Cannot read company list. ",e);
+            logger.error("Cannot read company list. ", e);
         }
         return companyList;
     }
@@ -54,7 +55,8 @@ public enum CompanyDao implements InterfaceDao {
      */
     public List<Entity> readPages(Page p) {
         List<Entity> companyList = new ArrayList<Entity>();
-        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES);) {
+        Connection cn = CONNECTION_INSTANCE.getConnection();
+        try (PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES)) {
             st.setLong(1, p.getPageSize());
             st.setLong(2, p.getOffset());
             ResultSet rs = st.executeQuery();
@@ -62,7 +64,7 @@ public enum CompanyDao implements InterfaceDao {
                 companyList.add(RS_TO_COMPUTER.rsToCompany(rs));
             }
         } catch (SQLException e) {
-            logger.error( "Cannot read a specific page of companies. ",e);
+            logger.error("Cannot read a specific page of companies. ", e);
         }
         return companyList;
     }
@@ -75,7 +77,8 @@ public enum CompanyDao implements InterfaceDao {
      */
     public Entity readOne(long id) {
         Company company = null;
-        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE);) {
+        Connection cn = CONNECTION_INSTANCE.getConnection();
+        try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
             if (id != 0)
                 st.setLong(1, id);
             else
@@ -84,7 +87,7 @@ public enum CompanyDao implements InterfaceDao {
             rs.next();
             company = new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME));
         } catch (SQLException e) {
-            logger.error( "Cannot read company with ID ", id,e);
+            logger.error("Cannot read company with ID ", id, e);
         }
         return company;
     }
@@ -93,23 +96,32 @@ public enum CompanyDao implements InterfaceDao {
      * create - new Company in database
      * 
      * @param Company
+     * @return 
      */
-    public void create(Entity entity) {
+    public int create(Entity entity) {
+        int newId = -1;
         Company c = (Company) entity;
-        try (Connection cn = CONNECTION_FACTORY.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_CREATE);) {
+        Connection cn = CONNECTION_INSTANCE.getConnection();
+        try (PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, c.getName());
-            st.executeUpdate();
+            st.executeUpdate();ResultSet resultSet = st.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                newId = resultSet.getInt(1);
+            }
         } catch (SQLException e) {
-            logger.error( "Cannot create new company ",e);
+            logger.error("Cannot create new company ", e);
         }
+        return newId;
     }
 
-    public void delete(long id, Connection connection) throws PersistenceException {
+    public void delete(long id) throws PersistenceException {
+        Connection connection = CONNECTION_INSTANCE.getConnection();
         try (PreparedStatement stCompany = connection.prepareStatement(SQL_DELETE)) {
             stCompany.setLong(1, id);
             stCompany.executeUpdate();
         } catch (SQLException e) {
-            logger.error( "Cannot delete company with ID ", id,e);
+            logger.error("Cannot delete company with ID ", id, e);
             throw new PersistenceException(e);
         }
     }

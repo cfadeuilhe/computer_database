@@ -20,7 +20,7 @@ public class Computer extends Entity {
         this.discontinuedDate = builder.discontinuedDate;
     }
 
-    public Computer() {
+    private Computer() {
 
     }
 
