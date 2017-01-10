@@ -105,6 +105,8 @@
     </dependencies>
 
     <build>
+        <finalName>cdb</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
