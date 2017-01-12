@@ -38,10 +38,10 @@ docker exec maven-container cp /usr/src/app/src/main/resources/credentialsCI.pro
 
 #clean install inside maven container
 docker exec maven-container mvn clean install
-if [ ! -d /var/jenkins_home/workspace/test-container/JUnitResults ]; then
-	mkdir /var/jenkins_home/workspace/test-container/JUnitResults
+if [ ! -d /var/jenkins_home/workspace/computer-database/JUnitResults ]; then
+	mkdir /var/jenkins_home/workspace/computer-database/JUnitResults
 fi
-docker cp maven-container:/usr/src/app/target/surefire-reports /var/jenkins_home/workspace/test-container/JUnitResults
+docker cp maven-container:/usr/src/app/target/surefire-reports /var/jenkins_home/workspace/computer-database/JUnitResults
 
 
 
