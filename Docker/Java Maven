@@ -1,0 +1,11 @@
+FROM maven:3.3.9-jdk-8
+
+COPY . /juanita/workspace/Cdb
+WORKDIR /juanita/workspace/Cdb
+RUN javac Main.java
+CMD ["java", "Main"]
+
+RUN mkdir -p /juanita/workspace/Cdb
+WORKDIR /juanita/workspace/Cdb
+ADD . /juanita/workspace/Cdb
+RUN mvn install

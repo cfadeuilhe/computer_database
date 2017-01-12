@@ -1,0 +1,67 @@
+
+#pull docker hub images
+docker pull cfadeuilhe/my-sql
+docker pull cfadeuilhe/my-maven
+docker pull cfadeuilhe/my-tomcat
+
+#containers init
+sqltestpresent=`docker ps -aq -f name=sql-test-container`
+mavenpresent=`docker ps -aq -f name=maven-container`
+
+if [ -z "$sqltestpresent" ]; then
+	#test database container not present
+    docker network create -d bridge --subnet=173.21.0.0/16 --gateway=173.21.0.1 --ip-range 173.21.0.0/24 test-network
+	docker run -dti --name sql-test-container -p 3304:3306 --network test-network cfadeuilhe/my-sql
+fi
+if [ -z "$mavenpresent" ]; then
+	#maven container not present
+	docker run -dti --name maven-container --network test-network cfadeuilhe/my-maven /bin/bash
+fi
+
+docker start sql-test-container maven-container
+
+docker exec maven-container bash -c 'cd /usr/src; rm -rf /usr/src/app; mkdir /usr/src/app;'
+
+docker exec maven-container apt-get update
+docker exec maven-container apt-get -y install git
+docker exec maven-container git clone https://github.com/cfadeuilhe/computer_database.git /usr/src/app/
+
+
+
+
+#test network
+#rename credential files to match the right database
+docker exec maven-container mv /usr/src/app/src/test/resources/credentials.properties /usr/src/app/src/test/resources/credentials.properties-old
+docker exec maven-container cp /usr/src/app/src/test/resources/credentialsCI.properties /usr/src/app/src/test/resources/credentials.properties
+docker exec maven-container mv /usr/src/app/src/main/resources/credentials.properties /usr/src/app/src/main/resources/credentials.properties-old
+docker exec maven-container cp /usr/src/app/src/main/resources/credentialsCI.properties /usr/src/app/src/main/resources/credentials.properties
+
+#clean install inside maven container
+docker exec maven-container mvn clean install
+if [ ! -d /var/jenkins_home/workspace/test-container/JUnitResults ]; then
+	mkdir /var/jenkins_home/workspace/test-container/JUnitResults
+fi
+docker cp maven-container:/usr/src/app/target/surefire-reports /var/jenkins_home/workspace/test-container/JUnitResults
+
+
+
+sqlprodpresent=`docker ps -aq -f name=sql-prod-container`
+tomcatpresent=`docker ps -aq -f name=tomcat-container`
+
+if [ -z "$sqlprodpresent" ]; then
+	#prod database container not present
+	docker network create -d bridge --subnet=173.22.0.0/16 --gateway=173.22.0.1 --ip-range=173.22.0.0/24 prod-network
+	docker run -dti --name sql-prod-container --network prod-network -p 3305:3306 cfadeuilhe/my-sql
+fi
+if [ -z "$tomcatpresent" ]; then
+	#tomcat container not present
+	docker run -dti --name tomcat-container --network prod-network -p 8085:8080 cfadeuilhe/my-tomcat
+fi
+
+docker cp maven-container:/usr/src/app/target/Cdb.war /var/jenkins_home/workspace/
+docker cp /var/jenkins_home/workspace/Cdb.war tomcat-container:/usr/local/tomcat/webapps
+docker start sql-prod-container tomcat-container
+
+
+docker commit tomcat-container cfadeuilhe/my-tomcat:latest
+docker push cfadeuilhe/my-tomcat
