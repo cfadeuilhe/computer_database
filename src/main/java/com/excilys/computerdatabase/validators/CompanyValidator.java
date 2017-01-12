@@ -7,7 +7,7 @@ import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.util.Consts;
 
 public class CompanyValidator {
-    
+
     /*
      * Convention used : if return false -> error, true -> everything ok
      * 
@@ -43,8 +43,10 @@ public class CompanyValidator {
         if (!ComputerValidator.nameValidator(c.getName())) {
             map.put(Consts.NO_NAME, Consts.NO_NAME);
         }
-        if (!ComputerValidator.nameLengthValidator(c.getName())) {
-            map.put(Consts.NAME_TOO_SHORT, Consts.NAME_TOO_SHORT);
+        if (c.getName() != null) {
+            if (!ComputerValidator.nameLengthValidator(c.getName())) {
+                map.put(Consts.NAME_TOO_SHORT, Consts.NAME_TOO_SHORT);
+            }
         }
 
         return map;

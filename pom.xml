@@ -19,6 +19,7 @@
         <mysql.version>6.0.5</mysql.version>
         <hikari.version>2.5.1</hikari.version>
         <maven-compiler.version>3.6.0</maven-compiler.version>
+        <maven-war-plugin.version>3.0.0</maven-war-plugin.version>
         <maven-checkstyle.version>2.17</maven-checkstyle.version>
         <maven-checkstyle.encoding>UTF-8</maven-checkstyle.encoding>
         <java.version>1.8</java.version>
@@ -28,6 +29,8 @@
     </properties>
 
     <dependencies>
+
+        <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -56,6 +59,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
@@ -70,6 +74,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Connection pool -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
+        </dependency>
+
+        <!-- Tag library -->
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
@@ -77,6 +89,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- database connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -85,22 +105,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
             <version>${tomcat.version}</version>
         </dependency>
 
-        <!-- Connection pool -->
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>${hikari.version}</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${maven-war-plugin.version}</version>
         </dependency>
 
     </dependencies>

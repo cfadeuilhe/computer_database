@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.persistence;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ComputerDaoTest {
         ConnectionDao.INSTANCE.initConnection();
         ComputerDao cDao = ComputerDao.INSTANCE;
         Computer computer = (Computer) cDao.readOne(1);
+        assertTrue(computer instanceof Computer);
         assertNotNull(computer);
     }
     

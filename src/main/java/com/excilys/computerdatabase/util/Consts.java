@@ -28,6 +28,7 @@ public final class Consts {
      * */
     public static final String METHOD_NOT_IMPLEMENTED = "Method create() is not implemented";
     public static final String NEGATIVE_ID = "NegativeId";
+    public static final String ID_NOT_A_NUMBER = "IdNotANumber";
     public static final String NO_NAME = "NoName";
     public static final String NAME_TOO_SHORT = "NameTooShort";
     public static final String DATE_ORDER_ERROR = "DateOrderError";

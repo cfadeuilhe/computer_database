@@ -19,7 +19,7 @@ public class ComputerValidator {
     }
 
     public static boolean isANumber(String id) {
-        return(id.matches("\\d+"));
+        return (id.matches("\\d+"));
     }
 
     public static boolean nameValidator(String name) {
@@ -53,8 +53,10 @@ public class ComputerValidator {
         if (!ComputerValidator.nameValidator(c.getName())) {
             map.put(Consts.NO_NAME, Consts.NO_NAME);
         }
-        if (!ComputerValidator.nameLengthValidator(c.getName())) {
-            map.put(Consts.NAME_TOO_SHORT, Consts.NAME_TOO_SHORT);
+        if (c.getName() != null) {
+            if (!ComputerValidator.nameLengthValidator(c.getName())) {
+                map.put(Consts.NAME_TOO_SHORT, Consts.NAME_TOO_SHORT);
+            }
         }
         if (!ComputerValidator.dateOrderValidator(c.getIntroducedDate(), c.getDiscontinuedDate())) {
             map.put(Consts.DATE_ORDER_ERROR, Consts.DATE_ORDER_ERROR);
