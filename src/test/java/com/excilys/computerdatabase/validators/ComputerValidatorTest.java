@@ -2,7 +2,6 @@ package com.excilys.computerdatabase.validators;
 
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 import org.junit.Test;
