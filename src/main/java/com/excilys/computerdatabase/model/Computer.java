@@ -74,7 +74,7 @@ public class Computer extends Entity {
 
     @Override
     public String toString() {
-        return "\nComputer n°" + id + ": [Name=" + name + ((company != null) ? (", Company=" + company.getName()) : "")
+        return "\nComputer n" + id + ": [Name=" + name + ((company != null) ? (", Company=" + company.getName()) : "")
                 + ((introducedDate != null) ? (", Introduced=" + introducedDate) : "")
                 + ((discontinuedDate != null) ? (", Discontinued=" + discontinuedDate) : "") + "]";
     }

@@ -19,6 +19,10 @@ import com.excilys.computerdatabase.util.Consts;
 
 public class DashboardServlet extends HttpServlet {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2927308147872440092L;
     private final static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 

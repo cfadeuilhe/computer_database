@@ -1,9 +1,7 @@
 package com.excilys.computerdatabase.validators;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.excilys.computerdatabase.model.Computer;

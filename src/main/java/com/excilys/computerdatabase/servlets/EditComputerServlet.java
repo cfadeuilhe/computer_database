@@ -19,7 +19,6 @@ import com.excilys.computerdatabase.mapper.RequestMapper;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
-import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.service.CompanyService;
 import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.util.Consts;
@@ -27,6 +26,10 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class EditComputerServlet extends HttpServlet {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4051934716238154424L;
     private final static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
     private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();

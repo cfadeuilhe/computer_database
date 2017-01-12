@@ -33,7 +33,7 @@ public class Company extends Entity {
 
     @Override
     public String toString() {
-        return "\nCompany n°" + id + " -> " + name;
+        return "\nCompany n" + id + " -> " + name;
     }
 
     @Override

@@ -26,6 +26,10 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class AddComputerServlet extends HttpServlet {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -6173958767889499696L;
     private final static Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
     private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();

@@ -15,6 +15,10 @@ import com.excilys.computerdatabase.util.Consts;
 
 public class DeleteComputerServlet extends HttpServlet {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -9167111070314009743L;
     private final static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
     private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
 
