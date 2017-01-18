@@ -8,7 +8,7 @@
 
     <!-- Enable annotations -->
     <context:annotation-config />
-    <context:component-scan base-package="com.exilys.computerdatabase" />
+    <context:component-scan base-package="com.excilys.computerdatabase" />
 
     <!-- HikariCP configuration -->
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
@@ -39,25 +39,6 @@
                 <prop key="password">${dataSource.password}</prop>
             </props>
         </property>
-    </bean>
-
-    <!-- Beans configuration -->
-    <bean id="computerDao" name="computerDao"
-        class="com.excilys.computerdatabase.persistence.ComputerDao">
-        <property name="dataSource" ref="dataSource"></property>
-    </bean>
-    <bean id="computerService" name="computerService"
-        class="com.excilys.computerdatabase.service.ComputerService">
-        <property name="computerDao" ref="computerDao"></property>
-    </bean>
-
-    <bean id="companyDao" name="companyDao"
-        class="com.excilys.computerdatabase.persistence.CompanyDao">
-        <property name="dataSource" ref="dataSource"></property>
-    </bean>
-    <bean id="companyService" name="companyService"
-        class="com.excilys.computerdatabase.service.CompanyService">
-        <property name="companyDao" ref="companyDao"></property>
     </bean>
 
 </beans>

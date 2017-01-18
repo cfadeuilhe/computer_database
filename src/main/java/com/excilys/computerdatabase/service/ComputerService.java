@@ -3,6 +3,10 @@ package com.excilys.computerdatabase.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
@@ -14,8 +18,10 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  * @author juanita
  *
  */
+@Service
 public class ComputerService {
 
+    @Autowired
     private ComputerDao computerDao;
 
     public ComputerService() {

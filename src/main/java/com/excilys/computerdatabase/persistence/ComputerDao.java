@@ -8,6 +8,9 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.mapper.RsMapper;
@@ -20,8 +23,10 @@ import com.excilys.computerdatabase.util.Consts;
  * @author juanita
  *
  */
+@Repository
 public class ComputerDao implements InterfaceDao {
     
+    @Autowired
     private DataSource dataSource;
     
     private final static ComputerDao COMPUTER_DAO_INSTANCE;

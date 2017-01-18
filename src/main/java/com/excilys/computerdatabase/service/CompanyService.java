@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
@@ -19,11 +21,14 @@ import com.excilys.computerdatabase.persistence.ConnectionDao;
  * @author juanita
  *
  */
+@Service
 public class CompanyService {
 
     private final static Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
+    @Autowired
 	private CompanyDao companyDao;
+    @Autowired
     private ComputerDao computerDao;
 
     private CompanyService() {
