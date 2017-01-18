@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,13 +20,14 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author juanita
  *
  */
-public enum ConnectionDao {
 
-    INSTANCE;
+public class ConnectionDao {
+    
+    private DataSource dataSource;
+    
+    private final static ConnectionDao CONNECTION_DAO_INSTANCE;
     private final static Logger logger = LoggerFactory.getLogger(ConnectionDao.class);
     private static final String PROPERTIES_FILE = "credentials.properties";
-    private static HikariDataSource dataSource;
-
     private ThreadLocal<Connection> threadLocal = new ThreadLocal<Connection>();
 
     static {
@@ -47,13 +50,22 @@ public enum ConnectionDao {
             config.setJdbcUrl(properties.getProperty("jdbcURL"));
             config.setUsername(properties.getProperty("user"));
             config.setPassword(properties.getProperty("password"));
-            
-            dataSource = new HikariDataSource(config);
+
+            HikariDataSource source = new HikariDataSource(config);
+            CONNECTION_DAO_INSTANCE = new ConnectionDao(source);
 
         } catch (ClassNotFoundException e) {
             logger.error("ConnectionDao : () catched ClassNotFoundException", e);
             throw new RuntimeException(e);
         }
+    }
+
+    public ConnectionDao(DataSource ds) {
+        this.dataSource = ds;
+    }
+
+    public static ConnectionDao getInstance() {
+        return CONNECTION_DAO_INSTANCE;
     }
 
     /**
@@ -63,21 +75,26 @@ public enum ConnectionDao {
      * @throws SQLException
      */
     public Connection getConnection() {
-        return threadLocal.get();
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            logger.error( "ConnectionDao : getConnection() catched SQLException",e);
+        }
+        return null;
     }
 
     public void closeConnection() {
         try {
             threadLocal.get().close();
         } catch (SQLException e) {
-            logger.error( "ConnectionDao : closeConnection() catched SQLException",e);
+            logger.error("ConnectionDao : closeConnection() catched SQLException", e);
         }
         threadLocal.remove();
     }
 
     public void initConnection() {
         try {
-            threadLocal.set(dataSource.getConnection());
+            dataSource.getConnection().close();
         } catch (SQLException e) {
             logger.error("Error initConnection", e);
         }
@@ -85,13 +102,11 @@ public enum ConnectionDao {
 
     public void initTransaction() {
         try {
-            // threadLocal.set(this.getConnection());
             threadLocal.get().setAutoCommit(false);
         } catch (SQLException e) {
             logger.error("HikariConnectionProvider : beginTransaction() catched SQLException ", e);
         }
-        // return threadLocal.get();
-    } 
+    }
 
     public void commitTransaction() {
         try {

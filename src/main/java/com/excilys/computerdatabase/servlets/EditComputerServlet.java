@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.mapper.DtoMapper;
@@ -26,17 +28,22 @@ import com.excilys.computerdatabase.validators.ComputerDtoValidator;
 
 public class EditComputerServlet extends HttpServlet {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 4051934716238154424L;
     private final static Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
-    private final static CompanyService COMPANY_SERVICE = CompanyService.getInstance();
-    private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
+    private CompanyService companyService;
+    private ComputerService computerService;
 
+    @Override
+    public void init() {
+       WebApplicationContext contextApp = WebApplicationContextUtils.getWebApplicationContext(getServletContext());       
+
+       this.computerService = (ComputerService)contextApp.getBean("computerService");
+       this.companyService = (CompanyService)contextApp.getBean("companyService");
+    }
+    
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Entity> list = new ArrayList<Entity>();
-        list = COMPANY_SERVICE.listEntities();
+        list = companyService.listEntities();
         request.setAttribute("companyList", list);
 
         String test = request.getParameter(Consts.PAGE);
@@ -66,7 +73,7 @@ public class EditComputerServlet extends HttpServlet {
             // update computer
             Computer computer = DtoMapper.dtoToComputer(computerDto);
             computer.setCompany(new Company(computerDto.getCompanyId(), computerDto.getCompanyName()));
-            COMPUTER_SERVICE.update(computer.getId(), computer);
+            computerService.update(computer.getId(), computer);
             request.getSession().setAttribute("computer", computerDto);
             response.sendRedirect("dashboard?page=" + p);
         } else {

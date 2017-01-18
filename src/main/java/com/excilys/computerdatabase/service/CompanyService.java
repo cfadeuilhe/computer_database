@@ -23,47 +23,38 @@ public class CompanyService {
 
     private final static Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
-    private static CompanyService INSTANCE = new CompanyService(CompanyDao.INSTANCE);
-	private static CompanyDao COMPANY_DAO = CompanyDao.INSTANCE;
-    private static ComputerDao COMPUTER_DAO = ComputerDao.INSTANCE;
-
-    private CompanyService(CompanyDao companyDao) {
-        this.COMPANY_DAO = companyDao;
-    }
+	private CompanyDao companyDao;
+    private ComputerDao computerDao;
 
     private CompanyService() {
+        this.companyDao = CompanyDao.getInstance();
+    }    
 
-    }
-
-    public static CompanyService getInstance() {
-        return INSTANCE;
+    public void setCompanyDao(CompanyDao cd) {
+        this.companyDao = cd;
     }
     
 	public List<Entity> listEntities() {
-        ConnectionDao.INSTANCE.initConnection();
 		List<Entity> list = new ArrayList<Entity>();
-		list = COMPANY_DAO.read();
-        ConnectionDao.INSTANCE.closeConnection();
+		list = companyDao.read();
 		return list;
 	}
 
 	public Entity readOne(long id) {
-        ConnectionDao.INSTANCE.initConnection();
-		Company c = (Company) COMPANY_DAO.readOne(id);
-        ConnectionDao.INSTANCE.closeConnection();
+		Company c = (Company) companyDao.readOne(id);
 		return c;
 	}
 
     public void delete(long id) {
-        ConnectionDao.INSTANCE.initConnection();
-        ConnectionDao.INSTANCE.initTransaction();
+        ConnectionDao.getInstance().initConnection();
+        ConnectionDao.getInstance().initTransaction();
         try {
-            COMPUTER_DAO.deleteByCompany(id);
-            COMPANY_DAO.delete(id);
-            ConnectionDao.INSTANCE.commitTransaction();
+            computerDao.deleteByCompany(id);
+            companyDao.delete(id);
+            ConnectionDao.getInstance().commitTransaction();
         } catch (PersistenceException e) {
             logger.error("delete() catched PersistenceException", e);
-            ConnectionDao.INSTANCE.rollbackTransaction();
+            ConnectionDao.getInstance().rollbackTransaction();
         }
 
     }

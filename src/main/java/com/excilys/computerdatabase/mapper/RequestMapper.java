@@ -1,9 +1,10 @@
 package com.excilys.computerdatabase.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.dto.ComputerDto.ComputerDtoBuilder;
@@ -14,20 +15,12 @@ import com.excilys.computerdatabase.util.Consts;
 
 public class RequestMapper {
 
-    private final static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
     private final static int PAGE_NUMBER_DEFAULT = 1;
     private final static int PAGE_SIZE_DEFAULT = 10;
 
-    public static Page requestToPage(HttpServletRequest request) {
-
-        List<Entity> list = new ArrayList<Entity>();
+    public static Page requestToPage(HttpServletRequest request, List<Entity> list) {
         String search = request.getParameter(Consts.SEARCH);
-        if (search != null && !search.trim().isEmpty()) {
-            list = COMPUTER_SERVICE.listSearch(search);
-        } else {
-            list = COMPUTER_SERVICE.listEntities();
-        }
-
+        
         int currentPage = (checkIsNumber(request.getParameter(Consts.PAGE)))
                 ? (Integer.parseInt(request.getParameter(Consts.PAGE))) : PAGE_NUMBER_DEFAULT;
         int pageSize = (checkIsNumber(request.getParameter(Consts.LIMIT)))
@@ -38,8 +31,7 @@ public class RequestMapper {
         if (search != null && !search.trim().isEmpty()) {
             page.setSearch(search);
         }
-        page.setComputerList(COMPUTER_SERVICE.readPages(page));
-
+        
         return page;
     }
 

@@ -7,7 +7,6 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.persistence.ComputerDao;
-import com.excilys.computerdatabase.persistence.ConnectionDao;
 
 /**
  * class ComputerService
@@ -17,19 +16,14 @@ import com.excilys.computerdatabase.persistence.ConnectionDao;
  */
 public class ComputerService {
 
-    private static ComputerService INSTANCE = new ComputerService(ComputerDao.INSTANCE);
-    private static ComputerDao COMPUTER_DAO;
+    private ComputerDao computerDao;
 
-    private ComputerService(ComputerDao computerDao) {
-        this.COMPUTER_DAO = computerDao;
+    public ComputerService() {
+        this.computerDao = ComputerDao.getInstance();
     }
 
-    private ComputerService() {
-
-    }
-
-    public static ComputerService getInstance() {
-        return INSTANCE;
+    public void setComputerDao(ComputerDao cd) {
+        this.computerDao = cd;
     }
 
     /**
@@ -38,25 +32,19 @@ public class ComputerService {
      * @return List<Computer>
      */
     public List<Entity> listEntities() {
-        ConnectionDao.INSTANCE.initConnection();
         List<Entity> list = new ArrayList<Entity>();
-        list = COMPUTER_DAO.read();
-        ConnectionDao.INSTANCE.closeConnection();
+        list = computerDao.read();
         return list;
     }
     
     public long countEntities(String search) {
-        ConnectionDao.INSTANCE.initConnection();
-        long l = COMPUTER_DAO.count(search);
-        ConnectionDao.INSTANCE.closeConnection();
+        long l = computerDao.count(search);
         return l;
     }
 
     public List<Entity> listSearch(String search) {
-        ConnectionDao.INSTANCE.initConnection();
         List<Entity> list = new ArrayList<Entity>();
-        list = COMPUTER_DAO.readSearch(search);
-        ConnectionDao.INSTANCE.closeConnection();
+        list = computerDao.readSearch(search);
         return list;
     }
 
@@ -67,10 +55,8 @@ public class ComputerService {
      * @return List<Computer>
      */
     public List<Entity> readPages(Page p) {
-        ConnectionDao.INSTANCE.initConnection();
         List<Entity> list = new ArrayList<Entity>();
-        list = COMPUTER_DAO.readPages(p);
-        ConnectionDao.INSTANCE.closeConnection();
+        list = computerDao.readPages(p);
         return list;
     }
 
@@ -81,9 +67,7 @@ public class ComputerService {
      * @return Computer
      */
     public Entity readOne(long id) {
-        ConnectionDao.INSTANCE.initConnection();
-        Computer c = (Computer) COMPUTER_DAO.readOne(id);
-        ConnectionDao.INSTANCE.closeConnection();
+        Computer c = (Computer) computerDao.readOne(id);
         return c;
     }
 
@@ -92,10 +76,8 @@ public class ComputerService {
      * 
      * @param Computer
      */
-    public void create(Entity entity) {
-        ConnectionDao.INSTANCE.initConnection();
-        COMPUTER_DAO.create(entity);
-        ConnectionDao.INSTANCE.closeConnection();
+    public int create(Entity entity) {
+        return computerDao.create(entity);
     }
 
     /**
@@ -106,9 +88,7 @@ public class ComputerService {
      * @param Computer
      */
     public void update(long id, Entity entity) {
-        ConnectionDao.INSTANCE.initConnection();
-        COMPUTER_DAO.update(id, entity);
-        ConnectionDao.INSTANCE.closeConnection();
+        computerDao.update(id, entity);
     }
 
     /**
@@ -117,8 +97,6 @@ public class ComputerService {
      * @param id
      */
     public void delete(long id) {
-        ConnectionDao.INSTANCE.initConnection();
-        COMPUTER_DAO.delete(id);
-        ConnectionDao.INSTANCE.closeConnection();
+        computerDao.delete(id);
     }
 }

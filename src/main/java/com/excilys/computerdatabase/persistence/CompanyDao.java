@@ -3,6 +3,8 @@ package com.excilys.computerdatabase.persistence;
 import java.sql.*;
 import java.util.*;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +19,12 @@ import com.excilys.computerdatabase.util.Consts;
  * @author juanita
  *
  */
-public enum CompanyDao implements InterfaceDao {
+public class CompanyDao implements InterfaceDao {
 
-    INSTANCE;
-    private final static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
-    private final static ConnectionDao CONNECTION_INSTANCE = ConnectionDao.INSTANCE;
+    private DataSource dataSource;
+    
+    private final static CompanyDao COMPANY_DAO_INSTANCE;
+    private final static Logger logger;
     private final static RsMapper RS_TO_COMPUTER = new RsMapper();
     private final static String SQL_READ = "SELECT * FROM company";
     private final static String SQL_READ_PAGES = "SELECT * FROM company LIMIT ? OFFSET ?";
@@ -29,6 +32,18 @@ public enum CompanyDao implements InterfaceDao {
     private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?')";
     private final static String SQL_DELETE = "DELETE FROM company WHERE id=?";
 
+    static {
+        COMPANY_DAO_INSTANCE = new CompanyDao();
+        logger = LoggerFactory.getLogger(CompanyDao.class);
+    }
+
+    public static CompanyDao getInstance() {
+        return COMPANY_DAO_INSTANCE;
+    }
+
+    public void setDataSource(DataSource ds) {
+        this.dataSource = ds;
+    }
     /**
      * read - get all Company from database
      * 
@@ -36,8 +51,7 @@ public enum CompanyDao implements InterfaceDao {
      */
     public List<Entity> read() {
         List<Entity> companyList = new ArrayList<Entity>();
-        Connection cn = CONNECTION_INSTANCE.getConnection();
-        try (PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery()) {
+        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
@@ -55,8 +69,7 @@ public enum CompanyDao implements InterfaceDao {
      */
     public List<Entity> readPages(Page p) {
         List<Entity> companyList = new ArrayList<Entity>();
-        Connection cn = CONNECTION_INSTANCE.getConnection();
-        try (PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES)) {
+        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES)) {
             st.setLong(1, p.getPageSize());
             st.setLong(2, p.getOffset());
             ResultSet rs = st.executeQuery();
@@ -77,8 +90,7 @@ public enum CompanyDao implements InterfaceDao {
      */
     public Entity readOne(long id) {
         Company company = null;
-        Connection cn = CONNECTION_INSTANCE.getConnection();
-        try (PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
+        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
             if (id != 0)
                 st.setLong(1, id);
             else
@@ -101,8 +113,7 @@ public enum CompanyDao implements InterfaceDao {
     public int create(Entity entity) {
         int newId = -1;
         Company c = (Company) entity;
-        Connection cn = CONNECTION_INSTANCE.getConnection();
-        try (PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, c.getName());
             st.executeUpdate();ResultSet resultSet = st.getGeneratedKeys();
 
@@ -116,8 +127,7 @@ public enum CompanyDao implements InterfaceDao {
     }
 
     public void delete(long id) throws PersistenceException {
-        Connection connection = CONNECTION_INSTANCE.getConnection();
-        try (PreparedStatement stCompany = connection.prepareStatement(SQL_DELETE)) {
+        try (Connection cn = dataSource.getConnection(); PreparedStatement stCompany = cn.prepareStatement(SQL_DELETE)) {
             stCompany.setLong(1, id);
             stCompany.executeUpdate();
         } catch (SQLException e) {
