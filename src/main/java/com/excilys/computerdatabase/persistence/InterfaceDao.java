@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.persistence;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -29,7 +30,7 @@ public interface InterfaceDao {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default void delete(long id) throws PersistenceException {
+    public default void delete(Connection cn, long id) throws PersistenceException {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 }

@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -55,7 +56,7 @@ public class CompanyDao implements InterfaceDao {
      */
     public List<Entity> read() {
         List<Entity> companyList = new ArrayList<Entity>();
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery()) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource); PreparedStatement st = cn.prepareStatement(SQL_READ); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 companyList.add(new Company(rs.getInt(Consts.ID), rs.getString(Consts.NAME)));
             }
@@ -73,7 +74,7 @@ public class CompanyDao implements InterfaceDao {
      */
     public List<Entity> readPages(Page p) {
         List<Entity> companyList = new ArrayList<Entity>();
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource); PreparedStatement st = cn.prepareStatement(SQL_READ_PAGES)) {
             st.setLong(1, p.getPageSize());
             st.setLong(2, p.getOffset());
             ResultSet rs = st.executeQuery();
@@ -94,7 +95,7 @@ public class CompanyDao implements InterfaceDao {
      */
     public Entity readOne(long id) {
         Company company = null;
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
             if (id != 0)
                 st.setLong(1, id);
             else
@@ -117,7 +118,7 @@ public class CompanyDao implements InterfaceDao {
     public int create(Entity entity) {
         int newId = -1;
         Company c = (Company) entity;
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource); PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, c.getName());
             st.executeUpdate();ResultSet resultSet = st.getGeneratedKeys();
 
@@ -130,8 +131,14 @@ public class CompanyDao implements InterfaceDao {
         return newId;
     }
 
-    public void delete(long id) throws PersistenceException {
-        try (Connection cn = dataSource.getConnection(); PreparedStatement stCompany = cn.prepareStatement(SQL_DELETE)) {
+    /**
+     * delete - delete a Company
+     * 
+     * @param cn - Connection to use
+     * @param id - id of the Company to delete
+     */
+    public void delete(Connection cn, long id) throws PersistenceException {
+        try ( PreparedStatement stCompany = cn.prepareStatement(SQL_DELETE)) {
             stCompany.setLong(1, id);
             stCompany.executeUpdate();
         } catch (SQLException e) {

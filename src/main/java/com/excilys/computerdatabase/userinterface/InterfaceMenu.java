@@ -1,6 +1,7 @@
 package com.excilys.computerdatabase.userinterface;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.text.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -120,7 +121,11 @@ public class InterfaceMenu {
     }
 
     public static void deleteCompany(long id) {
-        companyService.delete(id);
+        try {
+            companyService.delete(id);
+        } catch (SQLException e) {
+            logger.error( "InterfaceMenu : deleteCompany() catched SQLException, rollback failed. ",e);
+        }
     }
 
     /**

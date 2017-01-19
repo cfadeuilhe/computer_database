@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
@@ -25,10 +25,10 @@ import com.excilys.computerdatabase.util.Consts;
  */
 @Repository
 public class ComputerDao implements InterfaceDao {
-    
+
     @Autowired
     private DataSource dataSource;
-    
+
     private final static ComputerDao COMPUTER_DAO_INSTANCE;
     private final static Logger logger;
     private final static RsMapper RS_TO_COMPUTER = new RsMapper();
@@ -61,7 +61,7 @@ public class ComputerDao implements InterfaceDao {
      */
     public List<Entity> read() {
         List<Entity> computerList = new ArrayList<Entity>();
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource); PreparedStatement st = cn.prepareStatement(SQL_READ)) {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Computer c = RS_TO_COMPUTER.rsToComputer(rs);
@@ -84,9 +84,9 @@ public class ComputerDao implements InterfaceDao {
                     .concat(" LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%")
                     .concat(search).concat("%' or company.name LIKE '").concat(search).concat("%'");
         }
-        
-        try (Connection cn = dataSource.getConnection(); 
-                PreparedStatement st = cn.prepareStatement(sqlCount); 
+
+        try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                PreparedStatement st = cn.prepareStatement(sqlCount);
                 ResultSet rs = st.executeQuery();) {
             while (rs.next()) {
                 count = rs.getLong(Consts.COUNT);
@@ -100,7 +100,8 @@ public class ComputerDao implements InterfaceDao {
     public List<Entity> readSearch(String search) {
         List<Entity> computerList = new ArrayList<Entity>();
 
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_SEARCH)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                PreparedStatement st = cn.prepareStatement(SQL_READ_SEARCH)) {
             st.setString(1, "%" + search + "%");
             st.setString(2, search + "%");
             ResultSet rs = st.executeQuery();
@@ -133,7 +134,8 @@ public class ComputerDao implements InterfaceDao {
             }
             readPages += " LIMIT " + p.getPageSize() + " OFFSET " + p.getOffset();
 
-            try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(readPages)) {
+            try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                    PreparedStatement st = cn.prepareStatement(readPages)) {
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
                     Computer c = RS_TO_COMPUTER.rsToComputer(rs);
@@ -159,7 +161,8 @@ public class ComputerDao implements InterfaceDao {
     public Entity readOne(long id) {
         Computer computer = null;
 
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                PreparedStatement st = cn.prepareStatement(SQL_READ_ONE)) {
             st.setLong(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -184,7 +187,8 @@ public class ComputerDao implements InterfaceDao {
         int newId = -1;
         Computer computer = (Computer) entity;
 
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                PreparedStatement st = cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, computer.getName());
             if (computer.getIntroducedDate() != null) {
                 st.setString(2, computer.getIntroducedDate().toString());
@@ -222,7 +226,8 @@ public class ComputerDao implements InterfaceDao {
     public void update(long id, Entity entity) {
         Computer computer = (Computer) entity;
 
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_UPDATE)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                PreparedStatement st = cn.prepareStatement(SQL_UPDATE)) {
             st.setString(1, computer.getName());
             st.setString(2,
                     (computer.getIntroducedDate() != null ? (computer.getIntroducedDate().toString()) : (null)));
@@ -243,7 +248,8 @@ public class ComputerDao implements InterfaceDao {
      */
     public void delete(long id) {
 
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_DELETE)) {
+        try (Connection cn = DataSourceUtils.getConnection(dataSource);
+                PreparedStatement st = cn.prepareStatement(SQL_DELETE)) {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
@@ -251,8 +257,8 @@ public class ComputerDao implements InterfaceDao {
         }
     }
 
-    public void deleteByCompany(long id) throws PersistenceException {
-        try (Connection cn = dataSource.getConnection(); PreparedStatement st = cn.prepareStatement(SQL_DELETE_BY_COMPANY)) {
+    public void deleteByCompany(Connection cn, long id) throws PersistenceException {
+        try (PreparedStatement st = cn.prepareStatement(SQL_DELETE_BY_COMPANY)) {
             st.setLong(1, id);
             st.executeUpdate();
         } catch (SQLException e) {

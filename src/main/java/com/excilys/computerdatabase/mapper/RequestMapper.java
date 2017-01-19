@@ -4,13 +4,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.excilys.computerdatabase.dto.ComputerDto;
 import com.excilys.computerdatabase.dto.ComputerDto.ComputerDtoBuilder;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
-import com.excilys.computerdatabase.service.ComputerService;
 import com.excilys.computerdatabase.util.Consts;
 
 public class RequestMapper {

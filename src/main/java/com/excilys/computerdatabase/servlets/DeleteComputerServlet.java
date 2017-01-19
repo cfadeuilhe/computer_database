@@ -26,11 +26,11 @@ public class DeleteComputerServlet extends HttpServlet {
 
     @Override
     public void init() {
-       WebApplicationContext contextApp = WebApplicationContextUtils.getWebApplicationContext(getServletContext());       
+        WebApplicationContext contextApp = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 
-       this.computerService = (ComputerService)contextApp.getBean("computerService");
+        this.computerService = (ComputerService) contextApp.getBean(ComputerService.class);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,7 +38,12 @@ public class DeleteComputerServlet extends HttpServlet {
         String selection = request.getParameter(Consts.SELECTION);
         String[] parse = selection.split(",");
         for (int i = 0; i < parse.length; i++) {
-            computerService.delete(Long.parseLong(parse[i]));
+
+            try {
+                computerService.delete(Long.parseLong(parse[i]));
+            } catch (Exception e) {
+                logger.info("catched exception delete");
+            }
         }
 
         response.sendRedirect("dashboard");
