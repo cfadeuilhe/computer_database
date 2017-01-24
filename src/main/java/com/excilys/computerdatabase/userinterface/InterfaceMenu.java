@@ -1,7 +1,6 @@
 package com.excilys.computerdatabase.userinterface;
 
 import java.io.*;
-import java.sql.SQLException;
 import java.text.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
@@ -27,8 +27,8 @@ public class InterfaceMenu {
     private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
     static {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
-        computerService = (ComputerService) context.getBean("computerService");
-        companyService = (CompanyService) context.getBean("companyService");
+        computerService = (ComputerService) context.getBean(ComputerService.class);
+        companyService = (CompanyService) context.getBean(CompanyService.class);
     }
 
     public static void main(String args[]) {
@@ -123,8 +123,8 @@ public class InterfaceMenu {
     public static void deleteCompany(long id) {
         try {
             companyService.delete(id);
-        } catch (SQLException e) {
-            logger.error( "InterfaceMenu : deleteCompany() catched SQLException, rollback failed. ",e);
+        } catch (PersistenceException e) {
+            logger.error( "InterfaceMenu : deleteCompany() catched PersistenceException",e);
         }
     }
 

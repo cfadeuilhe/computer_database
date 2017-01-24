@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Company;
@@ -18,6 +19,7 @@ import com.excilys.computerdatabase.util.Consts;
  * @author juanita
  *
  */
+@Component
 public class RsMapper {
 
     private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);

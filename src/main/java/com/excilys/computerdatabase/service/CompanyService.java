@@ -1,17 +1,14 @@
 package com.excilys.computerdatabase.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
@@ -26,7 +23,8 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  *
  */
 @Service
-public class CompanyService {
+@Transactional(readOnly = true)
+public class CompanyService implements InterfaceService{
 
     private final static Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
@@ -34,19 +32,21 @@ public class CompanyService {
     private CompanyDao companyDao;
     @Autowired
     private ComputerDao computerDao;
-    @Autowired
-    private DataSource dataSource;
 
-    public CompanyService() {
-        this.companyDao = CompanyDao.getInstance();
+    public  CompanyDao getCompanyDao() {
+        return companyDao;
     }
 
-    public void setCompanyDao(CompanyDao cd) {
-        this.companyDao = cd;
+    public void setCompanyDao(CompanyDao companyDao) {
+        this.companyDao = companyDao;
     }
 
-    public void setDataSource(DataSource ds) {
-        dataSource = ds;
+    public ComputerDao getComputerDao() {
+        return computerDao;
+    }
+
+    public void setComputerDao(ComputerDao computerDao) {
+        this.computerDao = computerDao;
     }
 
     public List<Entity> listEntities() {
@@ -61,19 +61,19 @@ public class CompanyService {
     }
 
     /**
-     * delete a Company and all related Computers. rollback if there is any problem in the transaction
+     * delete a Company and all related Computers.
      * 
      * @param id - id of the Company to delete
-     * @throws SQLException
+     * @throws PersistenceException 
      */
-    public void delete(long id) throws SQLException {
-        Connection cn = DataSourceUtils.getConnection(dataSource);
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = PersistenceException.class)
+    public void delete(long id) throws PersistenceException {
         try {
-            computerDao.deleteByCompany(cn, id);
-            companyDao.delete(cn, id);
+            computerDao.deleteByCompany(id);
+            companyDao.delete(id);
         } catch (PersistenceException e) {
-            cn.rollback();
             logger.error("delete() catched PersistenceException", e);
+            throw new PersistenceException("company delete error");
         }
     }
 }

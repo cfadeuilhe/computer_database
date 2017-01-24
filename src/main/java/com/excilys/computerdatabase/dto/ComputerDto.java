@@ -1,14 +1,22 @@
 package com.excilys.computerdatabase.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.excilys.computerdatabase.validators.DateValidation;
+
 public class ComputerDto {
 
     private long id;
+    @NotNull
+    @Size(min = 3)
     private String name;
+    @DateValidation
     private String introducedDate;
     private String discontinuedDate;
     private long companyId;
     private String companyName;
-    
+
     private ComputerDto(ComputerDtoBuilder builder) {
         this.id = builder.id;
         this.name = builder.name;
@@ -84,7 +92,7 @@ public class ComputerDto {
         private String discontinuedDate;
         private long companyId;
         private String companyName;
-        
+
         public ComputerDtoBuilder(String name) {
             this.name = name;
         }
@@ -92,7 +100,7 @@ public class ComputerDto {
         public ComputerDtoBuilder() {
 
         }
-        
+
         public ComputerDtoBuilder id(long id) {
             this.id = id;
             return this;
@@ -102,7 +110,7 @@ public class ComputerDto {
             this.name = name;
             return this;
         }
-        
+
         public ComputerDtoBuilder introducedDate(String introducedDate) {
             this.introducedDate = introducedDate;
             return this;
@@ -112,7 +120,7 @@ public class ComputerDto {
             this.discontinuedDate = discontinuedDate;
             return this;
         }
-        
+
         public ComputerDtoBuilder companyId(long companyId) {
             this.companyId = companyId;
             return this;

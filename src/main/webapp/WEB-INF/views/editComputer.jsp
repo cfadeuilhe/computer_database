@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="springForm"
+	uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,11 +12,23 @@
 <link href="/Cdb/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="/Cdb/css/main.css" rel="stylesheet" media="screen">
 </head>
+
+<!-- Spring translation references -->
+<springTags:message code="computer.title" var="title"></springTags:message>
+<springTags:message code="computer.editComputer" var="editComputer"></springTags:message>
+<springTags:message code="computer.edit" var="edit"></springTags:message>
+<springTags:message code="computer.name" var="name"></springTags:message>
+<springTags:message code="computer.introducedDate" var="introducedDate"></springTags:message>
+<springTags:message code="computer.discontinuedDate" var="discontinuedDate"></springTags:message>
+<springTags:message code="computer.company" var="company"></springTags:message>
+<springTags:message code="computer.add" var="add"></springTags:message>
+<springTags:message code="computer.or" var="orelse"></springTags:message>
+<springTags:message code="computer.cancel" var="cancel"></springTags:message>
+
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"><c:out
-					value="Application - Computer Database"></c:out></a>
+			<a class="navbar-brand" href="dashboard"><c:out value="${title}"></c:out></a>
 		</div>
 	</header>
 	<section id="main">
@@ -23,57 +38,58 @@
 					<div class="label label-default pull-right">
 						<c:out value="id: ${computerToEdit.id }"></c:out>
 					</div>
-					<h1>Edit Computer</h1>
-					<form action="editComputer" method="POST">
+					<h1><c:out value="${editComputer }"></c:out></h1>
+					<springForm:form action="editComputer" method="POST"
+						id="editComputer" modelAttribute="computerDto">
 						<input type="hidden" name="id" value="${computerToEdit.id }"
 							id="id" /> <input type="hidden" name="page"
 							value="${pageNumber }" id="page" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label>
-								<c:if test="${computerToEdit.name != null }">
-									<input type="text" name="computerName" class="form-control"
-										id="computerName" value="${computerToEdit.name }">
-								</c:if>
-								<c:if test="${computerToEdit.name == null }">
-									<input type="text" name="computerName" class="form-control"
-										id="computerName" placeholder="Computer name">
-								</c:if>
+								<springForm:label path="name">
+									<c:out value="${name}"></c:out>
+								</springForm:label>
+								<springForm:input type="text" path="name" class="form-control"
+									id="computerName" placeholder="${name}" />
+								<springForm:errors path="name" cssClass="alert alert-danger"
+									element="div" />
 							</div>
-							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
-									type="date" name="introduced" class="form-control"
-									id="introduced" placeholder="Introduced date"
-									value="${computerToEdit.introducedDate }">
-							</div>
-							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" name="discontinued" class="form-control"
-									id="discontinued" placeholder="Discontinued date"
-									value="${computerToEdit.discontinuedDate }">
-							</div>
-							<div class="form-group">
-								<label for="companyId">Company</label> <select
-									class="form-control" name="companyId" id="companyId">
-									<option value=0>--</option>
-									<c:forEach items="${companyList}" var="item">
 
-										<c:if test="${computerToEdit.companyId  == item.id}">
-											<option selected value=${item.id }>${item.name}</option>
-										</c:if>
-										<c:if test="${computerToEdit.companyId  != item.id}">
-											<option value=${item.id }>${item.name}</option>
-										</c:if>
+							<div class="form-group">
+								<springForm:label path="introducedDate">
+									<c:out value="${introducedDate}"></c:out>
+								</springForm:label>
+								<springForm:input type="date" path="introducedDate"
+									class="form-control" id="introduced"
+									placeholder="${introducedDate}" />
+								<springForm:errors path="introducedDate" cssClass="alert alert-danger"
+									element="div" />
+							</div>
+							
+							<div class="form-group">
+								<springForm:label path="discontinuedDate">
+									<c:out value="${discontinuedDate}"></c:out>
+								</springForm:label>
+								<springForm:input type="date" path="discontinuedDate"
+									class="form-control" id="discontinued"
+									placeholder="${discontinuedDate}" />
+							</div>
 
-									</c:forEach>
-								</select>
+							<div class="form-group">
+								<label for="companyId"><c:out value="${company}"></c:out></label> 
+								<springForm:select
+									class="form-control" path="companyId" id="companyId">
+									<springForm:option value="0">--</springForm:option>
+									<springForm:options itemValue="id" itemLabel = "name" items="${companyList}"></springForm:options>
+								</springForm:select>
+								
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard" class="btn btn-default">Cancel</a>
+							<input type="submit" value="${edit}" class="btn btn-primary">
+							<c:out value="${orelse}"></c:out> <a href="dashboard" class="btn btn-default"><c:out value="${cancel}"></c:out></a>
 						</div>
-					</form>
+					</springForm:form>
 				</div>
 			</div>
 		</div>

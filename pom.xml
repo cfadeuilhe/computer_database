@@ -4,7 +4,7 @@
 
     <groupId>com.excilys.computerdatabase</groupId>
     <artifactId>Cdb</artifactId>
-    <version>0.5.2</version>
+    <version>0.6.0</version>
     <packaging>war</packaging>
     <name>CDB</name>
 
@@ -14,6 +14,8 @@
         <selenium.version>3.0.1</selenium.version>
         <gatling.version>2.2.3</gatling.version>
         <spring.version>4.3.5.RELEASE</spring.version>
+        <validation.api.version>1.1.0.Final</validation.api.version>
+        <hibernate.validator.version>5.3.4.Final</hibernate.validator.version>
         <jsp.version>2.0</jsp.version>
         <servlet.version>2.5</servlet.version>
         <hikari.version>2.5.1</hikari.version>
@@ -87,6 +89,12 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
@@ -109,6 +117,18 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- Validation -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+
         <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
@@ -122,6 +142,12 @@
             <artifactId>servlet-api</artifactId>
             <version>${servlet.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
 
         <!-- Connection pool -->

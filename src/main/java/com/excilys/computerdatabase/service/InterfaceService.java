@@ -2,16 +2,16 @@ package com.excilys.computerdatabase.service;
 
 import java.util.List;
 
-import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.util.Consts;
 
 public interface InterfaceService {
 
-    public void delete(long id);
+    public void delete(long id) throws PersistenceException;
 
-    public Company readOne(long id);
+    public Entity readOne(long id);
 
     public List<Entity> listEntities();
 
@@ -19,7 +19,7 @@ public interface InterfaceService {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default void create(Entity entity) {
+    public default int create(Entity entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 

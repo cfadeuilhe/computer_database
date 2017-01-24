@@ -1,5 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,37 +13,53 @@
 <link href="/Cdb/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="/Cdb/css/main.css" rel="stylesheet" media="screen">
 </head>
+
+<!-- Spring translation references -->
+<springTags:message code="computer.title" var="title"></springTags:message>
+<springTags:message code="computer.computersFound" var="computersFound"></springTags:message>
+<springTags:message code="computer.searchName" var="searchName"></springTags:message>
+<springTags:message code="computer.filterByName" var="filterByName"></springTags:message>
+<springTags:message code="computer.addComputer" var="addComputer"></springTags:message>
+<springTags:message code="computer.editComputer" var="editComputer"></springTags:message>
+<springTags:message code="computer.edit" var="edit"></springTags:message>
+<springTags:message code="computer.name" var="name"></springTags:message>
+<springTags:message code="computer.introducedDate" var="introducedDate"></springTags:message>
+<springTags:message code="computer.discontinuedDate" var="discontinuedDate"></springTags:message>
+<springTags:message code="computer.company" var="company"></springTags:message>
+<springTags:message code="computer.add" var="add"></springTags:message>
+<springTags:message code="computer.or" var="or"></springTags:message>
+<springTags:message code="computer.cancel" var="cancel"></springTags:message>
+
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> <c:out
-					value="Application - Computer
-				Database">
-				</c:out>
+			<a class="navbar-brand" href="dashboard"> <c:out value="${title}"></c:out>
 			</a>
+			<span style="float: right"> <a href="?language=en">English</a>|<a href="?language=fr">Français</a></span>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<c:out value="${count} Computers found"></c:out>
+				<c:out value="${count} ${computersFound }"></c:out>
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name"
+							class="form-control" placeholder="${searchName }"
 							value="${page.search }" /> <input type="submit"
-							id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+							id="searchsubmit" value="${filterByName }"
+							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer"><c:out
-							value="Add Computer"></c:out></a> <a class="btn btn-default"
-						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><c:out
-							value="Edit"></c:out></a>
+					<a class="btn btn-success" id="addComputer" href="addComputer">
+						<c:out value="${addComputer }"></c:out>
+					</a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><c:out value="${edit }"></c:out></a>
 				</div>
 			</div>
 		</div>
@@ -51,7 +69,7 @@
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
-		<input type="hidden" name="order" value="before" id="order" />
+			<input type="hidden" name="order" value="before" id="order" />
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
@@ -65,16 +83,15 @@
 									class="fa fa-trash-o"></i>
 							</a>
 						</span></th>
-						<th class="orderBy" id="computerName"><c:out
-								value="Computer Name	"></c:out><a href="#" id="orderBy"
-							onclick="$.fn.orderBy('computerName');"> <i id="orderArrow"
-								class="fa fa-arrow-down"></i>
+						<th class="orderBy" id="computerName"><c:out value="${name }"></c:out><a
+							href="#" id="orderBy" onclick="$.fn.orderBy('computerName');">
+								<i id="orderArrow" class="fa fa-arrow-down"></i>
 						</a></th>
-						<th><c:out value="Introduced date"></c:out></th>
+						<th><c:out value="${introducedDate }"></c:out></th>
 						<!-- Table header for Discontinued Date -->
-						<th><c:out value="Discontinued date"></c:out></th>
+						<th><c:out value="${discontinuedDate }"></c:out></th>
 						<!-- Table header for Company -->
-						<th><c:out value="Company"></c:out></th>
+						<th><c:out value="${company }"></c:out></th>
 
 					</tr>
 				</thead>

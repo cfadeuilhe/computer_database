@@ -18,13 +18,13 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  *
  */
 @Service
-public class ComputerService {
+public class ComputerService implements InterfaceService{
 
     @Autowired
     private ComputerDao computerDao;
 
-    public ComputerService() {
-        this.computerDao = ComputerDao.getInstance();
+    public ComputerDao getComputerDao() {
+        return computerDao;
     }
 
     public void setComputerDao(ComputerDao cd) {
