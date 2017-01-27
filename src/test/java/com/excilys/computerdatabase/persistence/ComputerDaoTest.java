@@ -7,52 +7,62 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.persistence.ComputerDao;
 
+@ContextConfiguration(locations = "classpath:Spring-Module-Test.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDaoTest {
+
+    @Autowired
+    ComputerDao computerDao;
 
     /**
      * Tests count(), without search parameter.
      * 
      */
-    
+
     @Test
-    public void testCreate(){
+    @Transactional
+    @Rollback(true)
+    public void testCreate() {
         ComputerBuilder builder = new ComputerBuilder();
         Computer c = builder.name("testcreate").build();
-        ConnectionDao.INSTANCE.initConnection();
-        ComputerDao cDao = ComputerDao.INSTANCE;
-        assertTrue(cDao.create(c) > 0);
+        assertTrue(computerDao.create(c) > 0);
     }
-    
+
     @Test
-    public void testDelete(){
-        ConnectionDao.INSTANCE.initConnection();
-        ComputerDao cDao = ComputerDao.INSTANCE;
-        cDao.delete(76);
+    @Transactional
+    @Rollback(true)
+    public void testDelete() {
+        computerDao.delete(1);
     }
-    
+
     @Test
+    @Transactional
+    @Rollback(true)
     public void testReadOne() {
-        ConnectionDao.INSTANCE.initConnection();
-        ComputerDao cDao = ComputerDao.INSTANCE;
-        Computer computer = (Computer) cDao.readOne(1);
+        Computer computer = computerDao.readOne(1);
         assertTrue(computer instanceof Computer);
         assertNotNull(computer);
     }
-    
+
     @Test
-    public void testReadAndCount(){
-        ConnectionDao.INSTANCE.initConnection();
-        ComputerDao cDao = ComputerDao.INSTANCE;
-        List<Entity> computerList = new ArrayList<Entity>();
-        computerList = cDao.read();
+    @Transactional
+    @Rollback(true)
+    public void testReadAndCount() {
+        List<Computer> computerList = new ArrayList<Computer>();
+        computerList = computerDao.read(null);
         assertNotNull(computerList);
-        long count = cDao.count(null);
+        long count = computerDao.count(null);
         assertTrue(count == computerList.size());
     }
 }

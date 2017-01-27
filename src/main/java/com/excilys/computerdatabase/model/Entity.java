@@ -1,7 +1,15 @@
 package com.excilys.computerdatabase.model;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 public class Entity {
+
+    @Id
+    @GeneratedValue
     protected long id;
+    @Column
     protected String name;
 
     protected long getId() {

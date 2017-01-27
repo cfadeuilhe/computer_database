@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
@@ -15,51 +15,53 @@
 </head>
 
 <!-- Spring translation references -->
-<springTags:message code="computer.title" var="title"></springTags:message>
-<springTags:message code="computer.computersFound" var="computersFound"></springTags:message>
-<springTags:message code="computer.searchName" var="searchName"></springTags:message>
-<springTags:message code="computer.filterByName" var="filterByName"></springTags:message>
-<springTags:message code="computer.addComputer" var="addComputer"></springTags:message>
-<springTags:message code="computer.editComputer" var="editComputer"></springTags:message>
-<springTags:message code="computer.edit" var="edit"></springTags:message>
-<springTags:message code="computer.name" var="name"></springTags:message>
-<springTags:message code="computer.introducedDate" var="introducedDate"></springTags:message>
-<springTags:message code="computer.discontinuedDate" var="discontinuedDate"></springTags:message>
-<springTags:message code="computer.company" var="company"></springTags:message>
-<springTags:message code="computer.add" var="add"></springTags:message>
-<springTags:message code="computer.or" var="or"></springTags:message>
-<springTags:message code="computer.cancel" var="cancel"></springTags:message>
+<springTags:message code="computer.title" var="tradTitle"></springTags:message>
+<springTags:message code="computer.computersFound"
+	var="tradComputersFound"></springTags:message>
+<springTags:message code="computer.searchName" var="tradSearchName"></springTags:message>
+<springTags:message code="computer.filterByName" var="tradFilterByName"></springTags:message>
+<springTags:message code="computer.addComputer" var="tradAddComputer"></springTags:message>
+<springTags:message code="computer.editComputer" var="tradEditComputer"></springTags:message>
+<springTags:message code="computer.edit" var="tradEdit"></springTags:message>
+<springTags:message code="computer.name" var="tradName"></springTags:message>
+<springTags:message code="computer.introducedDate"
+	var="tradIntroducedDate"></springTags:message>
+<springTags:message code="computer.discontinuedDate"
+	var="tradDiscontinuedDate"></springTags:message>
+<springTags:message code="computer.company" var="tradCompany"></springTags:message>
+<springTags:message code="computer.add" var="tradAdd"></springTags:message>
+<springTags:message code="computer.cancel" var="tradCancel"></springTags:message>
 
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> <c:out value="${title}"></c:out>
-			</a>
-			<span style="float: right"> <a href="?language=en">English</a>|<a href="?language=fr">Français</a></span>
+			<a class="navbar-brand" href="dashboard"> <c:out
+					value="${tradTitle}"></c:out>
+			</a> <span style="float: right"> <a href="?language=en">English</a>|<a
+				href="?language=fr">Français</a></span>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<c:out value="${count} ${computersFound }"></c:out>
+				<c:out value="${count} ${tradComputersFound }"></c:out>
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="${searchName }"
-							value="${page.search }" /> <input type="submit"
-							id="searchsubmit" value="${filterByName }"
-							class="btn btn-primary" />
+							class="form-control" placeholder="${tradSearchName }"
+							value="${pageSearch }" /> <input type="submit" id="searchsubmit"
+							value="${tradFilterByName }" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer">
-						<c:out value="${addComputer }"></c:out>
+						<c:out value="${tradAddComputer }"></c:out>
 					</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();"><c:out value="${edit }"></c:out></a>
+						onclick="$.fn.toggleEditMode();"><c:out value="${tradEdit }"></c:out></a>
 				</div>
 			</div>
 		</div>
@@ -67,9 +69,12 @@
 		<form id="deleteForm" action="deleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
+		<form id="orderForm" action="dashboard" method="GET">
+			<input type="hidden" name="order" value="">
+		</form>
 
 		<div class="container" style="margin-top: 10px;">
-			<input type="hidden" name="order" value="before" id="order" />
+			<input type="hidden" name="orderType" value="before" id="orderType" />
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
@@ -83,15 +88,28 @@
 									class="fa fa-trash-o"></i>
 							</a>
 						</span></th>
-						<th class="orderBy" id="computerName"><c:out value="${name }"></c:out><a
-							href="#" id="orderBy" onclick="$.fn.orderBy('computerName');">
+						<th class="orderBy" id="computerName"><c:out
+								value="${tradName }"></c:out><a href="#" id="orderBy"
+							onclick="$.fn.orderBy('computer.name');"> <i id="orderArrow"
+								class="fa fa-arrow-down"></i>
+						</a></th>
+						<th class="orderBy" id="introDateOrder"><c:out
+								value="${tradIntroducedDate }"></c:out><a href="#" id="orderBy"
+							onclick="$.fn.orderBy('computer.introduced');"> <i
+								id="orderArrow" class="fa fa-arrow-down"></i>
+						</a></th>
+						<!-- Table header for Discontinued Date -->
+						<th class="orderBy" id="discoDateOrder"><c:out
+								value="${tradDiscontinuedDate }"></c:out><a href="#"
+							id="orderBy" onclick="$.fn.orderBy('computer.discontinued');">
 								<i id="orderArrow" class="fa fa-arrow-down"></i>
 						</a></th>
-						<th><c:out value="${introducedDate }"></c:out></th>
-						<!-- Table header for Discontinued Date -->
-						<th><c:out value="${discontinuedDate }"></c:out></th>
 						<!-- Table header for Company -->
-						<th><c:out value="${company }"></c:out></th>
+						<th class="orderBy" id="companyNameOrder"><c:out
+								value="${tradCompany }"></c:out><a href="#" id="orderBy"
+							onclick="$.fn.orderBy('company.name');"> <i id="orderArrow"
+								class="fa fa-arrow-down"></i>
+						</a></th>
 
 					</tr>
 				</thead>
@@ -124,20 +142,23 @@
 			<ul class="pagination">
 				<myTag:pagination currentPage="${page.currentPage }"
 					pageSize="${page.pageSize }" searchValue="${page.search }"
-					pageCount="${page.pageCount }">
+					pageCount="${page.pageCount }" computerOrder="${page.order }">
 				</myTag:pagination>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<myTag:link cssClass="btn btn-default"
 					currentPage="${page.currentPage}" searchValue="${page.search }"
-					pageSize="10" target="dashboard" text="10"></myTag:link>
+					pageSize="10" target="dashboard" text="10"
+					computerOrder="${page.order }"></myTag:link>
 				<myTag:link cssClass="btn btn-default"
 					currentPage="${page.currentPage}" searchValue="${page.search }"
-					pageSize="50" target="dashboard" text="50"></myTag:link>
+					pageSize="50" target="dashboard" text="50"
+					computerOrder="${page.order }"></myTag:link>
 				<myTag:link cssClass="btn btn-default"
 					currentPage="${page.currentPage}" searchValue="${page.search }"
-					pageSize="100" target="dashboard" text="100"></myTag:link>
+					pageSize="100" target="dashboard" text="100"
+					computerOrder="${page.order }"></myTag:link>
 			</div>
 		</div>
 	</footer>

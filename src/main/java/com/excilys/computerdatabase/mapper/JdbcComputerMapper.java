@@ -6,13 +6,14 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.util.Consts;
 
-public class JdbcComputerMapper implements RowMapper<Entity>{
+public class JdbcComputerMapper implements RowMapper<Computer>{
 
-    public Entity mapRow(ResultSet rs, int rowNum) throws SQLException{
+    @Override
+    public Computer mapRow(ResultSet rs, int rowNum) throws SQLException{
         
         ComputerBuilder computerBuilder = new ComputerBuilder();
         computerBuilder.name(rs.getString(Consts.NAME)).id(rs.getLong(Consts.ID));

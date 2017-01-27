@@ -7,35 +7,51 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.model.Entity;
 
-
+@ContextConfiguration(locations = "classpath:Spring-Module-Test.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerServiceTest {
-    private static ComputerService COMPUTER_SERVICE = ComputerService.getInstance();
-    
+
+    @Autowired
+    ComputerService computerService;
+
     @Test
-    public void testCountEntities(){
-        COMPUTER_SERVICE.countEntities(null);
+    @Transactional
+    @Rollback(true)
+    public void testCountEntities() {
+        computerService.countEntities(null);
     }
-    
+
     @Test
+    @Transactional
+    @Rollback(true)
     public void testListAndCountEntities() {
-        List<Entity> computersList = COMPUTER_SERVICE.listEntities();
+        List<Computer> computersList = computerService.listEntities(null);
         assertNotNull(computersList);
     }
-    
+
     @Test
+    @Transactional
+    @Rollback(true)
     public void testListEntities() {
-        List<Entity> computersList = COMPUTER_SERVICE.listEntities();
-        long count = COMPUTER_SERVICE.countEntities(null);
+        List<Computer> computersList = computerService.listEntities(null);
+        long count = computerService.countEntities(null);
         assertEquals(computersList.size(), count);
     }
-    
+
     @Test
+    @Transactional
+    @Rollback(true)
     public void testReadOne() {
-        Computer computer = (Computer) COMPUTER_SERVICE.readOne(1);
+        Computer computer = computerService.readOne(1);
         assertTrue(computer instanceof Computer);
         assertNotNull(computer);
     }

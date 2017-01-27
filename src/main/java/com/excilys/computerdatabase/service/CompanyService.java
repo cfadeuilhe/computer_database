@@ -2,6 +2,7 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.persistence.CompanyDao;
 import com.excilys.computerdatabase.persistence.ComputerDao;
 
@@ -23,8 +23,8 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  *
  */
 @Service
-@Transactional(readOnly = true)
-public class CompanyService implements InterfaceService{
+@Transactional
+public class CompanyService implements InterfaceService<Company>{
 
     private final static Logger logger = LoggerFactory.getLogger(CompanyService.class);
 
@@ -49,14 +49,16 @@ public class CompanyService implements InterfaceService{
         this.computerDao = computerDao;
     }
 
-    public List<Entity> listEntities() {
-        List<Entity> list = new ArrayList<Entity>();
-        list = companyDao.read();
+    @Override
+    public List<Company> listEntities(Map<String, String> orderMap) {
+        List<Company> list = new ArrayList<Company>();
+        list = companyDao.read(orderMap);
         return list;
     }
 
-    public Entity readOne(long id) {
-        Company c = (Company) companyDao.readOne(id);
+    @Override
+    public Company readOne(long id) {
+        Company c = companyDao.readOne(id);
         return c;
     }
 
@@ -66,6 +68,7 @@ public class CompanyService implements InterfaceService{
      * @param id - id of the Company to delete
      * @throws PersistenceException 
      */
+    @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = PersistenceException.class)
     public void delete(long id) throws PersistenceException {
         try {

@@ -8,7 +8,8 @@ public class Page {
 	private int pageSize;
 	private int pageCount;
 	private String search=null;
-	private List<Entity> computerList = new ArrayList<Entity>();
+	private String order;
+	private List<Computer> computerList = new ArrayList<Computer>();
 	
 	public Page() {
 	}
@@ -43,12 +44,12 @@ public class Page {
 		this.pageCount = last;
 	}
 	
-	public List<Entity> getComputerList() {
+	public List<Computer> getComputerList() {
         return computerList;
     }
 
-    public void setComputerList(List<Entity> computerList) {
-        this.computerList = computerList;
+    public void setComputerList(List<Computer> list) {
+        this.computerList = list;
     }
 
     public String getSearch() {
@@ -72,8 +73,8 @@ public class Page {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (pageSize ^ (pageSize >>> 32));
-		result = prime * result + (int) (currentPage ^ (currentPage >>> 32));
+		result = prime * result + (pageSize ^ (pageSize >>> 32));
+		result = prime * result + (currentPage ^ (currentPage >>> 32));
 		return result;
 	}
 
@@ -92,4 +93,12 @@ public class Page {
 			return false;
 		return true;
 	}
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
 }

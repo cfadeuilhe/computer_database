@@ -2,6 +2,7 @@
 <%@ taglib prefix="springForm"
 	uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,21 +15,16 @@
 </head>
 
 <!-- Spring translation references -->
-<springTags:message code="computer.title" var="title"></springTags:message>
-<springTags:message code="computer.addComputer" var="addComputer"></springTags:message>
-<springTags:message code="computer.edit" var="edit"></springTags:message>
-<springTags:message code="computer.name" var="name"></springTags:message>
-<springTags:message code="computer.introducedDate" var="introducedDate"></springTags:message>
-<springTags:message code="computer.discontinuedDate" var="discontinuedDate"></springTags:message>
-<springTags:message code="computer.company" var="company"></springTags:message>
-<springTags:message code="computer.add" var="add"></springTags:message>
-<springTags:message code="computer.or" var="orelse"></springTags:message>
-<springTags:message code="computer.cancel" var="cancel"></springTags:message>
+<springTags:message code="computer.name" var="tradName"></springTags:message>
+<springTags:message code="computer.date.placeholder"
+	var="tradDatePlaceholder"></springTags:message>
+<springTags:message code="computer.add" var="tradAdd"></springTags:message>
 
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"><c:out value="${title}"></c:out></a>
+			<a class="navbar-brand" href="dashboard"><springTags:message
+					code="computer.title" /></a>
 		</div>
 	</header>
 
@@ -36,59 +32,67 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><c:out value="${addComputer}"></c:out></h1>
+					<h1>
+						<springTags:message code="computer.addComputer" />
+					</h1>
 					<springForm:form action="addComputer" method="POST"
-						id="addComputer" modelAttribute="computerDto">
+						id="addComputerForm" modelAttribute="computerDto">
 						<fieldset>
 							<div class="form-group">
 								<springForm:label path="name">
 									<springTags:message code="computer.name" />
 								</springForm:label>
 								<springForm:input type="text" path="name" class="form-control"
-									id="computerName" placeholder="Computer name" />
+									id="computerName" placeholder="${tradName }" name="name" />
 								<springForm:errors path="name" cssClass="alert alert-danger"
 									element="div" />
 							</div>
 							<div class="form-group">
 								<springForm:label path="introducedDate">
-									<c:out value="${introducedDate}"></c:out>
+									<springTags:message code="computer.introducedDate" />
 								</springForm:label>
 								<springForm:input type="date" path="introducedDate"
 									class="form-control" id="introduced"
-									placeholder="Introduced date" />
-								<springForm:errors path="introducedDate" cssClass="alert alert-danger"
-									element="div" />
+									placeholder="${tradDatePlaceholder }" name="introduced" />
+								<springForm:errors path="introducedDate"
+									cssClass="alert alert-danger" element="div" />
 							</div>
 
 							<div class="form-group">
 								<springForm:label path="discontinuedDate">
-									<c:out value="${discontinuedDate}"></c:out>
+									<springTags:message code="computer.discontinuedDate" />
 								</springForm:label>
 								<springForm:input type="date" path="discontinuedDate"
 									class="form-control" id="discontinued"
-									placeholder="Discontinued date" />
+									placeholder="${tradDatePlaceholder}" name="discontinued"/>
 							</div>
 
 							<div class="form-group">
 								<springForm:label path="companyId">
-									<c:out value="${company}"></c:out>
+									<springTags:message code="computer.company" />
 								</springForm:label>
-								<springForm:select
-									class="form-control" path="companyId" id="companyId">
+								<springForm:select class="form-control" path="companyId"
+									id="companyId">
 									<springForm:option value="0">--</springForm:option>
-									<springForm:options itemValue="id" itemLabel = "name" items="${companyList}"></springForm:options>
+									<springForm:options itemValue="id" itemLabel="name"
+										items="${companyList}"></springForm:options>
 								</springForm:select>
 							</div>
-							
+
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="${add}" class="btn btn-primary">
-							<c:out value="${orelse}"></c:out> <a href="dashboard" class="btn btn-default"><c:out value="${cancel}"></c:out></a>
+							<input type="submit" value="${tradAdd}" class="btn btn-primary">
+							<springTags:message code="computer.or" />
+							<a href="dashboard" class="btn btn-default"><springTags:message
+									code="computer.cancel" /></a>
 						</div>
 					</springForm:form>
 				</div>
 			</div>
 		</div>
 	</section>
+
+	<script src="/Cdb/js/addComputer.js"></script>
+
 </body>
 </html>

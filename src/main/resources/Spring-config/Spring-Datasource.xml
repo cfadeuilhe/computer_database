@@ -1,6 +1,5 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -23,8 +22,8 @@
         <property name="poolName" value="springHikariCP" />
         <property name="connectionTestQuery" value="SELECT 1" />
         <property name="dataSourceClassName" value="${hibernate.dataSourceClassName}" />
-        <!-- <property name="maximumPoolSize" value="${hibernate.hikari.maximumPoolSize}" 
-            /> <property name="idleTimeout" value="${hibernate.hikari.idleTimeout}" /> -->
+        <property name="minimumIdle" value="2" />
+        <property name="idleTimeout" value="100" />
 
         <property name="dataSourceProperties">
             <props>
@@ -34,5 +33,5 @@
             </props>
         </property>
     </bean>
-    
+
 </beans>

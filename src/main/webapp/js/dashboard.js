@@ -59,14 +59,10 @@ $(function() {
 // Function to sort by column
 (function($) {
 	$.fn.orderBy = function(column) {
-		$("#orderArrow").toggleClass("fa fa-arrow-up");
-		$("#orderArrow").toggleClass("fa fa-arrow-down");
-		if ($("#order").val() == "DESC") {
-			$("#order").val("ASC");
-		} else {
-			$("#order").val("DESC");
-		}
-		
+		//$("#orderArrow").toggleClass("fa fa-arrow-down");
+		$('#orderForm input[name=order]').val(column);
+		$('#orderForm').submit();  
+
 	};
 }(jQuery));
 

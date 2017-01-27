@@ -1,11 +1,27 @@
 package com.excilys.computerdatabase.model;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Entity;
+
 /**
  *
  * @author juanita
  *
  */
-public class Company extends Entity {
-
+@Entity
+@Table(name="company")
+public final class Company {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
+    
+    protected String name;
+    
     public Company(long id, String name) {
         this.id = id;
         this.name = name;

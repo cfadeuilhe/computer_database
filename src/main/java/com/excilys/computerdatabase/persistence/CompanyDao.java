@@ -1,20 +1,19 @@
 package com.excilys.computerdatabase.persistence;
 
 import java.util.*;
+import java.util.function.Supplier;
 
-import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.mapper.JdbcCompanyMapper;
-import com.excilys.computerdatabase.model.*;
-
+import com.excilys.computerdatabase.model.Company;
+import com.excilys.computerdatabase.model.Page;
+import com.excilys.computerdatabase.model.QCompany;
+import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 /**
  * Class CompanyDAO
  * 
@@ -22,34 +21,25 @@ import com.excilys.computerdatabase.model.*;
  *
  */
 @Repository
-public class CompanyDao implements InterfaceDao {
-
+@Transactional
+public class CompanyDao implements InterfaceDao<Company> {
+    private static QCompany company = QCompany.company;
+    
     @Autowired
-    private DataSource dataSource;
-
-    private JdbcTemplate jdbcTemplate;
-
-    private final static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
-
-    private final static String SQL_READ = "SELECT * FROM company";
-    private final static String SQL_READ_PAGES = "SELECT * FROM company LIMIT ? OFFSET ?";
-    private final static String SQL_READ_ONE = "SELECT * FROM company WHERE id=?";
-    private final static String SQL_CREATE = "INSERT INTO company (name) VALUES ('?')";
-    private final static String SQL_DELETE = "DELETE FROM company WHERE id=?";
-
-    public void setDataSource(DataSource ds) {
-        this.dataSource = ds;
-    }
+    SessionFactory sessionFactory;
+    
+    private Supplier<HibernateQueryFactory> queryFactory =
+                        () -> new HibernateQueryFactory(sessionFactory.getCurrentSession());
 
     /**
      * read - get all Company from database
      * 
      * @return List<Company>
      */
-    public List<Entity> read() {
+    @Override
+    public List<Company> read(Map<String, String> orderMap) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        return this.jdbcTemplate.query(SQL_READ, new JdbcCompanyMapper());
+        return queryFactory.get().selectFrom(company).fetch();
     }
 
     /**
@@ -58,11 +48,10 @@ public class CompanyDao implements InterfaceDao {
      * @param Page
      * @return List<Company>
      */
-    public List<Entity> readPages(Page p) {
+    @Override
+    public List<Company> readPages(Page p, Map<String, String> orderMap) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        return this.jdbcTemplate.query(SQL_READ_PAGES, new Object[] { p.getPageSize(), p.getOffset() },
-                new JdbcCompanyMapper());
+        return queryFactory.get().selectFrom(company).limit(p.getPageSize()).offset(p.getOffset()).fetch();
     }
 
     /**
@@ -71,11 +60,10 @@ public class CompanyDao implements InterfaceDao {
      * @param id
      * @return Company
      */
-    public Entity readOne(long id) {
+    @Override
+    public Company readOne(long id) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        return this.jdbcTemplate.queryForObject(SQL_READ_ONE, new Object[] { (id != 0 ? id : null) },
-                new JdbcCompanyMapper());
+        return queryFactory.get().selectFrom(company).where(company.id.eq(id)).fetchOne();
     }
 
     /**
@@ -84,7 +72,7 @@ public class CompanyDao implements InterfaceDao {
      * @param Company
      * @return
      *//*
-       * public int create(Entity entity) { int newId = -1; Company c =
+       * public int create(Company entity) { int newId = -1; Company c =
        * (Company) entity; try (Connection cn =
        * DataSourceUtils.getConnection(dataSource); PreparedStatement st =
        * cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
@@ -104,11 +92,11 @@ public class CompanyDao implements InterfaceDao {
      * @param id
      *            - id of the Company to delete
      */
+    @Override
     public void delete(long id) throws PersistenceException {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
         try {
-            jdbcTemplate.update(SQL_DELETE, id);
+            queryFactory.get().delete(company).where(company.id.eq(id)).execute();
         } catch (DataAccessException e) {
             throw new PersistenceException("te");
         }

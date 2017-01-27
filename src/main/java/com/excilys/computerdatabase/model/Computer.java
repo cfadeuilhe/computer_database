@@ -1,16 +1,43 @@
 package com.excilys.computerdatabase.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.excilys.computerdatabase.mapper.DateConverter;
 import com.excilys.computerdatabase.validators.ComputerValidator;
 
-public class Computer extends Entity {
+@Entity
+@Table(name="computer")
+public final class Computer {
 
-    private Company company;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
+
+    protected String name;
+
+    @Column(name="introduced", nullable=true)
+    @Convert(converter = DateConverter.class)
     private LocalDate introducedDate;
+
+    @Column(name="discontinued", nullable=true)
+    @Convert(converter = DateConverter.class)
     private LocalDate discontinuedDate;
-    private List<String> errorsList;
+    
+    @ManyToOne
+    @JoinColumn(nullable=true, name="company_id")
+    private Company company;
+
+    //private List<String> errorsList;
 
     private Computer(ComputerBuilder builder) {
         this.id = builder.id;
@@ -62,14 +89,6 @@ public class Computer extends Entity {
 
     public void setDiscontinuedDate(LocalDate discontinuedDate) {
         this.discontinuedDate = discontinuedDate;
-    }
-
-    public List<String> getErrorsList() {
-        return errorsList;
-    }
-
-    public void setErrorsList(List<String> errorsList) {
-        this.errorsList = errorsList;
     }
 
     @Override
@@ -166,7 +185,7 @@ public class Computer extends Entity {
 
         public Computer build() {
             Computer c = new Computer(this);
-            //Validation
+            // Validation
             ComputerValidator.validator(c);
             return c;
         }

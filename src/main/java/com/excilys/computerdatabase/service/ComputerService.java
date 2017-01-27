@@ -2,12 +2,13 @@ package com.excilys.computerdatabase.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.model.Computer;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.persistence.ComputerDao;
 
@@ -18,7 +19,8 @@ import com.excilys.computerdatabase.persistence.ComputerDao;
  *
  */
 @Service
-public class ComputerService implements InterfaceService{
+@Transactional
+public class ComputerService implements InterfaceService<Computer> {
 
     @Autowired
     private ComputerDao computerDao;
@@ -36,19 +38,22 @@ public class ComputerService implements InterfaceService{
      * 
      * @return List<Computer>
      */
-    public List<Entity> listEntities() {
-        List<Entity> list = new ArrayList<Entity>();
-        list = computerDao.read();
+    @Override
+    public List<Computer> listEntities(Map<String, String> orderMap) {
+        List<Computer> list = new ArrayList<Computer>();
+        list = computerDao.read(orderMap);
         return list;
     }
-    
+
+    @Override
     public long countEntities(String search) {
         long l = computerDao.count(search);
         return l;
     }
 
-    public List<Entity> listSearch(String search) {
-        List<Entity> list = new ArrayList<Entity>();
+    @Override
+    public List<Computer> listSearch(String search) {
+        List<Computer> list = new ArrayList<Computer>();
         list = computerDao.readSearch(search);
         return list;
     }
@@ -59,9 +64,10 @@ public class ComputerService implements InterfaceService{
      * @param Page
      * @return List<Computer>
      */
-    public List<Entity> readPages(Page p) {
-        List<Entity> list = new ArrayList<Entity>();
-        list = computerDao.readPages(p);
+    @Override
+    public List<Computer> readPages(Page p, Map<String, String> orderMap) {
+        List<Computer> list = new ArrayList<Computer>();
+        list = computerDao.readPages(p, orderMap);
         return list;
     }
 
@@ -71,8 +77,9 @@ public class ComputerService implements InterfaceService{
      * @param id
      * @return Computer
      */
-    public Entity readOne(long id) {
-        Computer c = (Computer) computerDao.readOne(id);
+    @Override
+    public Computer readOne(long id) {
+        Computer c = computerDao.readOne(id);
         return c;
     }
 
@@ -81,7 +88,8 @@ public class ComputerService implements InterfaceService{
      * 
      * @param Computer
      */
-    public int create(Entity entity) {
+    @Override
+    public int create(Computer entity) {
         return computerDao.create(entity);
     }
 
@@ -92,7 +100,8 @@ public class ComputerService implements InterfaceService{
      * @param id
      * @param Computer
      */
-    public void update(long id, Entity entity) {
+    @Override
+    public void update(long id, Computer entity) {
         computerDao.update(id, entity);
     }
 
@@ -101,6 +110,7 @@ public class ComputerService implements InterfaceService{
      * 
      * @param id
      */
+    @Override
     public void delete(long id) {
         computerDao.delete(id);
     }

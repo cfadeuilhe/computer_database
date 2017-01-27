@@ -1,27 +1,27 @@
 package com.excilys.computerdatabase.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.util.Consts;
 
-public interface InterfaceDao {
+public interface InterfaceDao<T> {
 
-    public List<Entity> read();
+    public List<T> read(Map<String, String> orderMap);
 
-    public Entity readOne(long id);
+    public T readOne(long id);
 
-    public List<Entity> readPages(Page p);
+    public List<T> readPages(Page p, Map<String, String> orderMap);
 
     public void delete(long id) throws PersistenceException;
 
-    public default int create(Entity entity) {
+    public default int create(T entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default void update(long id, Entity entity) {
+    public default void update(long id, T entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 }

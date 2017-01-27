@@ -1,33 +1,33 @@
 package com.excilys.computerdatabase.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.model.Entity;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.util.Consts;
 
-public interface InterfaceService {
+public interface InterfaceService<T> {
 
     public void delete(long id) throws PersistenceException;
 
-    public Entity readOne(long id);
+    public T readOne(long id);
 
-    public List<Entity> listEntities();
+    public List<T> listEntities(Map<String, String> orderMap);
 
-    public default void update(long id, Entity entity) {
+    public default void update(long id, T entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default int create(Entity entity) {
+    public default int create(T entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default List<Entity> readPages(Page p) {
+    public default List<T> readPages(Page p, Map<String, String> orderMap) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default List<Entity> listSearch(String search) {
+    public default List<T> listSearch(String search) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 

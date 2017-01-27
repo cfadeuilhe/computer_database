@@ -27,8 +27,8 @@ public class InterfaceMenu {
     private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
     static {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
-        computerService = (ComputerService) context.getBean(ComputerService.class);
-        companyService = (CompanyService) context.getBean(CompanyService.class);
+        computerService = context.getBean(ComputerService.class);
+        companyService = context.getBean(CompanyService.class);
     }
 
     public static void main(String args[]) {
@@ -54,10 +54,10 @@ public class InterfaceMenu {
                     "\nMenu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) Delete a company\n\t8) By Pages\n\t9) Quit\n");
             switch (userInput) {
             case "1": // List computers
-                System.out.println(computerService.listEntities());
+                System.out.println(computerService.listEntities(null));
                 break;
             case "2": // List companies
-                System.out.println(companyService.listEntities());
+                System.out.println(companyService.listEntities(null));
                 break;
             case "3": // Show computer details (info of one specific computer)
                 // VALIDATION : is userChoice an integer ?
@@ -124,7 +124,7 @@ public class InterfaceMenu {
         try {
             companyService.delete(id);
         } catch (PersistenceException e) {
-            logger.error( "InterfaceMenu : deleteCompany() catched PersistenceException",e);
+            logger.error("InterfaceMenu : deleteCompany() catched PersistenceException", e);
         }
     }
 
@@ -134,8 +134,8 @@ public class InterfaceMenu {
      * @param Page
      */
     public static void showPage(Page p) {
-        System.out.println((computerService.readPages(p).isEmpty()) ? "You reached the end of the database"
-                : computerService.readPages(p).toString());
+        System.out.println((computerService.readPages(p, null).isEmpty()) ? "You reached the end of the database"
+                : computerService.readPages(p, null).toString());
         pagesMenu(p);
     }
 
@@ -226,9 +226,9 @@ public class InterfaceMenu {
         do {
             choiceName = askUser("Enter name (mandatory)");
         } while (choiceName.equals(""));
-        System.out.println(companyService.listEntities().toString());
+        System.out.println(companyService.listEntities(null).toString());
         choiceCompany = askUser("Choose a company from the previous list.");
-        Company c = (Company) companyService.readOne(Integer.parseInt(choiceCompany));
+        Company c = companyService.readOne(Integer.parseInt(choiceCompany));
         choiceIntroDate = askUser("Enter introduction date. [dd/mm/yyyy] t) for today's date");
         intro = formatDate(choiceIntroDate);
         choiceDiscoDate = askUser("Enter discontinution date. [dd/mm/yyyy] t) for today's date");

@@ -2,11 +2,11 @@ package com.excilys.computerdatabase.persistence;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Supplier;
 
-import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,10 +14,12 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.mapper.JdbcComputerMapper;
 import com.excilys.computerdatabase.model.*;
+import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 
 /**
  * class ComputerDAO
@@ -26,14 +28,22 @@ import com.excilys.computerdatabase.model.*;
  *
  */
 @Repository
-public class ComputerDao implements InterfaceDao {
+@Transactional
+public class ComputerDao implements InterfaceDao<Computer> {
 
     @Autowired
-    private DataSource dataSource;
-
     private JdbcTemplate jdbcTemplate;
 
-    private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+    private static QComputer computer = QComputer.computer;
+    private static QCompany company = QCompany.company;
+
+    @Autowired
+    SessionFactory sessionFactory;
+
+    private Supplier<HibernateQueryFactory> queryFactory = 
+            () -> new HibernateQueryFactory(sessionFactory.getCurrentSession());
+    
+    // private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 
     private final static String SQL_READ = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id";
     private final static String SQL_READ_SEARCH = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ?";
@@ -44,24 +54,30 @@ public class ComputerDao implements InterfaceDao {
     private final static String SQL_DELETE_BY_COMPANY = "DELETE FROM computer WHERE company_id=?";
     private final static String SQL_COUNT = "SELECT COUNT(*) AS count FROM computer";
 
-    public void setDataSource(DataSource ds) {
-        this.dataSource = ds;
-    }
-
     /**
      * read - get all Computer from database
      * 
      * @return List<Computer>
      */
-    public List<Entity> read() {
+    @Override
+    public List<Computer> read(Map<String, String> orderMap) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        return this.jdbcTemplate.query(SQL_READ, new JdbcComputerMapper());
+        queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).orderBy(computer.name.asc()).fetch();
+        //List<Computer> list = queryFactory.get().selectFrom(computer).fetch();
+        //return list;
+        String sqlRead = SQL_READ;
+        if (orderMap != null) {
+            for (Entry<String, String> entrySet : orderMap.entrySet()) {
+                if (entrySet.getKey() != null && !entrySet.getKey().isEmpty()) {
+                    sqlRead = sqlRead.concat(" ORDER BY " + entrySet.getKey() + " " + entrySet.getValue());
+                }
+            }
+        }
+
+        return this.jdbcTemplate.query(sqlRead, new JdbcComputerMapper());
     }
 
     public long count(String search) {
-
-        jdbcTemplate = new JdbcTemplate(dataSource);
 
         String sqlCount = SQL_COUNT;
         if (search != null && !search.isEmpty()) {
@@ -73,9 +89,9 @@ public class ComputerDao implements InterfaceDao {
         return this.jdbcTemplate.queryForObject(sqlCount, Integer.class);
     }
 
-    public List<Entity> readSearch(String search) {
+    public List<Computer> readSearch(String search) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
+        queryFactory.get().selectFrom(computer).leftJoin(computer.company,company).where(computer.name.contains(search)).fetch();
         return this.jdbcTemplate.query(SQL_READ_SEARCH, new Object[] { "%" + search + "%", search + "%" },
                 new JdbcComputerMapper());
     }
@@ -86,10 +102,20 @@ public class ComputerDao implements InterfaceDao {
      * @param Page
      * @return List<Computer>
      */
-    public List<Entity> readPages(Page p) {
+    @Override
+    public List<Computer> readPages(Page p, Map<String, String> orderMap) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        String readPages = SQL_READ;
+        return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).limit(p.getPageSize()).offset(p.getOffset()).orderBy(computer.name.asc()).fetch();
+        
+        /*String readPages = SQL_READ;
+
+        if (orderMap != null) {
+            for (Entry<String, String> entrySet : orderMap.entrySet()) {
+                if (entrySet.getKey() != null && !entrySet.getKey().isEmpty()) {
+                    readPages = readPages.concat(" ORDER BY " + entrySet.getKey() + " " + entrySet.getValue());
+                }
+            }
+        }
 
         if (p.getOffset() >= 0) {
             if (p.getSearch() != null && !(p.getSearch().isEmpty())) {
@@ -100,7 +126,7 @@ public class ComputerDao implements InterfaceDao {
 
         }
 
-        return this.jdbcTemplate.query(readPages, new JdbcComputerMapper());
+        return this.jdbcTemplate.query(readPages, new JdbcComputerMapper());*/
     }
 
     /**
@@ -109,9 +135,9 @@ public class ComputerDao implements InterfaceDao {
      * @param id
      * @return Computer
      */
-    public Entity readOne(long id) {
+    @Override
+    public Computer readOne(long id) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
         return this.jdbcTemplate.queryForObject(SQL_READ_ONE, new Object[] { id }, new JdbcComputerMapper());
     }
 
@@ -119,16 +145,15 @@ public class ComputerDao implements InterfaceDao {
      * create - new Computer in database
      * 
      * @param Computer
-     * @return 
+     * @return
      */
-    public int create(Entity entity) {
+    @Override
+    public int create(Computer computer) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        Computer computer = (Computer) entity;
         KeyHolder holder = new GeneratedKeyHolder();
-        
+
         this.jdbcTemplate.update(new PreparedStatementCreator() {
-            
+
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement ps = con.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS);
@@ -149,21 +174,24 @@ public class ComputerDao implements InterfaceDao {
                 } else {
                     ps.setString(4, null);
                 }
-                
+
                 return ps;
             }
         }, holder);
-        
+
         return holder.getKey().intValue();
-        
-        /*this.jdbcTemplate.update(SQL_CREATE, computer.getName(),
-                (computer.getIntroducedDate() != null ? computer.getIntroducedDate().toString() : null),
-                (computer.getDiscontinuedDate() != null ? computer.getDiscontinuedDate().toString() : null),
-                ((computer.getCompany() != null && computer.getCompany().getId() != 0) ? computer.getCompany().getId()
-                        : null));
-        
-        int a = holder.getKey().intValue();
-        return a ;*/
+
+        /*
+         * this.jdbcTemplate.update(SQL_CREATE, computer.getName(),
+         * (computer.getIntroducedDate() != null ?
+         * computer.getIntroducedDate().toString() : null),
+         * (computer.getDiscontinuedDate() != null ?
+         * computer.getDiscontinuedDate().toString() : null),
+         * ((computer.getCompany() != null && computer.getCompany().getId() !=
+         * 0) ? computer.getCompany().getId() : null));
+         * 
+         * int a = holder.getKey().intValue(); return a ;
+         */
     }
 
     /**
@@ -172,17 +200,14 @@ public class ComputerDao implements InterfaceDao {
      * @param id
      * @param Computer
      */
-    public void update(long id, Entity entity) {
-        
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        Computer computer = (Computer) entity;
+    @Override
+    public void update(long id, Computer computer) {
 
         jdbcTemplate.update(SQL_UPDATE,
                 new Object[] { computer.getName(),
                         (computer.getIntroducedDate() != null ? (computer.getIntroducedDate().toString()) : (null)),
                         (computer.getDiscontinuedDate() != null ? (computer.getDiscontinuedDate().toString()) : (null)),
-                        (computer.getCompany() != null ? (computer.getCompany().getId()) : 0), 
-                        id });
+                        (computer.getCompany() != null ? (computer.getCompany().getId()) : 0), id });
     }
 
     /**
@@ -190,9 +215,9 @@ public class ComputerDao implements InterfaceDao {
      * 
      * @param id
      */
+    @Override
     public void delete(long id) {
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
         jdbcTemplate.update(SQL_DELETE, id);
     }
 
@@ -203,12 +228,11 @@ public class ComputerDao implements InterfaceDao {
      * @throws PersistenceException
      */
     public void deleteByCompany(long id) throws PersistenceException {
-        
-        jdbcTemplate = new JdbcTemplate(dataSource);
+
         try {
             jdbcTemplate.update(SQL_DELETE_BY_COMPANY, id);
         } catch (DataAccessException e) {
-            throw new PersistenceException("ezrzt");
+            throw new PersistenceException("error delete computer by company");
         }
     }
 }
