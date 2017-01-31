@@ -34,10 +34,8 @@ public final class Computer {
     private LocalDate discontinuedDate;
     
     @ManyToOne
-    @JoinColumn(nullable=true, name="company_id")
+    @JoinColumn(name="company_id", nullable=true)
     private Company company;
-
-    //private List<String> errorsList;
 
     private Computer(ComputerBuilder builder) {
         this.id = builder.id;

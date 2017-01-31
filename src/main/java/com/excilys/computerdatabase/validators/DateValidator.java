@@ -15,6 +15,9 @@ public class DateValidator implements ConstraintValidator<DateValidation, String
     @Override
     public boolean isValid(String date, ConstraintValidatorContext ctx) {
 
+        //String country = System.getProperty("user.country"); 
+        //String language = System.getProperty("user.language");
+        
         if (date != null && date.length() > 0) {
             try {
                 LocalDate myDate = LocalDate.parse(date);

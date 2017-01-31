@@ -4,47 +4,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Page {
-	private int currentPage;
-	private int pageSize;
-	private int pageCount;
-	private String search=null;
-	private String order;
-	private List<Computer> computerList = new ArrayList<Computer>();
-	
-	public Page() {
-	}
+    private int currentPage;
+    private int pageSize;
+    private int pageCount;
+    private String search = null;
+    private String order;
+    private List<Computer> computerList = new ArrayList<Computer>();
 
-	public Page(int currentPage, int pageSize, int pageCount) {
-		this.currentPage = currentPage;
-		this.pageSize = pageSize;
-		this.pageCount = pageCount;
-	}
+    public Page() {
+    }
 
-	public int getCurrentPage() {
-		return currentPage;
-	}
+    public Page(int currentPage, int pageSize, int pageCount) {
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
+        this.pageCount = pageCount;
+    }
 
-	public void setCurrentPage(int pageNumber) {
-		this.currentPage = pageNumber;
-	}
+    public int getCurrentPage() {
+        return currentPage;
+    }
 
-	public int getPageSize() {
-		return pageSize;
-	}
+    public void setCurrentPage(int pageNumber) {
+        this.currentPage = pageNumber;
+    }
 
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
+    public int getPageSize() {
+        return pageSize;
+    }
 
-	public int getPageCount() {
-		return pageCount;
-	}
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public void setPageCount(int last) {
-		this.pageCount = last;
-	}
-	
-	public List<Computer> getComputerList() {
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int last) {
+        this.pageCount = last;
+    }
+
+    public List<Computer> getComputerList() {
         return computerList;
     }
 
@@ -61,38 +61,38 @@ public class Page {
     }
 
     public long getOffset() {
-		return ((this.currentPage - 1) * this.pageSize);
-	}
+        return ((this.currentPage - 1) * this.pageSize);
+    }
 
-	@Override
-	public String toString() {
-		return "Page [currentPage=" + currentPage + ", pageSize=" + pageSize + "]";
-	}
+    @Override
+    public String toString() {
+        return "Page [currentPage=" + currentPage + ", pageSize=" + pageSize + "]";
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (pageSize ^ (pageSize >>> 32));
-		result = prime * result + (currentPage ^ (currentPage >>> 32));
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (pageSize ^ (pageSize >>> 32));
+        result = prime * result + (currentPage ^ (currentPage >>> 32));
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Page other = (Page) obj;
-		if (pageSize != other.pageSize)
-			return false;
-		if (currentPage != other.currentPage)
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Page other = (Page) obj;
+        if (pageSize != other.pageSize)
+            return false;
+        if (currentPage != other.currentPage)
+            return false;
+        return true;
+    }
 
     public String getOrder() {
         return order;

@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,7 @@ import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Page;
 import com.excilys.computerdatabase.model.QCompany;
 import com.querydsl.jpa.hibernate.HibernateQueryFactory;
+
 /**
  * Class CompanyDAO
  * 
@@ -23,13 +26,16 @@ import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 @Repository
 @Transactional
 public class CompanyDao implements InterfaceDao<Company> {
+
     private static QCompany company = QCompany.company;
-    
+
     @Autowired
     SessionFactory sessionFactory;
-    
-    private Supplier<HibernateQueryFactory> queryFactory =
-                        () -> new HibernateQueryFactory(sessionFactory.getCurrentSession());
+
+    private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+
+    private Supplier<HibernateQueryFactory> queryFactory = () -> new HibernateQueryFactory(
+            sessionFactory.getCurrentSession());
 
     /**
      * read - get all Company from database
@@ -39,7 +45,7 @@ public class CompanyDao implements InterfaceDao<Company> {
     @Override
     public List<Company> read(Map<String, String> orderMap) {
 
-        return queryFactory.get().selectFrom(company).fetch();
+        return queryFactory.get().selectFrom(company).orderBy(company.name.asc()).fetch();
     }
 
     /**
@@ -67,24 +73,6 @@ public class CompanyDao implements InterfaceDao<Company> {
     }
 
     /**
-     * create - new Company in database
-     * 
-     * @param Company
-     * @return
-     *//*
-       * public int create(Company entity) { int newId = -1; Company c =
-       * (Company) entity; try (Connection cn =
-       * DataSourceUtils.getConnection(dataSource); PreparedStatement st =
-       * cn.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS)) {
-       * st.setString(1, c.getName()); st.executeUpdate();ResultSet resultSet =
-       * st.getGeneratedKeys();
-       * 
-       * if (resultSet.next()) { newId = resultSet.getInt(1); } } catch
-       * (SQLException e) { logger.error("Cannot create new company ", e); }
-       * return newId; }
-       */
-
-    /**
      * delete - delete a Company
      * 
      * @param cn
@@ -98,7 +86,8 @@ public class CompanyDao implements InterfaceDao<Company> {
         try {
             queryFactory.get().delete(company).where(company.id.eq(id)).execute();
         } catch (DataAccessException e) {
-            throw new PersistenceException("te");
+            logger.info("Error while deleting company number " + id);
+            throw new PersistenceException("error deleting company " + id);
         }
     }
 }

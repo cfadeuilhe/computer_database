@@ -75,7 +75,7 @@ public class CompanyService implements InterfaceService<Company>{
             computerDao.deleteByCompany(id);
             companyDao.delete(id);
         } catch (PersistenceException e) {
-            logger.error("delete() catched PersistenceException", e);
+            logger.error("delete() in class CompanyService catched PersistenceException", e);
             throw new PersistenceException("company delete error");
         }
     }

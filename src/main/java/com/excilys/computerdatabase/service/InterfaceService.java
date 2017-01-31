@@ -27,7 +27,7 @@ public interface InterfaceService<T> {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 
-    public default List<T> listSearch(String search) {
+    public default List<T> listSearch(String search, Map<String, String> orderMap) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
     }
 

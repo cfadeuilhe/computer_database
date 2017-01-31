@@ -53,7 +53,7 @@
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="${tradSearchName }"
-							value="${pageSearch }" /> <input type="submit" id="searchsubmit"
+							value="${page.search }" /> <input type="submit" id="searchsubmit"
 							value="${tradFilterByName }" class="btn btn-primary" />
 					</form>
 				</div>
@@ -89,27 +89,49 @@
 							</a>
 						</span></th>
 						<th class="orderBy" id="computerName"><c:out
-								value="${tradName }"></c:out><a href="#" id="orderBy"
-							onclick="$.fn.orderBy('computer.name');"> <i id="orderArrow"
-								class="fa fa-arrow-down"></i>
-						</a></th>
+								value="${tradName }"></c:out>
+							<div style="float: right">
+								<a href="#" id="orderBy" onclick="$.fn.orderBy('name', 'asc');">
+									<i id="orderArrow" class="fa fa-arrow-down"></i>
+								</a><a href="#" id="orderBy" onclick="$.fn.orderBy('name', 'desc');">
+									<i id="orderArrow" class="fa fa-arrow-up"></i>
+								</a>
+							</div></th>
 						<th class="orderBy" id="introDateOrder"><c:out
-								value="${tradIntroducedDate }"></c:out><a href="#" id="orderBy"
-							onclick="$.fn.orderBy('computer.introduced');"> <i
-								id="orderArrow" class="fa fa-arrow-down"></i>
-						</a></th>
+								value="${tradIntroducedDate }"></c:out>
+							<div style="float: right">
+								<a id="orderBy"
+									onclick="$.fn.orderBy('introduced', 'asc');"> <i
+									id="orderArrow" class="fa fa-arrow-down"></i>
+								</a><a href="#" id="orderBy"
+									onclick="$.fn.orderBy('introduced', 'desc');"> <i
+									id="orderArrow" class="fa fa-arrow-up"></i>
+								</a>
+							</div></th>
 						<!-- Table header for Discontinued Date -->
 						<th class="orderBy" id="discoDateOrder"><c:out
-								value="${tradDiscontinuedDate }"></c:out><a href="#"
-							id="orderBy" onclick="$.fn.orderBy('computer.discontinued');">
-								<i id="orderArrow" class="fa fa-arrow-down"></i>
-						</a></th>
+								value="${tradDiscontinuedDate }"></c:out>
+							<div style="float: right">
+								<a href="#" id="orderBy"
+									onclick="$.fn.orderBy('discontinued', 'asc');"> <i
+									id="orderArrow" class="fa fa-arrow-down"></i>
+								</a><a href="#" id="orderBy"
+									onclick="$.fn.orderBy('discontinued', 'desc');"> <i
+									id="orderArrow" class="fa fa-arrow-up"></i>
+								</a>
+							</div></th>
 						<!-- Table header for Company -->
 						<th class="orderBy" id="companyNameOrder"><c:out
-								value="${tradCompany }"></c:out><a href="#" id="orderBy"
-							onclick="$.fn.orderBy('company.name');"> <i id="orderArrow"
-								class="fa fa-arrow-down"></i>
-						</a></th>
+								value="${tradCompany }"></c:out>
+							<div style="float: right">
+								<a href="#" id="orderBy"
+									onclick="$.fn.orderBy('company', 'asc');"> <i
+									id="orderArrow" class="fa fa-arrow-down"></i>
+								</a><a href="#" id="orderBy"
+									onclick="$.fn.orderBy('company', 'desc');"> <i
+									id="orderArrow" class="fa fa-arrow-up"></i>
+								</a>
+							</div></th>
 
 					</tr>
 				</thead>

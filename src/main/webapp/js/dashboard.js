@@ -58,10 +58,10 @@ $(function() {
 
 // Function to sort by column
 (function($) {
-	$.fn.orderBy = function(column) {
-		//$("#orderArrow").toggleClass("fa fa-arrow-down");
-		$('#orderForm input[name=order]').val(column);
-		$('#orderForm').submit();  
+	$.fn.orderBy = function(column, order) {
+
+		$('#orderForm input[name=order]').val(column + "." + order);
+		$('#orderForm').submit();
 
 	};
 }(jQuery));

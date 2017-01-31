@@ -125,6 +125,7 @@ public class InterfaceMenu {
             companyService.delete(id);
         } catch (PersistenceException e) {
             logger.error("InterfaceMenu : deleteCompany() catched PersistenceException", e);
+            logger.info("The company and associated computers were not deleted");
         }
     }
 

@@ -1,24 +1,21 @@
 package com.excilys.computerdatabase.persistence;
 
-import java.sql.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computerdatabase.exceptions.PersistenceException;
-import com.excilys.computerdatabase.mapper.JdbcComputerMapper;
 import com.excilys.computerdatabase.model.*;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 
 /**
@@ -31,28 +28,16 @@ import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 @Transactional
 public class ComputerDao implements InterfaceDao<Computer> {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
     private static QComputer computer = QComputer.computer;
     private static QCompany company = QCompany.company;
 
     @Autowired
     SessionFactory sessionFactory;
 
-    private Supplier<HibernateQueryFactory> queryFactory = 
-            () -> new HibernateQueryFactory(sessionFactory.getCurrentSession());
-    
-    // private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
+    private Supplier<HibernateQueryFactory> queryFactory = () -> new HibernateQueryFactory(
+            sessionFactory.getCurrentSession());
 
-    private final static String SQL_READ = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id";
-    private final static String SQL_READ_SEARCH = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? or company.name LIKE ?";
-    private final static String SQL_READ_ONE = "SELECT * FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id=?";
-    private final static String SQL_CREATE = "INSERT INTO computer (name,introduced,discontinued,company_id) VALUES (?,?,?,?)";
-    private final static String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
-    private final static String SQL_DELETE = "DELETE FROM computer WHERE id=?";
-    private final static String SQL_DELETE_BY_COMPANY = "DELETE FROM computer WHERE company_id=?";
-    private final static String SQL_COUNT = "SELECT COUNT(*) AS count FROM computer";
+    private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 
     /**
      * read - get all Computer from database
@@ -62,38 +47,29 @@ public class ComputerDao implements InterfaceDao<Computer> {
     @Override
     public List<Computer> read(Map<String, String> orderMap) {
 
-        queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).orderBy(computer.name.asc()).fetch();
-        //List<Computer> list = queryFactory.get().selectFrom(computer).fetch();
-        //return list;
-        String sqlRead = SQL_READ;
-        if (orderMap != null) {
-            for (Entry<String, String> entrySet : orderMap.entrySet()) {
-                if (entrySet.getKey() != null && !entrySet.getKey().isEmpty()) {
-                    sqlRead = sqlRead.concat(" ORDER BY " + entrySet.getKey() + " " + entrySet.getValue());
-                }
-            }
-        }
+        JPQLQuery<Computer> query = queryFactory.get().selectFrom(computer).leftJoin(computer.company, company);
 
-        return this.jdbcTemplate.query(sqlRead, new JdbcComputerMapper());
+        query = orderBy(query, orderMap);
+        return query.fetch();
     }
 
     public long count(String search) {
 
-        String sqlCount = SQL_COUNT;
         if (search != null && !search.isEmpty()) {
-            sqlCount = sqlCount
-                    .concat(" LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE '%")
-                    .concat(search).concat("%' or company.name LIKE '").concat(search).concat("%'");
+            return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company)
+                    .where(computer.name.contains(search)).fetch().size();
+        } else {
+            return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).fetch().size();
         }
-
-        return this.jdbcTemplate.queryForObject(sqlCount, Integer.class);
     }
 
-    public List<Computer> readSearch(String search) {
-
-        queryFactory.get().selectFrom(computer).leftJoin(computer.company,company).where(computer.name.contains(search)).fetch();
-        return this.jdbcTemplate.query(SQL_READ_SEARCH, new Object[] { "%" + search + "%", search + "%" },
-                new JdbcComputerMapper());
+    public List<Computer> readSearch(String search, Map<String, String> orderMap) {
+        JPQLQuery<Computer> query = queryFactory.get().selectFrom(computer).leftJoin(computer.company, company);
+        if (search != null && !search.isEmpty()) {
+            query = query.where(computer.name.contains(search));
+        }
+        query = orderBy(query, orderMap);
+        return query.fetch();
     }
 
     /**
@@ -105,28 +81,12 @@ public class ComputerDao implements InterfaceDao<Computer> {
     @Override
     public List<Computer> readPages(Page p, Map<String, String> orderMap) {
 
-        return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).limit(p.getPageSize()).offset(p.getOffset()).orderBy(computer.name.asc()).fetch();
-        
-        /*String readPages = SQL_READ;
-
-        if (orderMap != null) {
-            for (Entry<String, String> entrySet : orderMap.entrySet()) {
-                if (entrySet.getKey() != null && !entrySet.getKey().isEmpty()) {
-                    readPages = readPages.concat(" ORDER BY " + entrySet.getKey() + " " + entrySet.getValue());
-                }
-            }
+        JPQLQuery<Computer> query = queryFactory.get().selectFrom(computer).leftJoin(computer.company, company);
+        if (p.getSearch() != null && !p.getSearch().isEmpty()) {
+            query = query.where(computer.name.contains(p.getSearch()));
         }
-
-        if (p.getOffset() >= 0) {
-            if (p.getSearch() != null && !(p.getSearch().isEmpty())) {
-                readPages = readPages.concat(" WHERE computer.name LIKE '%").concat(p.getSearch())
-                        .concat("%' or company.name LIKE '").concat(p.getSearch()).concat("%'");
-            }
-            readPages += " LIMIT " + p.getPageSize() + " OFFSET " + p.getOffset();
-
-        }
-
-        return this.jdbcTemplate.query(readPages, new JdbcComputerMapper());*/
+        query = orderBy(query, orderMap);
+        return query.limit(p.getPageSize()).offset(p.getOffset()).fetch();
     }
 
     /**
@@ -138,7 +98,8 @@ public class ComputerDao implements InterfaceDao<Computer> {
     @Override
     public Computer readOne(long id) {
 
-        return this.jdbcTemplate.queryForObject(SQL_READ_ONE, new Object[] { id }, new JdbcComputerMapper());
+        return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).where(computer.id.eq(id))
+                .fetchOne();
     }
 
     /**
@@ -150,48 +111,8 @@ public class ComputerDao implements InterfaceDao<Computer> {
     @Override
     public int create(Computer computer) {
 
-        KeyHolder holder = new GeneratedKeyHolder();
-
-        this.jdbcTemplate.update(new PreparedStatementCreator() {
-
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement ps = con.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS);
-
-                ps.setString(1, computer.getName());
-                if (computer.getIntroducedDate() != null) {
-                    ps.setString(2, computer.getIntroducedDate().toString());
-                } else {
-                    ps.setString(2, null);
-                }
-                if (computer.getDiscontinuedDate() != null) {
-                    ps.setString(3, computer.getDiscontinuedDate().toString());
-                } else {
-                    ps.setString(3, null);
-                }
-                if (computer.getCompany() != null && computer.getCompany().getId() != 0) {
-                    ps.setLong(4, computer.getCompany().getId());
-                } else {
-                    ps.setString(4, null);
-                }
-
-                return ps;
-            }
-        }, holder);
-
-        return holder.getKey().intValue();
-
-        /*
-         * this.jdbcTemplate.update(SQL_CREATE, computer.getName(),
-         * (computer.getIntroducedDate() != null ?
-         * computer.getIntroducedDate().toString() : null),
-         * (computer.getDiscontinuedDate() != null ?
-         * computer.getDiscontinuedDate().toString() : null),
-         * ((computer.getCompany() != null && computer.getCompany().getId() !=
-         * 0) ? computer.getCompany().getId() : null));
-         * 
-         * int a = holder.getKey().intValue(); return a ;
-         */
+        sessionFactory.getCurrentSession().save(computer);
+        return (int) computer.getId();
     }
 
     /**
@@ -201,13 +122,12 @@ public class ComputerDao implements InterfaceDao<Computer> {
      * @param Computer
      */
     @Override
-    public void update(long id, Computer computer) {
+    public void update(long id, Computer uComputer) {
 
-        jdbcTemplate.update(SQL_UPDATE,
-                new Object[] { computer.getName(),
-                        (computer.getIntroducedDate() != null ? (computer.getIntroducedDate().toString()) : (null)),
-                        (computer.getDiscontinuedDate() != null ? (computer.getDiscontinuedDate().toString()) : (null)),
-                        (computer.getCompany() != null ? (computer.getCompany().getId()) : 0), id });
+        queryFactory.get().update(computer).where(computer.id.eq(id)).set(computer.name, uComputer.getName())
+                .set(computer.introducedDate, uComputer.getIntroducedDate())
+                .set(computer.discontinuedDate, uComputer.getDiscontinuedDate())
+                .set(computer.company, uComputer.getCompany()).execute();
     }
 
     /**
@@ -218,7 +138,7 @@ public class ComputerDao implements InterfaceDao<Computer> {
     @Override
     public void delete(long id) {
 
-        jdbcTemplate.update(SQL_DELETE, id);
+        queryFactory.get().delete(computer).where(computer.id.eq(id)).execute();
     }
 
     /**
@@ -230,9 +150,52 @@ public class ComputerDao implements InterfaceDao<Computer> {
     public void deleteByCompany(long id) throws PersistenceException {
 
         try {
-            jdbcTemplate.update(SQL_DELETE_BY_COMPANY, id);
+            queryFactory.get().delete(computer).where(computer.company.id.eq(id)).execute();
         } catch (DataAccessException e) {
-            throw new PersistenceException("error delete computer by company");
+            logger.info("Error while deleting computer number " + id);
+            throw new PersistenceException("error deleting computer " + id);
         }
+    }
+
+    public JPQLQuery<Computer> orderBy(JPQLQuery<Computer> query, Map<String, String> orderMap) {
+
+        if (orderMap != null && !orderMap.isEmpty()) {
+            for (Entry<String, String> entrySet : orderMap.entrySet()) {
+                if (entrySet.getKey() != null && !entrySet.getKey().isEmpty()) {
+                    switch (entrySet.getKey()) {
+                    case "name":
+                        if (entrySet.getValue().equals("asc")) {
+                            query = query.orderBy(computer.name.asc());
+                        } else if (entrySet.getValue().equals("desc")) {
+                            query = query.orderBy(computer.name.desc());
+                        }
+                        break;
+                    case "introduced":
+                        if (entrySet.getValue().equals("asc")) {
+                            query = query.orderBy(computer.introducedDate.asc());
+                        } else if (entrySet.getValue().equals("desc")) {
+                            query = query.orderBy(computer.introducedDate.desc());
+                        }
+                        break;
+                    case "discontinued":
+                        if (entrySet.getValue().equals("asc")) {
+                            query = query.orderBy(computer.discontinuedDate.asc());
+                        } else if (entrySet.getValue().equals("desc")) {
+                            query = query.orderBy(computer.discontinuedDate.desc());
+                        }
+                        break;
+                    case "company":
+                        if (entrySet.getValue().equals("asc")) {
+                            query = query.orderBy(company.name.asc());
+                        } else if (entrySet.getValue().equals("desc")) {
+                            query = query.orderBy(company.name.desc());
+                        }
+                        break;
+                    }
+
+                }
+            }
+        }
+        return query;
     }
 }

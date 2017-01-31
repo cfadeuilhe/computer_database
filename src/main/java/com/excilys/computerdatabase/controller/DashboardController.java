@@ -36,6 +36,7 @@ public class DashboardController {
 
     @Autowired
     private ComputerService computerService;
+
     @Autowired
     private CompanyService companyService;
 
@@ -46,25 +47,23 @@ public class DashboardController {
 
         long count = 0;
         String search = requestMap.get(Consts.SEARCH);
-        String orderBy = requestMap.get("order"); 
-        Map<String, String> order = new HashMap<String, String>();
-        order.put(orderBy, "asc");
+        String orderBy = requestMap.get("order");
+        String[] order; Map<String, String> orderMap = new HashMap<String, String>();
+        if (orderBy != null && !orderBy.isEmpty()) {
+            order = orderBy.split("[.]");
+            orderMap.put(order[0], order[1]);
+        }
         count = computerService.countEntities(search);
         Page p;
         if (requestMap.get(Consts.SEARCH) != null) {
-            p = RequestMapper.requestToPage(requestMap, computerService.listSearch(search));
+            p = RequestMapper.requestToPage(requestMap, computerService.listSearch(search, orderMap));
         } else {
-            p = RequestMapper.requestToPage(requestMap, computerService.listEntities(order));
+            p = RequestMapper.requestToPage(requestMap, computerService.listEntities(orderMap));
         }
-        if (search != null && !search.trim().isEmpty()) {
-
-        } else {
-
-        }
+        
         p.setOrder(orderBy);
-        p.setComputerList(computerService.readPages(p, order));
+        p.setComputerList(computerService.readPages(p, orderMap));
 
-        // String t = request.getParameter("order");
         model.addObject(Consts.COUNT, count);
         model.addObject(Consts.PAGE, p);
 
@@ -148,6 +147,19 @@ public class DashboardController {
             model.addObject(Consts.COMPANY_LIST, list);
         }
 
+        return model;
+    }
+
+    @PostMapping(value = "/deleteComputer")
+    public ModelAndView postDelete(@RequestParam Map<String, String> requestMap) {
+
+        String selection = requestMap.get(Consts.SELECTION);
+        String[] parse = selection.split(",");
+        for (int i = 0; i < parse.length; i++) {
+            computerService.delete(Long.parseLong(parse[i]));
+        }
+
+        ModelAndView model = new ModelAndView("redirect:dashboard");
         return model;
     }
 

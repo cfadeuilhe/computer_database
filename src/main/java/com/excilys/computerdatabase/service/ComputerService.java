@@ -52,9 +52,9 @@ public class ComputerService implements InterfaceService<Computer> {
     }
 
     @Override
-    public List<Computer> listSearch(String search) {
+    public List<Computer> listSearch(String search, Map<String, String> orderMap) {
         List<Computer> list = new ArrayList<Computer>();
-        list = computerDao.readSearch(search);
+        list = computerDao.readSearch(search, orderMap);
         return list;
     }
 
