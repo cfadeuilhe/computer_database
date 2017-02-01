@@ -40,6 +40,26 @@ public class DashboardController {
     @Autowired
     private CompanyService companyService;
 
+    @GetMapping(value = "/login")
+    public ModelAndView getLogin(@RequestParam Map<String, String> requestMap) {
+
+        ModelAndView model = new ModelAndView("login");
+        
+        String error = requestMap.get("error");
+        String logout = requestMap.get("logout");
+        
+        if (error != null) {
+            model.addObject("error", "error.login");
+        }
+
+        if (logout != null) {
+            model.addObject("logout", "logout.success");
+        }
+
+        return model;
+    }
+    
+    
     @GetMapping(value = "/dashboard")
     public ModelAndView getDashboard(@RequestParam Map<String, String> requestMap) {
 

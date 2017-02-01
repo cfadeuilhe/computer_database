@@ -33,22 +33,6 @@ public class CompanyService implements InterfaceService<Company>{
     @Autowired
     private ComputerDao computerDao;
 
-    public  CompanyDao getCompanyDao() {
-        return companyDao;
-    }
-
-    public void setCompanyDao(CompanyDao companyDao) {
-        this.companyDao = companyDao;
-    }
-
-    public ComputerDao getComputerDao() {
-        return computerDao;
-    }
-
-    public void setComputerDao(ComputerDao computerDao) {
-        this.computerDao = computerDao;
-    }
-
     @Override
     public List<Company> listEntities(Map<String, String> orderMap) {
         List<Company> list = new ArrayList<Company>();

@@ -18,28 +18,37 @@
 <springTags:message code="computer.title" var="tradTitle"></springTags:message>
 <springTags:message code="computer.computersFound"
 	var="tradComputersFound"></springTags:message>
-<springTags:message code="computer.searchName" var="tradSearchName"></springTags:message>
-<springTags:message code="computer.filterByName" var="tradFilterByName"></springTags:message>
-<springTags:message code="computer.addComputer" var="tradAddComputer"></springTags:message>
-<springTags:message code="computer.editComputer" var="tradEditComputer"></springTags:message>
-<springTags:message code="computer.edit" var="tradEdit"></springTags:message>
-<springTags:message code="computer.name" var="tradName"></springTags:message>
+<springTags:message code="computer.searchName" var="tradSearchName" />
+<springTags:message code="computer.filterByName" var="tradFilterByName" />
+<springTags:message code="computer.addComputer" var="tradAddComputer" />
+<springTags:message code="computer.editComputer" var="tradEditComputer" />
+<springTags:message code="computer.edit" var="tradEdit" />
+<springTags:message code="computer.name" var="tradName" />
 <springTags:message code="computer.introducedDate"
-	var="tradIntroducedDate"></springTags:message>
+	var="tradIntroducedDate" />
 <springTags:message code="computer.discontinuedDate"
-	var="tradDiscontinuedDate"></springTags:message>
-<springTags:message code="computer.company" var="tradCompany"></springTags:message>
-<springTags:message code="computer.add" var="tradAdd"></springTags:message>
-<springTags:message code="computer.cancel" var="tradCancel"></springTags:message>
+	var="tradDiscontinuedDate" />
+<springTags:message code="computer.company" var="tradCompany" />
+<springTags:message code="computer.add" var="tradAdd" />
+<springTags:message code="computer.cancel" var="tradCancel" />
 
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
+			<a href="login?logout" class="pull-right" style="padding-top: 7px;"> <span
+				class="glyphicon glyphicon-log-out btn btn-danger"></span>
+			</a> 
 			<a class="navbar-brand" href="dashboard"> <c:out
 					value="${tradTitle}"></c:out>
-			</a> <span style="float: right"> <a href="?language=en">English</a>|<a
-				href="?language=fr">Français</a></span>
+			</a> <span style="float: right; padding-right:10px; padding-top:7px;"> <a href="?language=en"><img border="10" alt="French"
+					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_United_Kingdom.png"
+					width="35" height="35"></a>|<a
+				href="?language=fr"><img
+					border="10" alt="English"
+					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_France.png"
+					width="35" height="35"></a></span>
 		</div>
+
 	</header>
 
 	<section id="main">

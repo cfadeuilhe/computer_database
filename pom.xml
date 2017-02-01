@@ -18,7 +18,7 @@
     </modules>
 
     <properties>
-        <cdb.version>0.6.2</cdb.version>
+        <cdb.version>0.6.3</cdb.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.3.7</mockito.version>
         <selenium.version>3.0.1</selenium.version>

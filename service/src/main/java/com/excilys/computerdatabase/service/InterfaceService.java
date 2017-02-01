@@ -9,11 +9,19 @@ import com.excilys.computerdatabase.util.Consts;
 
 public interface InterfaceService<T> {
 
-    public void delete(long id) throws PersistenceException;
-
     public T readOne(long id);
+    
+    public default void delete(long id) throws PersistenceException {
+        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
+    }
+    
+    public default T readByName(String name) {
+        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
+    }
 
-    public List<T> listEntities(Map<String, String> orderMap);
+    public default List<T> listEntities(Map<String, String> orderMap) {
+        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
+    }
 
     public default void update(long id, T entity) {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);

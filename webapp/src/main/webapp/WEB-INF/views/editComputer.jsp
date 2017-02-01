@@ -29,7 +29,18 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"><c:out value="${tradTitle}"></c:out></a>
+			<a href="login?logout" class="pull-right" style="padding-top: 7px;"> <span
+				class="glyphicon glyphicon-log-out btn btn-danger"></span>
+			</a> 
+			<a class="navbar-brand" href="dashboard"> <c:out
+					value="${tradTitle}"></c:out>
+			</a> <span style="float: right; padding-right:10px; padding-top:7px;"> <a href="?language=en"><img border="10" alt="French"
+					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_United_Kingdom.png"
+					width="35" height="35"></a>|<a
+				href="?language=fr"><img
+					border="10" alt="English"
+					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_France.png"
+					width="35" height="35"></a></span>
 		</div>
 	</header>
 	<section id="main">

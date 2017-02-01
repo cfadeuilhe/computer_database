@@ -25,14 +25,6 @@ public class ComputerService implements InterfaceService<Computer> {
     @Autowired
     private ComputerDao computerDao;
 
-    public ComputerDao getComputerDao() {
-        return computerDao;
-    }
-
-    public void setComputerDao(ComputerDao cd) {
-        this.computerDao = cd;
-    }
-
     /**
      * listEntities - call DAO to get the list of all Computer from database
      * 

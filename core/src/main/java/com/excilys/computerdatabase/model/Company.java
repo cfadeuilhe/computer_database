@@ -17,9 +17,9 @@ public final class Company {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    private long id;
     
-    protected String name;
+    private String name;
     
     public Company(long id, String name) {
         this.id = id;
