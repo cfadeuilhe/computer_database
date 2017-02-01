@@ -9,8 +9,7 @@
     </parent>
 
     <artifactId>core</artifactId>
-    <packaging>jar</packaging>
-    <version>1.0</version>
+    <version>${modules.version}</version>
     <name>Core Module</name>
 
     <dependencies>
@@ -39,38 +38,8 @@
     </dependencies>
 
     <build>
-        <finalName>Cdb</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle.version}</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <configLocation>checkstyle.xml</configLocation>
-                            <suppressionLocation>suppressions.xml</suppressionLocation>
-                            <encoding>${maven-checkstyle.encoding}</encoding>
-                            <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                            <linkXRef>false</linkXRef>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <groupId>com.mysema.maven</groupId>
@@ -84,23 +53,6 @@
                         <configuration>
                             <outputDirectory>target/generated-sources/java</outputDirectory>
                             <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-                <version>${gatling.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>gatlingtest</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <simulationsFolder>com.excilys.computerdatabase.simulation</simulationsFolder>
                         </configuration>
                     </execution>
                 </executions>

@@ -7,7 +7,7 @@ public class Page {
     private int currentPage;
     private int pageSize;
     private int pageCount;
-    private String search = null;
+    private String search;
     private String order;
     private List<Computer> computerList = new ArrayList<Computer>();
 

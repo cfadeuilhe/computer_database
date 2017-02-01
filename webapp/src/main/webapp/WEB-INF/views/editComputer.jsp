@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="springForm"
 	uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
@@ -18,31 +19,20 @@
 <springTags:message code="computer.editComputer" var="tradEditComputer"></springTags:message>
 <springTags:message code="computer.edit" var="tradEdit"></springTags:message>
 <springTags:message code="computer.name" var="tradName"></springTags:message>
-<springTags:message code="computer.introducedDate" var="tradIntroducedDate"></springTags:message>
-<springTags:message code="computer.discontinuedDate" var="tradDiscontinuedDate"></springTags:message>
-<springTags:message code="computer.date.placeholder" var="tradDatePlaceholder"></springTags:message>
+<springTags:message code="computer.introducedDate"
+	var="tradIntroducedDate"></springTags:message>
+<springTags:message code="computer.discontinuedDate"
+	var="tradDiscontinuedDate"></springTags:message>
+<springTags:message code="computer.date.placeholder"
+	var="tradDatePlaceholder"></springTags:message>
 <springTags:message code="computer.company" var="tradCompany"></springTags:message>
 <springTags:message code="computer.add" var="tradAdd"></springTags:message>
 <springTags:message code="computer.or" var="tradOrelse"></springTags:message>
 <springTags:message code="computer.cancel" var="tradCancel"></springTags:message>
 
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a href="login?logout" class="pull-right" style="padding-top: 7px;"> <span
-				class="glyphicon glyphicon-log-out btn btn-danger"></span>
-			</a> 
-			<a class="navbar-brand" href="dashboard"> <c:out
-					value="${tradTitle}"></c:out>
-			</a> <span style="float: right; padding-right:10px; padding-top:7px;"> <a href="?language=en"><img border="10" alt="French"
-					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_United_Kingdom.png"
-					width="35" height="35"></a>|<a
-				href="?language=fr"><img
-					border="10" alt="English"
-					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_France.png"
-					width="35" height="35"></a></span>
-		</div>
-	</header>
+	<myTag:header tradTitle="${tradTitle}"></myTag:header>
+
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -50,12 +40,15 @@
 					<div class="label label-default pull-right">
 						<c:out value="id: ${computerToEdit.id }"></c:out>
 					</div>
-					<h1><c:out value="${tradEditComputer }"></c:out></h1>
+					<h1>
+						<c:out value="${tradEditComputer }"></c:out>
+					</h1>
 					<springForm:form action="editComputer" method="POST"
 						id="editComputer" modelAttribute="computerDto">
 						<input type="hidden" name="id" value="${computerToEdit.id }"
-							id="id" /> <input type="hidden" name="page"
-							value="${pageNumber }" id="page" />
+							id="id" />
+						<input type="hidden" name="page" value="${page.currentPage }"
+							id="page" />
 						<fieldset>
 							<div class="form-group">
 								<springForm:label path="name">
@@ -74,10 +67,10 @@
 								<springForm:input type="date" path="introducedDate"
 									class="form-control" id="introduced"
 									placeholder="${tradDatePlaceholder}" />
-								<springForm:errors path="introducedDate" cssClass="alert alert-danger"
-									element="div" />
+								<springForm:errors path="introducedDate"
+									cssClass="alert alert-danger" element="div" />
 							</div>
-							
+
 							<div class="form-group">
 								<springForm:label path="discontinuedDate">
 									<c:out value="${discontinuedDate}"></c:out>
@@ -88,18 +81,25 @@
 							</div>
 
 							<div class="form-group">
-								<label for="companyId"><c:out value="${tradCompany}"></c:out></label> 
-								<springForm:select
-									class="form-control" path="companyId" id="companyId">
+								<label for="companyId"><c:out value="${tradCompany}"></c:out></label>
+								<springForm:select class="form-control" path="companyId"
+									id="companyId">
 									<springForm:option value="0">--</springForm:option>
-									<springForm:options itemValue="id" itemLabel = "name" items="${companyList}"></springForm:options>
+									<springForm:options itemValue="id" itemLabel="name"
+										items="${companyList}"></springForm:options>
 								</springForm:select>
-								
+
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="${tradEdit}" class="btn btn-primary">
-							<c:out value="${tradOrelse}"></c:out> <a href="dashboard" class="btn btn-default"><c:out value="${tradCancel}"></c:out></a>
+							<c:out value="${tradOrelse}"></c:out>
+							<a
+								href="dashboard?page=${page.currentPage }&
+												limit=${page.pageSize }&
+												search=${page.search }&
+												order=${page.order }"
+								class="btn btn-default"> <c:out value="${tradCancel}"></c:out></a>
 						</div>
 					</springForm:form>
 				</div>

@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="secTags"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,25 +34,18 @@
 <springTags:message code="computer.add" var="tradAdd" />
 <springTags:message code="computer.cancel" var="tradCancel" />
 
+<springTags:message code="computer.delete" var="tradDel" />
+<springTags:message code="computer.view" var="tradView" />
+
+<script>
+	var del = '${tradDel}'
+</script>
+<script>
+	var view = '${tradView}'
+</script>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a href="login?logout" class="pull-right" style="padding-top: 7px;"> <span
-				class="glyphicon glyphicon-log-out btn btn-danger"></span>
-			</a> 
-			<a class="navbar-brand" href="dashboard"> <c:out
-					value="${tradTitle}"></c:out>
-			</a> <span style="float: right; padding-right:10px; padding-top:7px;"> <a href="?language=en"><img border="10" alt="French"
-					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_United_Kingdom.png"
-					width="35" height="35"></a>|<a
-				href="?language=fr"><img
-					border="10" alt="English"
-					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_France.png"
-					width="35" height="35"></a></span>
-		</div>
-
-	</header>
-
+<myTag:header tradTitle="${tradTitle}"></myTag:header>
+	
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
@@ -60,19 +55,30 @@
 				<div class="pull-left">
 					<form id="searchForm" action="" method="GET" class="form-inline">
 
-						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="${tradSearchName }"
-							value="${page.search }" /> <input type="submit"
-							id="searchsubmit" value="${tradFilterByName }"
+						<input type="hidden" name="page" value="${page.currentPage }" />
+						<input type="hidden" name="limit" value="${page.pageSize }" /> 
+						<input type="search" id="searchbox" name="search" class="form-control"
+							placeholder="${tradSearchName }" value="${page.search }" /> 
+						<input type="hidden" name="order" value="${page.order }" /> <input
+							type="submit" id="searchsubmit" value="${tradFilterByName }"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
+					<secTags:authorize access="hasRole('Admin')">
+						<a class="btn btn-default" id="editComputer" href="#"
+							onclick="$.fn.toggleEditMode();"><c:out value="${tradDel }"></c:out></a>
+					</secTags:authorize>
+				</div>
+				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer">
 						<c:out value="${tradAddComputer }"></c:out>
-					</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();"><c:out value="${tradEdit }"></c:out></a>
+					</a>
+					<form id="deleteForm" action="#" method="GET">
+						<input type="hidden" name="selection" value="">
+					</form>
 				</div>
+
 			</div>
 		</div>
 
@@ -169,7 +175,10 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value=${item.id }></td>
 							<td><a
-								href="editComputer?id=${item.id }&computerName=${item.name }&introduced=${item.introducedDate}&discontinued=${item.discontinuedDate}&companyId=${item.company.id}&page=${page.currentPage}"
+								href="editComputer?id=${item.id }&computerName=${item.name }&
+								introduced=${item.introducedDate}&discontinued=${item.discontinuedDate}&
+								companyId=${item.company.id}&page=${page.currentPage}&limit=${page.pageSize}&
+								search=${page.search}&order=${page.order}"
 								onclick="">${item.name}</a></td>
 							<td><c:out value="${item.introducedDate}"></c:out></td>
 							<td><c:out value="${item.discontinuedDate}"></c:out></td>
@@ -210,9 +219,11 @@
 		</div>
 	</footer>
 
-	<script src="/Cdb/js/jquery.min.js"></script>
-	<script src="/Cdb/js/bootstrap.min.js"></script>
-	<script src="/Cdb/js/dashboard.js"></script>
+	<script type="text/javascript" src="/Cdb/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/Cdb/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/Cdb/js/dashboard.js"></script>
+	<script type="text/javascript" src="js/jquery.i18n.properties-min.js"></script>
+
 
 </body>
 </html>

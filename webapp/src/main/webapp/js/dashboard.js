@@ -40,16 +40,19 @@ $(function() {
 
 }(jQuery));
 
+function getContextPath() {
+	   return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
+	}
 // Function toggleEditMode
 (function($) {
 
 	$.fn.toggleEditMode = function() {
 		if ($(".editMode").is(":visible")) {
 			$(".editMode").hide();
-			$("#editComputer").text("Edit");
+			$("#editComputer").text(del);
 		} else {
 			$(".editMode").show();
-			$("#editComputer").text("View");
+			$("#editComputer").text(view);
 		}
 		return this;
 	};

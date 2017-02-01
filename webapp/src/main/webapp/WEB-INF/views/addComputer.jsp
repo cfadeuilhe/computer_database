@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="springForm"
 	uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
@@ -15,28 +16,14 @@
 </head>
 
 <!-- Spring translation references -->
+<springTags:message code="computer.title" var="tradTitle"></springTags:message>
 <springTags:message code="computer.name" var="tradName"></springTags:message>
 <springTags:message code="computer.date.placeholder"
 	var="tradDatePlaceholder"></springTags:message>
 <springTags:message code="computer.add" var="tradAdd"></springTags:message>
 
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a href="login?logout" class="pull-right" style="padding-top: 7px;"> <span
-				class="glyphicon glyphicon-log-out btn btn-danger"></span>
-			</a> 
-			<a class="navbar-brand" href="dashboard"> <c:out
-					value="${tradTitle}"></c:out>
-			</a> <span style="float: right; padding-right:10px; padding-top:7px;"> <a href="?language=en"><img border="10" alt="French"
-					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_United_Kingdom.png"
-					width="35" height="35"></a>|<a
-				href="?language=fr"><img
-					border="10" alt="English"
-					src="https://cdn2.iconfinder.com/data/icons/world-flag-icons/128/Flag_of_France.png"
-					width="35" height="35"></a></span>
-		</div>
-	</header>
+	<myTag:header tradTitle="${tradTitle}"></myTag:header>
 
 	<section id="main">
 		<div class="container">
