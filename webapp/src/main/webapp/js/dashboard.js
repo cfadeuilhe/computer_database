@@ -40,6 +40,23 @@ $(function() {
 
 }(jQuery));
 
+function getSystemLocale() {
+    var systemLocale = window.navigator.language;
+    return systemLocale;
+}
+
+function getResource(textToTrad){
+    jQuery.i18n.properties({
+        name:'messages', 
+        path: 'resources/', 
+        mode:'both', 
+        language:getSystemLocale(),
+        callback: function() {
+        	$("#editComputer").text(jQuery.i18n.prop(textToTrad));
+        }
+    });
+}
+
 function getContextPath() {
 	   return window.location.pathname.substring(0, window.location.pathname.indexOf("/",2));
 	}

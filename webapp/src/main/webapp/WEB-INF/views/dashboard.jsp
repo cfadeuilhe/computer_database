@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="springForm"
+	uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="springTags" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="secTags"
@@ -44,8 +46,8 @@
 	var view = '${tradView}'
 </script>
 <body>
-<myTag:header tradTitle="${tradTitle}"></myTag:header>
-	
+	<myTag:header tradTitle="${tradTitle}"></myTag:header>
+
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
@@ -56,17 +58,17 @@
 					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="hidden" name="page" value="${page.currentPage }" />
-						<input type="hidden" name="limit" value="${page.pageSize }" /> 
-						<input type="search" id="searchbox" name="search" class="form-control"
-							placeholder="${tradSearchName }" value="${page.search }" /> 
-						<input type="hidden" name="order" value="${page.order }" /> <input
+						<input type="hidden" name="limit" value="${page.pageSize }" /> <input
+							type="search" id="searchbox" name="search" class="form-control"
+							placeholder="${tradSearchName }" value="${page.search }" /> <input
+							type="hidden" name="order" value="${page.order }" /> <input
 							type="submit" id="searchsubmit" value="${tradFilterByName }"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<secTags:authorize access="hasRole('Admin')">
-						<a class="btn btn-default" id="editComputer" href="#"
+						<a class="btn btn-danger" id="editComputer" href="#"
 							onclick="$.fn.toggleEditMode();"><c:out value="${tradDel }"></c:out></a>
 					</secTags:authorize>
 				</div>
@@ -74,17 +76,14 @@
 					<a class="btn btn-success" id="addComputer" href="addComputer">
 						<c:out value="${tradAddComputer }"></c:out>
 					</a>
-					<form id="deleteForm" action="#" method="GET">
-						<input type="hidden" name="selection" value="">
-					</form>
+					<springForm:form id="deleteForm" action="deleteComputer" method="POST">
+						<input type="hidden" name="selection" value=""/>
+					</springForm:form>
 				</div>
 
 			</div>
 		</div>
 
-		<form id="deleteForm" action="deleteComputer" method="POST">
-			<input type="hidden" name="selection" value="">
-		</form>
 		<form id="orderForm" action="dashboard" method="GET">
 			<input type="hidden" name="order" value="">
 		</form>

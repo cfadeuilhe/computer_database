@@ -1,5 +1,6 @@
 package com.excilys.computerdatabase.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -14,10 +15,16 @@ import javax.persistence.Table;
 
 import com.excilys.computerdatabase.mapper.DateConverter;
 import com.excilys.computerdatabase.validators.ComputerValidator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 @Entity
 @Table(name="computer")
-public final class Computer {
+public final class Computer implements Serializable {
+
+    private static final long serialVersionUID = -5186730060655040115L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +34,14 @@ public final class Computer {
 
     @Column(name="introduced", nullable=true)
     @Convert(converter = DateConverter.class)
+    @JsonSerialize(using=LocalDateSerializer.class)
+    @JsonDeserialize(using=LocalDateDeserializer.class)
     private LocalDate introducedDate;
 
     @Column(name="discontinued", nullable=true)
     @Convert(converter = DateConverter.class)
+    @JsonSerialize(using=LocalDateSerializer.class)
+    @JsonDeserialize(using=LocalDateDeserializer.class)
     private LocalDate discontinuedDate;
     
     @ManyToOne
@@ -48,7 +59,7 @@ public final class Computer {
     private Computer() {
 
     }
-
+    
     public long getId() {
         return id;
     }

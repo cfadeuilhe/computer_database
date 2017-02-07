@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -26,8 +28,7 @@ import com.excilys.computerdatabase.util.Consts;
 @RequestMapping("/")
 public class AddController {
 
-    // private final static Logger logger =
-    // LoggerFactory.getLogger(DashboardController.class);
+    private final static Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @Autowired
     private ComputerService computerService;
@@ -38,6 +39,8 @@ public class AddController {
     @GetMapping(value = "/addComputer")
     public ModelAndView getAdd() {
 
+        logger.info("add computer get controller");
+        
         ModelAndView model = new ModelAndView("addComputer");
 
         List<Company> list = new ArrayList<Company>();
@@ -52,6 +55,8 @@ public class AddController {
     public ModelAndView postAdd(@Valid @ModelAttribute("computerDto") ComputerDto computerDto,
             BindingResult bindingResult) {
 
+        logger.info("add computer post controller");
+        
         ModelAndView model;// = new
                            // ModelAndView("/WEB-INF/views/addComputer.jsp");
         if (!bindingResult.hasErrors()) {

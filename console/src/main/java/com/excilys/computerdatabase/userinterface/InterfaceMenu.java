@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
@@ -21,10 +20,12 @@ import com.excilys.computerdatabase.service.ComputerService;
 
 public class InterfaceMenu {
 
-    private static ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+    private static ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Console-Module.xml");
     private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
     private static ComputerService computerService = context.getBean(ComputerService.class);
     private static CompanyService companyService = context.getBean(CompanyService.class);
+    private static ComputerCliService computerCliService = context.getBean(ComputerCliService.class);
+    private static CompanyCliService companyCliService = context.getBean(CompanyCliService.class);
     private final static ComputerBuilder COMPUTER_BUILDER = new ComputerBuilder();
 
     public static void main(String args[]) {
@@ -50,10 +51,11 @@ public class InterfaceMenu {
                     "\nMenu :\n\t1) List computers\n\t2) List companies\n\t3) Show computer details\n\t4) Create a computer\n\t5) Update a computer\n\t6) Delete a computer\n\t7) Delete a company\n\t8) By Pages\n\t9) Quit\n");
             switch (userInput) {
             case "1": // List computers
-                System.out.println(computerService.listEntities(null));
+                System.out.println(computerCliService.listEntities(null));
                 break;
             case "2": // List companies
-                System.out.println(companyService.listEntities(null));
+                System.out.println(companyCliService.listEntities(null));
+
                 break;
             case "3": // Show computer details (info of one specific computer)
                 // VALIDATION : is userChoice an integer ?
@@ -61,8 +63,8 @@ public class InterfaceMenu {
                     userInput = askUser("Enter computer ID");
                 } while (!validateStringToInt(userInput));
 
-                System.out.println((computerService.readOne(Integer.parseInt(userInput)) != null)
-                        ? (computerService.readOne(Integer.parseInt(userInput))) : ("Unknown ID"));
+                Computer c = computerCliService.getComputerId(Integer.parseInt(userInput));
+                System.out.println((c != null) ? (c) : ("Unknown ID ¯\\_(ツ)_/¯"));
                 break;
             case "4": // Create a computer
                 createComputer();
@@ -109,20 +111,19 @@ public class InterfaceMenu {
     }
 
     public static void createComputer() {
-        computerService.create(askComputerDetails());
+        computerCliService.createComputer(askComputerDetails());
+    }
+    
+    public static void updateComputer(long userChoice) {
+        computerCliService.update(userChoice, askComputerDetails());
     }
 
     public static void deleteComputer(long id) {
-        computerService.delete(id);
+        computerCliService.delete(id);
     }
 
     public static void deleteCompany(long id) {
-        try {
-            companyService.delete(id);
-        } catch (PersistenceException e) {
-            logger.error("InterfaceMenu : deleteCompany() catched PersistenceException", e);
-            logger.info("The company and associated computers were not deleted");
-        }
+        companyCliService.delete(id);
     }
 
     /**
@@ -208,9 +209,6 @@ public class InterfaceMenu {
         return true;
     }
 
-    public static void updateComputer(long userChoice) {
-        computerService.update(userChoice, askComputerDetails());
-    }
 
     /**
      * askComputerDetails - creates new Computer with user inputs

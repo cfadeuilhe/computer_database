@@ -18,8 +18,8 @@ import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Computer.ComputerBuilder;
 import com.excilys.computerdatabase.persistence.ComputerDao;
 
-@ContextConfiguration(locations = "classpath:Spring-Module-Test.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:Spring-Module-Test.xml")
 public class ComputerDaoTest {
 
     @Autowired
@@ -29,7 +29,6 @@ public class ComputerDaoTest {
      * Tests count(), without search parameter.
      * 
      */
-
     @Test
     @Transactional
     @Rollback(true)

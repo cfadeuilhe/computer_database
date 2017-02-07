@@ -36,7 +36,7 @@ public class ComputerDao implements InterfaceDao<Computer> {
 
     @Autowired
     SessionFactory sessionFactory;
-
+    
     private Supplier<HibernateQueryFactory> queryFactory = () -> new HibernateQueryFactory(
             sessionFactory.getCurrentSession());
 
@@ -101,8 +101,7 @@ public class ComputerDao implements InterfaceDao<Computer> {
     @Override
     public Computer readOne(long id) {
 
-        return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company).where(computer.id.eq(id))
-                .fetchOne();
+        return sessionFactory.getCurrentSession().get(Computer.class, id);
     }
 
     /**

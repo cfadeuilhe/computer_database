@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -31,8 +33,7 @@ import com.excilys.computerdatabase.util.Consts;
 @RequestMapping("/")
 public class EditController {
     
-    // private final static Logger logger =
-    // LoggerFactory.getLogger(DashboardController.class);
+    private final static Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @Autowired
     private ComputerService computerService;
@@ -43,6 +44,8 @@ public class EditController {
     @GetMapping(value = "/editComputer")
     public ModelAndView getEdit(@RequestParam Map<String, String> requestMap) {
 
+        logger.info("edit computer get controller");
+        
         ModelAndView model = new ModelAndView("editComputer");
 
         List<Company> list = new ArrayList<Company>();
@@ -74,6 +77,8 @@ public class EditController {
     public ModelAndView postEdit(@Valid @ModelAttribute("computerDto") ComputerDto computerDto,
             BindingResult bindingResult) {
 
+        logger.info("edit computer post controller");
+        
         ModelAndView model = new ModelAndView("editComputer");
         if (!bindingResult.hasErrors()) {
             // create computer

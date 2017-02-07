@@ -1,2 +1,2 @@
-name,password
-user,user
+name,password,role
+user,user,User

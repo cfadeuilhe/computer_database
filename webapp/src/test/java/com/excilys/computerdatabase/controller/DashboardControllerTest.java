@@ -1,4 +1,4 @@
-/*package com.excilys.computerdatabase.controller;
+package com.excilys.computerdatabase.controller;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -7,14 +7,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.excilys.computerdatabase.model.Company;
@@ -28,8 +23,6 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(locations = "classpath:Spring-Module-Test.xml")
 public class DashboardControllerTest {
 
-    private MockMvc mockMvc;
-
     @Autowired
     private ComputerService computerServiceMock;
 
@@ -37,10 +30,8 @@ public class DashboardControllerTest {
     private WebApplicationContext webApplicationContext;
     
     @Before
-    public void setUp(){
-        Mockito.reset(computerServiceMock);
+    public void initMocks(){
         
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
     @Test
     public void testA() throws Exception{
@@ -53,4 +44,3 @@ public class DashboardControllerTest {
        // this.mockMvc.perform(get("/dashboard"));
     }
 }
-*/

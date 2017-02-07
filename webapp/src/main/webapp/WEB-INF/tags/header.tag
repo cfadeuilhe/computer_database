@@ -7,7 +7,9 @@
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 		<a href="login?logout" class="pull-right" style="padding-top: 7px;">
-			<span class="glyphicon glyphicon-log-out btn btn-danger"></span>
+			<img border="10" alt="French"
+				src="http://www.aratimegarecharge.in/common/bootstrap/img/Logout.png"
+				width="33" height="35">
 		</a> <a class="navbar-brand" href="dashboard"> <c:out
 				value="${tradTitle}"></c:out>
 		</a> <span style="float: right; padding-right: 30px; padding-top: 7px;">
