@@ -28,9 +28,7 @@ public class CompanyCliService {
     
     private WebTarget webTarget = client.target(TARGET_URL);
     
-    public Company getComputerId(int id){
-
-
+    public Company getCompanyById(int id){
         WebTarget companyWebTarget = webTarget.path("company/"+id);
         Company c = companyWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get().readEntity(Company.class);
 

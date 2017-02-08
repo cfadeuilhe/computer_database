@@ -32,6 +32,8 @@ public class CompanyDao implements InterfaceDao<Company> {
 
     @Autowired
     SessionFactory sessionFactory;
+    @Autowired
+    ComputerDao computerDao;
 
     private final static Logger logger = LoggerFactory.getLogger(CompanyDao.class);
 

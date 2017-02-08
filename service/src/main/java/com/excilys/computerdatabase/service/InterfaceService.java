@@ -9,7 +9,9 @@ import com.excilys.computerdatabase.util.Consts;
 
 public interface InterfaceService<T> {
 
-    public T readOne(long id);
+    public default T readOne(long id) {
+        throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);
+    }
     
     public default void delete(long id) throws PersistenceException {
         throw new UnsupportedOperationException(Consts.METHOD_NOT_IMPLEMENTED);

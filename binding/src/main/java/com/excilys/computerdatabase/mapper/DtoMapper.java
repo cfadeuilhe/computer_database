@@ -30,10 +30,10 @@ public class DtoMapper {
         ComputerBuilder computerBuilder = new ComputerBuilder();
 
         computerBuilder.id(computerDto.getId()).name(computerDto.getName());
-        if (!computerDto.getIntroducedDate().trim().isEmpty()) {
+        if (computerDto.getIntroducedDate() != null && !computerDto.getIntroducedDate().trim().isEmpty()) {
             computerBuilder.introducedDate(LocalDate.parse(computerDto.getIntroducedDate()));
         }
-        if (!computerDto.getDiscontinuedDate().trim().isEmpty()) {
+        if (computerDto.getDiscontinuedDate() != null && !computerDto.getDiscontinuedDate().trim().isEmpty()) {
             computerBuilder.discontinuedDate(LocalDate.parse(computerDto.getDiscontinuedDate()));
         }
 

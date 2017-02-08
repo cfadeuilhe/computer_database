@@ -1,54 +1,47 @@
 package com.excilys.computerdatabase.userinterface;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.computerdatabase.model.Computer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:Spring-Module-Test.xml")
 public class ComputerCliServiceTest {
 
-    private Client client = ClientBuilder.newClient();
-    private final String TARGET_URL = new String("http://localhost:8080/Cdb");
-
-    private WebTarget webTarget = client.target(TARGET_URL);
-
+    @Autowired
+    ComputerCliService computerCliService;
+    
+    @Ignore("MessageBodyProviderNotFound")
     @Test
-    public void testGetComputerId(int id) {
-
-        WebTarget computerWebTarget = webTarget.path("computers/id/" + id);
-        Computer c = computerWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get().readEntity(Computer.class);
-        
+    public void testGetComputerById() {
+        Computer c = computerCliService.getComputerById(1);
         assertNotNull(c);
     }
 
+    @Ignore("MessageBodyProviderNotFound")
     @Test
-    public void testListEntities(Map<String, String> orderMap) {
-        WebTarget computerWebTarget = webTarget.path("computers");
+    public void testListEntities() {
         List<Computer> list = new ArrayList<Computer>();
-        list = computerWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get()
-                .readEntity(new GenericType<List<Computer>>() {
-                });
-
+        computerCliService.listEntities(null);
+        
         assertNotNull(list);
     }
 
+    @Ignore("MessageBodyProviderNotFound")
     @Test
-    public void testDeleteComputer(Map<String, String> orderMap) {
-        
+    public void testDeleteComputer() {
+        computerCliService.delete(1);
+        assertNull(computerCliService.getComputerById(1));
     }
 
 }

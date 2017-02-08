@@ -22,7 +22,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 @Entity
 @Table(name="computer")
-public final class Computer implements Serializable {
+public class Computer implements Serializable {
 
     private static final long serialVersionUID = -5186730060655040115L;
 

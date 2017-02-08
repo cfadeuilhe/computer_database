@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.excilys.computerdatabase.exceptions.PersistenceException;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.model.Page;
@@ -63,7 +64,7 @@ public class InterfaceMenu {
                     userInput = askUser("Enter computer ID");
                 } while (!validateStringToInt(userInput));
 
-                Computer c = computerCliService.getComputerId(Integer.parseInt(userInput));
+                Computer c = computerCliService.getComputerById(Integer.parseInt(userInput));
                 System.out.println((c != null) ? (c) : ("Unknown ID ¯\\_(ツ)_/¯"));
                 break;
             case "4": // Create a computer
@@ -111,19 +112,23 @@ public class InterfaceMenu {
     }
 
     public static void createComputer() {
-        computerCliService.createComputer(askComputerDetails());
+        computerService.create(askComputerDetails());
     }
     
     public static void updateComputer(long userChoice) {
-        computerCliService.update(userChoice, askComputerDetails());
+        computerService.update(userChoice, askComputerDetails());
     }
 
     public static void deleteComputer(long id) {
-        computerCliService.delete(id);
+        computerService.delete(id);
     }
 
     public static void deleteCompany(long id) {
-        companyCliService.delete(id);
+        try {
+            companyService.delete(id);
+        } catch (PersistenceException e) {
+            logger.error("Could not delete the company and associated computers");
+        }
     }
 
     /**

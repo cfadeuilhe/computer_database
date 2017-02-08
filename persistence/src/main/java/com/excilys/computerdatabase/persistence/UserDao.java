@@ -25,5 +25,5 @@ public class UserDao implements InterfaceDao<User> {
         User u = queryFactory.get().selectFrom(user).where(user.username.eq(name)).fetchOne();
         return u;
     }
-
+    
 }

@@ -20,12 +20,6 @@ public class UserService implements InterfaceService<User>, UserDetailsService {
     UserDao userDao;
 
     @Override
-    public User readOne(long id) {
-        User u = userDao.readOne(id);
-        return u;
-    }
-
-    @Override
     public User readByName(String name) {
         User u = userDao.readByName(name);
         return u;
@@ -46,5 +40,4 @@ public class UserService implements InterfaceService<User>, UserDetailsService {
                 true, true, true, user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                         .collect(Collectors.toList()));
     }
-
 }

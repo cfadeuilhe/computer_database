@@ -64,6 +64,14 @@ public class Page {
         return ((this.currentPage - 1) * this.pageSize);
     }
 
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
     @Override
     public String toString() {
         return "Page [currentPage=" + currentPage + ", pageSize=" + pageSize + "]";
@@ -92,13 +100,5 @@ public class Page {
         if (currentPage != other.currentPage)
             return false;
         return true;
-    }
-
-    public String getOrder() {
-        return order;
-    }
-
-    public void setOrder(String order) {
-        this.order = order;
     }
 }

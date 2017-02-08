@@ -28,7 +28,7 @@ public class ComputerCliService {
 
     private WebTarget webTarget = client.target(TARGET_URL);
 
-    public Computer getComputerId(int id) {
+    public Computer getComputerById(int id) {
 
         WebTarget computerWebTarget = webTarget.path("computers/" + id);
         Computer c = computerWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get().readEntity(Computer.class);
