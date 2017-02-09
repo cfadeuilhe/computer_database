@@ -39,6 +39,8 @@
 <springTags:message code="computer.delete" var="tradDel" />
 <springTags:message code="computer.view" var="tradView" />
 
+<c:set value="${pageContext.response.locale}" var="localeCode" />
+
 <script>
 	var del = '${tradDel}'
 </script>
@@ -76,8 +78,9 @@
 					<a class="btn btn-success" id="addComputer" href="addComputer">
 						<c:out value="${tradAddComputer }"></c:out>
 					</a>
-					<springForm:form id="deleteForm" action="deleteComputer" method="POST">
-						<input type="hidden" name="selection" value=""/>
+					<springForm:form id="deleteForm" action="deleteComputer"
+						method="POST">
+						<input type="hidden" name="selection" value="" />
 					</springForm:form>
 				</div>
 
@@ -110,12 +113,12 @@
 								<myTag:link cssClass="fa fa-arrow-down"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="name.asc"></myTag:link>
+									computerOrder="name.asc" language="${localeCode }"></myTag:link>
 
 								<myTag:link cssClass="fa fa-arrow-up"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="name.desc"></myTag:link>
+									computerOrder="name.desc" language="${localeCode }"></myTag:link>
 
 							</div></th>
 						<th class="orderBy" id="introDateOrder"><c:out
@@ -125,11 +128,11 @@
 								<myTag:link cssClass="fa fa-arrow-down"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="introduced.asc"></myTag:link>
+									computerOrder="introduced.asc" language="${localeCode }"></myTag:link>
 								<myTag:link cssClass="fa fa-arrow-up"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="introduced.desc"></myTag:link>
+									computerOrder="introduced.desc" language="${localeCode }"></myTag:link>
 
 							</div></th>
 						<!-- Table header for Discontinued Date -->
@@ -140,11 +143,11 @@
 								<myTag:link cssClass="fa fa-arrow-down"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="discontinued.asc"></myTag:link>
+									computerOrder="discontinued.asc" language="${localeCode }"></myTag:link>
 								<myTag:link cssClass="fa fa-arrow-up"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="discontinued.desc"></myTag:link>
+									computerOrder="discontinued.desc" language="${localeCode }"></myTag:link>
 
 							</div></th>
 						<!-- Table header for Company -->
@@ -155,11 +158,11 @@
 								<myTag:link cssClass="fa fa-arrow-down"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="company.asc"></myTag:link>
+									computerOrder="company.asc" language="${localeCode }"></myTag:link>
 								<myTag:link cssClass="fa fa-arrow-up"
 									currentPage="${page.currentPage}" searchValue="${page.search }"
 									pageSize="${page.pageSize }" target="dashboard"
-									computerOrder="company.desc"></myTag:link>
+									computerOrder="company.desc" language="${localeCode }"></myTag:link>
 
 							</div></th>
 
@@ -197,23 +200,43 @@
 			<ul class="pagination">
 				<myTag:pagination currentPage="${page.currentPage }"
 					pageSize="${page.pageSize }" searchValue="${page.search }"
-					pageCount="${page.pageCount }" computerOrder="${page.order }">
+					pageCount="${page.pageCount }" computerOrder="${page.order }"
+					language="${localeCode }">
 				</myTag:pagination>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<myTag:link cssClass="btn btn-default"
+				<c:if test="${page.pageSize == 10 }">
+					<springTags:message code="btn.primary" var="Tenclass" />
+				</c:if>
+				<c:if test="${page.pageSize != 10 }">
+					<springTags:message code="btn.default" var="Tenclass" />
+				</c:if>
+				<c:if test="${page.pageSize == 50 }">
+					<springTags:message code="btn.primary" var="Fiftyclass" />
+				</c:if>
+				<c:if test="${page.pageSize != 50 }">
+					<springTags:message code="btn.default" var="Fiftyclass" />
+				</c:if>
+				<c:if test="${page.pageSize == 100 }">
+					<springTags:message code="btn.primary" var="Hundredclass" />
+				</c:if>
+				<c:if test="${page.pageSize != 100 }">
+					<springTags:message code="btn.default" var="Hundredclass" />
+				</c:if>
+				
+				<myTag:link cssClass="${Tenclass }"
 					currentPage="${page.currentPage}" searchValue="${page.search }"
 					pageSize="10" target="dashboard" text="10"
-					computerOrder="${page.order }"></myTag:link>
-				<myTag:link cssClass="btn btn-default"
+					computerOrder="${page.order }" language="${localeCode }"></myTag:link>
+				<myTag:link cssClass="${Fiftyclass }"
 					currentPage="${page.currentPage}" searchValue="${page.search }"
 					pageSize="50" target="dashboard" text="50"
-					computerOrder="${page.order }"></myTag:link>
-				<myTag:link cssClass="btn btn-default"
+					computerOrder="${page.order }" language="${localeCode }"></myTag:link>
+				<myTag:link cssClass="${Hundredclass }"
 					currentPage="${page.currentPage}" searchValue="${page.search }"
 					pageSize="100" target="dashboard" text="100"
-					computerOrder="${page.order }"></myTag:link>
+					computerOrder="${page.order }" language="${localeCode }"></myTag:link>
 			</div>
 		</div>
 	</footer>

@@ -72,7 +72,7 @@ If the gatling test with your current database has good results, you can now tes
 * Create and fill your Spring Security table (if you have Spring Security enabled).
 * Change the value **max_allowed_packet** of the file /etc/mysql/my.cnf to 80M.
 * Restart mysql: **sudo service mysql restart**
-* Run the insertCompany.sql and insertComputer.sql scripts, for example: **mysql -uUSER -p computer-database-db2 < insertCompany.sql** and **mysql -uUSER -p computer-database-db2 < insertComputer.sql**
+* Run the insertCompany.sql and insertComputer.sql scripts, for example: **mysql -uroot -p computer-database-db2 < insertCompany.sql** and **mysql -uroot -p computer-database-db2 < insertComputer.sql**
 
 If you want to modify the insert scripts, modify the file **createComputerSql.sh**
 

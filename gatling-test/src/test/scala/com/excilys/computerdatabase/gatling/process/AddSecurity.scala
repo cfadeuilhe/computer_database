@@ -17,7 +17,7 @@ object AddSecurity {
   val feederAdd = csv("data/addComputer.csv").random
 
   val add = exec(http("AddSecurity: Add page")
-    .get(config.getString("application.urls.addPage")).check(status.is(200))
+    .get(config.getString("application.urls.addPage")).digestAuth("admin","admin").check(status.is(200))
     .check(
       css(config.getString("application.urls.idElement.add.csrf").get, "value").saveAs("csrf_token")
     )
@@ -27,7 +27,7 @@ object AddSecurity {
     .feed(feederName)
     .feed(feederAdd)
     .exec(http("AddSecurity: Add post")
-      .post(config.getString("application.urls.addPost").get)
+      .post(config.getString("application.urls.addPost").get).digestAuth("admin","admin")
       .formParam(config.getString("application.urls.form.add.name").get, "${addComputerName}")
       .formParam(config.getString("application.urls.form.add.introduced").get, "${addComputerIntroduced}")
       .formParam(config.getString("application.urls.form.add.discontinued").get, "${addComputerDiscontinued}")

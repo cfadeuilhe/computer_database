@@ -84,7 +84,7 @@
 								<label for="companyId"><c:out value="${tradCompany}"></c:out></label>
 								<springForm:select class="form-control" path="companyId"
 									id="companyId">
-									<springForm:option value="0">--</springForm:option>
+<%--									<springForm:option value="0">--</springForm:option>		--%> 
 									<springForm:options itemValue="id" itemLabel="name"
 										items="${companyList}"></springForm:options>
 								</springForm:select>

@@ -6,21 +6,20 @@
                         http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true" use-expressions="true">
-        <form-login
-            login-page="/login"
-            default-target-url="/dashboard"
+        <intercept-url pattern="/dashboard**" access="hasRole('User') or hasRole('Admin')" />
+        <form-login login-page="/login" default-target-url="/dashboard"
             authentication-failure-url="/login?error"
             login-processing-url="/j_spring_security_check"
-            username-parameter="username"
-            password-parameter="password" />
-        <logout logout-success-url="/login?logout" logout-url="/computer/j_spring_security_logout" />
+            username-parameter="username" password-parameter="password" />
+        <logout logout-success-url="/login?logout"
+            logout-url="/computer/j_spring_security_logout" />
         <!-- enable csrf protection -->
-        <csrf/>
+        <csrf />
     </http>
-    
-    
+
     <authentication-manager>
-        <authentication-provider user-service-ref="userService" >
+        <authentication-provider
+            user-service-ref="userService">
             <password-encoder hash="bcrypt" />
         </authentication-provider>
     </authentication-manager>

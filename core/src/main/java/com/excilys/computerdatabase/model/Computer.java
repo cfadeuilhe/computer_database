@@ -3,6 +3,7 @@ package com.excilys.computerdatabase.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -44,7 +45,7 @@ public class Computer implements Serializable {
     @JsonDeserialize(using=LocalDateDeserializer.class)
     private LocalDate discontinuedDate;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name="company_id", nullable=true)
     private Company company;
 

@@ -12,7 +12,7 @@ object EditSecurity {
   val config = ConfigFactory.load()
 
   val edit = exec(http("EditSecurity: Search for edit")
-    .get(config.getString("application.urls.dashboardPage"))
+    .get(config.getString("application.urls.dashboardPage")).digestAuth("admin","admin")
     .queryParam(config.getString("application.urls.param.search").toString(), "${addComputerName}")
     .check(
       status.is(200),
@@ -21,7 +21,7 @@ object EditSecurity {
   )
     .pause(3, 10)
     .exec(http("EditSecurity: Select for edit")
-      .get("${computerURL}")
+      .get("${computerURL}").digestAuth("admin","admin")
       .check(
         status.is(200),
         css(config.getString("application.urls.idElement.edit.csrf").get, "value").saveAs("csrf_token"),
@@ -29,7 +29,7 @@ object EditSecurity {
       )
     )
     .exec(http("EditSecurity: Edit Post")
-      .post(config.getString("application.urls.editPost").get)
+      .post(config.getString("application.urls.editPost").get).digestAuth("admin","admin")
       .formParam(config.getString("application.urls.form.edit.id").get, "${computer_id}")
       .formParam(config.getString("application.urls.form.edit.name").get, "${addComputerName}_edited")
       .formParam(config.getString("application.urls.form.edit.introduced").get, "${addComputerIntroduced}")

@@ -12,7 +12,7 @@ object DeleteSecurity {
   val config = ConfigFactory.load()
 
   val delete = exec(http("DeleteSecurity: Search for delete")
-    .get(config.getString("application.urls.dashboardPage"))
+    .get(config.getString("application.urls.dashboardPage")).digestAuth("admin","admin")
     .queryParam(config.getString("application.urls.param.search").toString(), "${addComputerName}_edited")
     .check(
       status.is(200),
@@ -21,7 +21,7 @@ object DeleteSecurity {
     ))
     .pause(3, 10)
     .exec(http("DeleteSecurity: Delete post")
-      .post(config.getString("application.urls.deletePost").get)
+      .post(config.getString("application.urls.deletePost").get).digestAuth("admin","admin")
       .formParam(config.getString("application.urls.form.delete.selection").get, "${computerId}")
       .formParam(config.getString("application.urls.form.delete.csrf").get, "${csrf_token}"))
     .pause(3, 10)

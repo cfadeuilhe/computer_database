@@ -30,14 +30,14 @@ public class ComputerCliService {
 
     public Computer getComputerById(int id) {
 
-        WebTarget computerWebTarget = webTarget.path("computers/" + id);
+        WebTarget computerWebTarget = webTarget.path("computer/" + id);
         Computer c = computerWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get().readEntity(Computer.class);
 
         return c;
     }
 
     public List<Computer> listEntities(Map<String, String> orderMap) {
-        WebTarget computerWebTarget = webTarget.path("computers");
+        WebTarget computerWebTarget = webTarget.path("computer");
         List<Computer> list = new ArrayList<Computer>();
         list = computerWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get()
                 .readEntity(new GenericType<List<Computer>>() {
@@ -47,7 +47,7 @@ public class ComputerCliService {
     }
 
     public void delete(long id) {
-        WebTarget computerWebTarget = webTarget.path("computers/"+id);
+        WebTarget computerWebTarget = webTarget.path("computer/"+id);
         
         Response s = computerWebTarget.request().delete();
 
@@ -57,7 +57,7 @@ public class ComputerCliService {
     }
 
     public Response createComputer(Computer computer) {
-        WebTarget computerWebTarget = webTarget.path("computers");
+        WebTarget computerWebTarget = webTarget.path("computer");
 
         Response s = computerWebTarget.request().post(Entity.entity(computer, MediaType.APPLICATION_JSON));
 
@@ -68,7 +68,7 @@ public class ComputerCliService {
     }
 
     public void update(long id, Computer computer) {
-        WebTarget computerWebTarget = webTarget.path("computers/"+id);
+        WebTarget computerWebTarget = webTarget.path("computer/"+id);
 
         Response s = computerWebTarget.request(MediaType.APPLICATION_JSON)
                 .put(Entity.entity(computer, MediaType.APPLICATION_JSON));

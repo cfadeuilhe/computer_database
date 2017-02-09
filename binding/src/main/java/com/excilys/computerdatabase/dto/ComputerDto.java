@@ -12,16 +12,17 @@ public class ComputerDto {
     @Size(min = 3)
     private String name;
     @DateValidation
-    private String introducedDate;
-    private String discontinuedDate;
+    private String introduced;
+    @DateValidation
+    private String discontinued;
     private long companyId;
     private String companyName;
 
     private ComputerDto(ComputerDtoBuilder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.introducedDate = builder.introducedDate;
-        this.discontinuedDate = builder.discontinuedDate;
+        this.introduced = builder.introducedDate;
+        this.discontinued = builder.discontinuedDate;
         this.companyId = builder.companyId;
         this.companyName = builder.companyName;
     }
@@ -47,19 +48,19 @@ public class ComputerDto {
     }
 
     public String getIntroducedDate() {
-        return introducedDate;
+        return introduced;
     }
 
     public void setIntroducedDate(String introducedDate) {
-        this.introducedDate = introducedDate;
+        this.introduced = introducedDate;
     }
 
     public String getDiscontinuedDate() {
-        return discontinuedDate;
+        return discontinued;
     }
 
     public void setDiscontinuedDate(String discontinuedDate) {
-        this.discontinuedDate = discontinuedDate;
+        this.discontinued = discontinuedDate;
     }
 
     public long getCompanyId() {
@@ -80,8 +81,8 @@ public class ComputerDto {
 
     @Override
     public String toString() {
-        return "ComputerDto [id=" + id + ", name=" + name + ", introducedDate=" + introducedDate + ", discontinuedDate="
-                + discontinuedDate + ", companyId=" + companyId + "]";
+        return "ComputerDto [id=" + id + ", name=" + name + ", introducedDate=" + introduced + ", discontinuedDate="
+                + discontinued + ", companyId=" + companyId + "]";
     }
 
     public static class ComputerDtoBuilder {
