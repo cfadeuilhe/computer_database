@@ -6,7 +6,7 @@
 
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
-		<a href="login?logout" class="pull-right" style="padding-top: 7px;">
+		<a href="javascript:formSubmit()" class="pull-right" style="padding-top: 7px;">
 			<img border="10" alt="French"
 			src="http://www.aratimegarecharge.in/common/bootstrap/img/Logout.png"
 			width="33" height="35">
@@ -21,4 +21,16 @@
 				width="35" height="35"></a>
 		</span>
 	</div>
+	
+	<form action="j_spring_security_logout" method="post" id="logoutForm">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+			</form>
+
+			<script>
+				function formSubmit() {
+					document.getElementById("logoutForm").submit();
+				}
+			</script>
+			
 </header>

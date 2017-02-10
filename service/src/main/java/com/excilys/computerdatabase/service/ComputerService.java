@@ -26,7 +26,7 @@ public class ComputerService implements InterfaceService<Computer> {
     private ComputerDao computerDao;
 
     /**
-     * listEntities - call DAO to get the list of all Computer from database
+     * call DAO to get the list of all Computer from database
      * 
      * @return List<Computer>
      */
@@ -51,7 +51,7 @@ public class ComputerService implements InterfaceService<Computer> {
     }
 
     /**
-     * readPages - call DAO to get a specific Page of Computer from database
+     * call DAO to get a specific Page of Computer from database
      * 
      * @param Page
      * @return List<Computer>
@@ -64,7 +64,7 @@ public class ComputerService implements InterfaceService<Computer> {
     }
 
     /**
-     * readOne - call DAO to get a specific Computer from database
+     * call DAO to get a specific Computer from database
      * 
      * @param id
      * @return Computer
@@ -76,7 +76,7 @@ public class ComputerService implements InterfaceService<Computer> {
     }
 
     /**
-     * create - call DAO to create a new Computer in database
+     * call DAO to create a new Computer in database
      * 
      * @param Computer
      */
@@ -86,7 +86,7 @@ public class ComputerService implements InterfaceService<Computer> {
     }
 
     /**
-     * update - sets the Computer object, then calls DAO to update a specific
+     * sets the Computer object, then calls DAO to update a specific
      * Computer in database
      * 
      * @param id
@@ -98,7 +98,7 @@ public class ComputerService implements InterfaceService<Computer> {
     }
 
     /**
-     * delete - call DAO to delete a specific Computer from database
+     * call DAO to delete a specific Computer from database
      * 
      * @param id
      */

@@ -64,39 +64,30 @@ public class Computer implements Serializable {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public Company getCompany() {
         return company;
     }
-
     public void setCompany(Company company) {
         this.company = company;
     }
-
     public LocalDate getIntroducedDate() {
         return introducedDate;
     }
-
     public void setIntroducedDate(LocalDate introducedDate) {
         this.introducedDate = introducedDate;
     }
-
     public LocalDate getDiscontinuedDate() {
         return discontinuedDate;
     }
-
     public void setDiscontinuedDate(LocalDate discontinuedDate) {
         this.discontinuedDate = discontinuedDate;
     }

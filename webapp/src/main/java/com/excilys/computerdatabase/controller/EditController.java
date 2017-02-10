@@ -32,7 +32,7 @@ import com.excilys.computerdatabase.util.Consts;
 @Controller
 @RequestMapping("/")
 public class EditController {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @Autowired
@@ -43,22 +43,17 @@ public class EditController {
 
     @GetMapping(value = "/editComputer")
     public ModelAndView getEdit(@RequestParam Map<String, String> requestMap) {
-
         logger.info("edit computer get controller");
-        
+
         ModelAndView model = new ModelAndView("editComputer");
 
         List<Company> list = new ArrayList<Company>();
         list = companyService.listEntities(null);
         model.addObject("companyList", list);
 
-        //String test = requestMap.get(Consts.PAGE);
-        //int p = 1;
-        //if (test != null && !test.isEmpty()) {
-        //    p = Integer.parseInt(requestMap.get(Consts.PAGE));
-        //}
         String orderBy = requestMap.get("order");
-        String[] order; Map<String, String> orderMap = new HashMap<String, String>();
+        String[] order;
+        Map<String, String> orderMap = new HashMap<String, String>();
         if (orderBy != null && !orderBy.isEmpty()) {
             order = orderBy.split("[.]");
             orderMap.put(order[0], order[1]);
@@ -76,9 +71,8 @@ public class EditController {
     @PostMapping(value = "/editComputer")
     public ModelAndView postEdit(@Valid @ModelAttribute("computerDto") ComputerDto computerDto,
             BindingResult bindingResult) {
-
         logger.info("edit computer post controller");
-        
+
         ModelAndView model = new ModelAndView("editComputer");
         if (!bindingResult.hasErrors()) {
             // create computer

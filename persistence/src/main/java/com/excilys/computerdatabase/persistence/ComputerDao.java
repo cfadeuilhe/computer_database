@@ -43,13 +43,12 @@ public class ComputerDao implements InterfaceDao<Computer> {
     private final static Logger logger = LoggerFactory.getLogger(ComputerDao.class);
 
     /**
-     * read - get all Computer from database
+     * get all Computer from database
      * 
      * @return List<Computer>
      */
     @Override
     public List<Computer> read(Map<String, String> orderMap) {
-
         JPQLQuery<Computer> query = queryFactory.get().selectFrom(computer).leftJoin(computer.company, company);
 
         query = orderBy(query, orderMap);
@@ -57,7 +56,6 @@ public class ComputerDao implements InterfaceDao<Computer> {
     }
 
     public long count(String search) {
-
         if (search != null && !search.isEmpty()) {
             return queryFactory.get().selectFrom(computer).leftJoin(computer.company, company)
                     .where(computer.name.contains(search).or(company.name.contains(search))).fetch().size();
@@ -76,14 +74,13 @@ public class ComputerDao implements InterfaceDao<Computer> {
     }
 
     /**
-     * readPages - sort by pages and return a specific page
+     * sort by pages and return a specific page
      * 
      * @param Page
      * @return List<Computer>
      */
     @Override
     public List<Computer> readPages(Page p, Map<String, String> orderMap) {
-
         JPQLQuery<Computer> query = queryFactory.get().selectFrom(computer).leftJoin(computer.company, company);
         if (p.getSearch() != null && !p.getSearch().isEmpty()) {
             query = query.where(computer.name.contains(p.getSearch()).or(company.name.contains(p.getSearch())));
@@ -93,39 +90,36 @@ public class ComputerDao implements InterfaceDao<Computer> {
     }
 
     /**
-     * readOne - get a specific Computer from database
+     * get a specific Computer from database
      * 
      * @param id
      * @return Computer
      */
     @Override
     public Computer readOne(long id) {
-
         return sessionFactory.getCurrentSession().get(Computer.class, id);
     }
 
     /**
-     * create - new Computer in database
+     * new Computer in database
      * 
      * @param Computer
      * @return
      */
     @Override
     public int create(Computer computer) {
-
         sessionFactory.getCurrentSession().save(computer);
         return (int) computer.getId();
     }
 
     /**
-     * update - update a certain Computer in database
+     * update a certain Computer in database
      * 
      * @param id
      * @param Computer
      */
     @Override
     public void update(long id, Computer uComputer) {
-
         queryFactory.get().update(computer).where(computer.id.eq(id)).set(computer.name, uComputer.getName())
                 .set(computer.introducedDate, uComputer.getIntroducedDate())
                 .set(computer.discontinuedDate, uComputer.getDiscontinuedDate())
@@ -133,13 +127,12 @@ public class ComputerDao implements InterfaceDao<Computer> {
     }
 
     /**
-     * delete - delete a certain Computer from database
+     * delete a certain Computer from database
      * 
      * @param id
      */
     @Override
     public void delete(long id) {
-
         queryFactory.get().delete(computer).where(computer.id.eq(id)).execute();
     }
 
@@ -150,7 +143,6 @@ public class ComputerDao implements InterfaceDao<Computer> {
      * @throws PersistenceException
      */
     public void deleteByCompany(long id) throws PersistenceException {
-
         try {
             queryFactory.get().delete(computer).where(computer.company.id.eq(id)).execute();
         } catch (DataAccessException e) {
@@ -160,7 +152,6 @@ public class ComputerDao implements InterfaceDao<Computer> {
     }
 
     public JPQLQuery<Computer> orderBy(JPQLQuery<Computer> query, Map<String, String> orderMap) {
-
         if (orderMap != null && !orderMap.isEmpty()) {
             for (Entry<String, String> entrySet : orderMap.entrySet()) {
                 if (entrySet.getKey() != null && !entrySet.getKey().isEmpty()) {

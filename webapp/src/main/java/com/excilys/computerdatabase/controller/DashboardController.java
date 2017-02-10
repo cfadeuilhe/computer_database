@@ -28,15 +28,15 @@ public class DashboardController {
 
     @GetMapping(value = "/dashboard")
     public ModelAndView getDashboard(@RequestParam Map<String, String> requestMap) {
-
         logger.info("dashboard get controller");
-        
+
         ModelAndView model = new ModelAndView("dashboard");
 
         long count = 0;
         String search = requestMap.get(Consts.SEARCH);
         String orderBy = requestMap.get("order");
-        String[] order; Map<String, String> orderMap = new HashMap<String, String>();
+        String[] order;
+        Map<String, String> orderMap = new HashMap<String, String>();
         if (orderBy != null && !orderBy.isEmpty()) {
             order = orderBy.split("[.]");
             orderMap.put(order[0], order[1]);
@@ -48,7 +48,7 @@ public class DashboardController {
         } else {
             p = RequestMapper.requestToPage(requestMap, computerService.listEntities(orderMap));
         }
-        
+
         p.setOrder(orderBy);
         p.setComputerList(computerService.readPages(p, orderMap));
 

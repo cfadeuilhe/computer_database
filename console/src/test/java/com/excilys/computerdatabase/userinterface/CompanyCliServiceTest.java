@@ -34,7 +34,6 @@ public class CompanyCliServiceTest {
     public void testListEntities() {
         List<Company> list = new ArrayList<Company>();
         companyCliService.listEntities(null);
-        
         assertNotNull(list);
     }
 

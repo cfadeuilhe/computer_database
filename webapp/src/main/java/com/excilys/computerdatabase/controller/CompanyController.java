@@ -26,47 +26,44 @@ import com.excilys.computerdatabase.service.CompanyService;
 public class CompanyController {
 
     private final static Logger logger = LoggerFactory.getLogger(DashboardController.class);
-    
+
     @Autowired
     private CompanyService companyService;
-    
-     @GetMapping("/company")
-     public  @ResponseBody ResponseEntity<List<Company>> getCompany(@RequestParam Map<String, String> requestMap) {
-         
-         logger.info("JSON company get controller");
-         
-         String orderBy = requestMap.get("order");
-         String[] order; Map<String, String> orderMap = new HashMap<String, String>();
-         if (orderBy != null && !orderBy.isEmpty()) {
-             order = orderBy.split("[.]");
-             orderMap.put(order[0], order[1]);
-         }
-         List<Company> companyList = companyService.listEntities(orderMap);
-         return new ResponseEntity<List<Company>>(companyList, HttpStatus.OK);
-     }
-     
-     @GetMapping("/company/{id}")
-     public @ResponseBody ResponseEntity<Company> getCompanyId(@PathVariable("id") int compId) {
-         
-         logger.info("JSON companyid get controller");
 
-         Company c = companyService.readOne(compId);
-         if(c != null)
-             return new ResponseEntity<Company>(c, HttpStatus.OK);
-         else
-             return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
-     }
-     
-     @PostMapping("/company/{id}")
-     public @ResponseBody ResponseEntity<Integer> deleteCompany(@PathVariable("id") int compId){
-         
+    @GetMapping("/company")
+    public @ResponseBody ResponseEntity<List<Company>> getCompany(@RequestParam Map<String, String> requestMap) {
+        logger.info("JSON company get controller");
+
+        String orderBy = requestMap.get("order");
+        String[] order;
+        Map<String, String> orderMap = new HashMap<String, String>();
+        if (orderBy != null && !orderBy.isEmpty()) {
+            order = orderBy.split("[.]");
+            orderMap.put(order[0], order[1]);
+        }
+        List<Company> companyList = companyService.listEntities(orderMap);
+        return new ResponseEntity<List<Company>>(companyList, HttpStatus.OK);
+    }
+
+    @GetMapping("/company/{id}")
+    public @ResponseBody ResponseEntity<Company> getCompanyId(@PathVariable("id") int compId) {
+        logger.info("JSON companyid get controller");
+
+        Company c = companyService.readOne(compId);
+        if (c != null)
+            return new ResponseEntity<Company>(c, HttpStatus.OK);
+        else
+            return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/company/{id}")
+    public @ResponseBody ResponseEntity<Integer> deleteCompany(@PathVariable("id") int compId) {
         try {
             companyService.delete(compId);
         } catch (PersistenceException e) {
-            logger.error("Could not delete Company number "+compId+" or one of the associated Computers");
+            logger.error("Could not delete Company number " + compId + " or one of the associated Computers");
             e.printStackTrace();
         }
         return null;
-     }
-
+    }
 }

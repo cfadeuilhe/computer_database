@@ -14,8 +14,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import com.excilys.computerdatabase.dto.ComputerDto;
 
 public class DateAnteriorValidator implements ConstraintValidator<DateAnteriorValidation, ComputerDto> {
+    
     @Autowired
     private MessageSource messageSource;
+    
     @Override
     public void initialize(DateAnteriorValidation arg0) {
 

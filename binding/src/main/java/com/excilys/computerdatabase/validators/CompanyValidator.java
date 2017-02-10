@@ -33,7 +33,6 @@ public class CompanyValidator {
     }
 
     public static Map<String, String> validator(Company c) {
-
         Map<String, String> map = new HashMap<String, String>();
         if (c.getId() != 0) {
             if (!ComputerValidator.idValidator(c.getId())) {

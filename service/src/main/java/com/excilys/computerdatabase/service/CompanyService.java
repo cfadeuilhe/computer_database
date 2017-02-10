@@ -30,6 +30,7 @@ public class CompanyService implements InterfaceService<Company>{
 
     @Autowired
     private CompanyDao companyDao;
+    
     @Autowired
     private ComputerDao computerDao;
 

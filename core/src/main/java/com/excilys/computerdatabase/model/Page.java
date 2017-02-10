@@ -23,51 +23,39 @@ public class Page {
     public int getCurrentPage() {
         return currentPage;
     }
-
     public void setCurrentPage(int pageNumber) {
         this.currentPage = pageNumber;
     }
-
     public int getPageSize() {
         return pageSize;
     }
-
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
-
     public int getPageCount() {
         return pageCount;
     }
-
     public void setPageCount(int last) {
         this.pageCount = last;
     }
-
     public List<Computer> getComputerList() {
         return computerList;
     }
-
     public void setComputerList(List<Computer> list) {
         this.computerList = list;
     }
-
     public String getSearch() {
         return search;
     }
-
     public void setSearch(String search) {
         this.search = search;
     }
-
     public long getOffset() {
         return ((this.currentPage - 1) * this.pageSize);
     }
-
     public String getOrder() {
         return order;
     }
-
     public void setOrder(String order) {
         this.order = order;
     }

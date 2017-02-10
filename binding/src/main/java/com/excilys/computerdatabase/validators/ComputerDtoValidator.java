@@ -48,8 +48,6 @@ public class ComputerDtoValidator {
     }
 
     public static boolean isDateValidator(String date) {
-        // DateFormat format = new SimpleDateFormat(DATE_FORMAT);
-
         DateTimeFormatter format = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
         if (date != null && date.length() > 0) {

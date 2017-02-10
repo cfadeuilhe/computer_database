@@ -32,6 +32,7 @@ public class CompanyDao implements InterfaceDao<Company> {
 
     @Autowired
     SessionFactory sessionFactory;
+    
     @Autowired
     ComputerDao computerDao;
 
@@ -41,42 +42,39 @@ public class CompanyDao implements InterfaceDao<Company> {
             sessionFactory.getCurrentSession());
 
     /**
-     * read - get all Company from database
+     * get all Company from database
      * 
      * @return List<Company>
      */
     @Override
     public List<Company> read(Map<String, String> orderMap) {
-
         return queryFactory.get().selectFrom(company).orderBy(company.name.asc()).fetch();
     }
 
     /**
-     * readPages - sort by pages and return a specific page
+     * sort by pages and return a specific page
      * 
      * @param Page
      * @return List<Company>
      */
     @Override
     public List<Company> readPages(Page p, Map<String, String> orderMap) {
-
         return queryFactory.get().selectFrom(company).limit(p.getPageSize()).offset(p.getOffset()).fetch();
     }
 
     /**
-     * readOne - get a specific Company from database
+     * get a specific Company from database
      * 
      * @param id
      * @return Company
      */
     @Override
     public Company readOne(long id) {
-
         return queryFactory.get().selectFrom(company).where(company.id.eq(id)).fetchOne();
     }
 
     /**
-     * delete - delete a Company
+     * delete a Company
      * 
      * @param cn
      *            - Connection to use
@@ -85,7 +83,6 @@ public class CompanyDao implements InterfaceDao<Company> {
      */
     @Override
     public void delete(long id) throws PersistenceException {
-
         try {
             queryFactory.get().delete(company).where(company.id.eq(id)).execute();
         } catch (DataAccessException e) {

@@ -34,15 +34,12 @@ public class ComputerDto {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -50,31 +47,24 @@ public class ComputerDto {
     public String getIntroducedDate() {
         return introduced;
     }
-
     public void setIntroducedDate(String introducedDate) {
         this.introduced = introducedDate;
     }
-
     public String getDiscontinuedDate() {
         return discontinued;
     }
-
     public void setDiscontinuedDate(String discontinuedDate) {
         this.discontinued = discontinuedDate;
     }
-
     public long getCompanyId() {
         return companyId;
     }
-
     public void setCompanyId(long companyId) {
         this.companyId = companyId;
     }
-
     public String getCompanyName() {
         return companyName;
     }
-
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }

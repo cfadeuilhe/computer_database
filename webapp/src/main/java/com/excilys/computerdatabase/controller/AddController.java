@@ -38,7 +38,6 @@ public class AddController {
     
     @GetMapping(value = "/addComputer")
     public ModelAndView getAdd() {
-
         logger.info("add computer get controller");
         
         ModelAndView model = new ModelAndView("addComputer");
@@ -54,7 +53,6 @@ public class AddController {
     @PostMapping(value = "/addComputer")
     public ModelAndView postAdd(@Valid @ModelAttribute("computerDto") ComputerDto computerDto,
             BindingResult bindingResult) {
-
         logger.info("add computer post controller");
         
         ModelAndView model;// = new

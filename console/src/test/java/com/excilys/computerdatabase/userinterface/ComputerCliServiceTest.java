@@ -33,7 +33,6 @@ public class ComputerCliServiceTest {
     public void testListEntities() {
         List<Computer> list = new ArrayList<Computer>();
         computerCliService.listEntities(null);
-        
         assertNotNull(list);
     }
 
@@ -43,5 +42,4 @@ public class ComputerCliServiceTest {
         computerCliService.delete(1);
         assertNull(computerCliService.getComputerById(1));
     }
-
 }

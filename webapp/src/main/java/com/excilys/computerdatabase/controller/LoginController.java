@@ -18,9 +18,8 @@ public class LoginController {
 
     @GetMapping(value = "/login")
     public ModelAndView getLogin(@RequestParam Map<String, String> requestMap) {
-
         logger.info("login computer get controller");
-        
+
         ModelAndView model = new ModelAndView("login");
 
         String error = requestMap.get("error");

@@ -23,7 +23,6 @@ public class CompanyValidatorTest {
     @Test
     public void testNoName(){
         company.setId(1); company.setName("");
-        
         Map<String, String> validatorMap = CompanyValidator.validator(company);
         assertTrue(validatorMap.containsKey(Consts.NO_NAME));
     }
@@ -31,7 +30,6 @@ public class CompanyValidatorTest {
     @Test
     public void testNullName(){
         company.setId(1); company.setName(null);
-        
         Map<String, String> validatorMap = CompanyValidator.validator(company);
         assertTrue(validatorMap.containsKey(Consts.NO_NAME));
     }
@@ -39,7 +37,6 @@ public class CompanyValidatorTest {
     @Test
     public void testWrongNameLength(){
         company.setId(1); company.setName("ts");
-        
         Map<String, String> validatorMap = CompanyValidator.validator(company);
         assertTrue(validatorMap.containsKey(Consts.NAME_TOO_SHORT));
     }
@@ -47,7 +44,6 @@ public class CompanyValidatorTest {
     @Test
     public void testRightCompany(){
         company.setId(1); company.setName("testCompany");
-        
         Map<String, String> validatorMap = CompanyValidator.validator(company);
         System.out.println(validatorMap);
         assertTrue(validatorMap.isEmpty());

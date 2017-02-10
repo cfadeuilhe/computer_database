@@ -28,15 +28,14 @@ import com.excilys.computerdatabase.service.ComputerService;
 public class ComputerController {
 
     private final static Logger logger = LoggerFactory.getLogger(ComputerController.class);
-    
+
     @Autowired
     private ComputerService computerService;
 
     @GetMapping("/computers")
     public ResponseEntity<List<Computer>> getComputers(@RequestParam Map<String, String> requestMap) {
-        
         logger.info("GET computers cli");
-        
+
         String orderBy = requestMap.get("order");
         String[] order;
         Map<String, String> orderMap = new HashMap<String, String>();
@@ -50,35 +49,35 @@ public class ComputerController {
 
     @PutMapping("/computers/{id}")
     public int updateComputer(@RequestBody Computer computer, @PathVariable("id") int compId) {
-
         logger.info("PUT computer cli");
 
-        //Computer computer = DtoMapper.dtoToComputer(computerDto);
-        //computer.setCompany(new Company(computerDto.getCompanyId(), computerDto.getCompanyName()));
+        // Computer computer = DtoMapper.dtoToComputer(computerDto);
+        // computer.setCompany(new Company(computerDto.getCompanyId(),
+        // computerDto.getCompanyName()));
         computerService.update(compId, computer);
 
         return 0;
     }
-    
+
     @DeleteMapping("/computers/{id}")
     public int deleteComputer(@PathVariable("id") int compId) {
-
         logger.info("DELETE computer cli");
 
-        //Computer computer = DtoMapper.dtoToComputer(computer);
-        //computer.setCompany(new Company(computer.getCompanyId(), computer.getCompanyName()));
+        // Computer computer = DtoMapper.dtoToComputer(computer);
+        // computer.setCompany(new Company(computer.getCompanyId(),
+        // computer.getCompanyName()));
         computerService.delete(compId);
 
         return 0;
     }
-    
+
     @PostMapping("/computers")
     public ResponseEntity<Integer> creatomputer(@RequestBody Computer computer) {
-
         logger.info("POST computer cli");
 
-        //Computer computer = DtoMapper.dtoToComputer(computerDto);
-        //computer.setCompany(new Company(computerDto.getCompanyId(), computerDto.getCompanyName()));
+        // Computer computer = DtoMapper.dtoToComputer(computerDto);
+        // computer.setCompany(new Company(computerDto.getCompanyId(),
+        // computerDto.getCompanyName()));
         computerService.create(computer);
 
         return new ResponseEntity<Integer>(0, HttpStatus.OK);
@@ -86,7 +85,6 @@ public class ComputerController {
 
     @GetMapping("/computers/{id}")
     public ResponseEntity<Computer> getComputersId(@PathVariable("id") int compId) {
-        
         logger.info("GET computer by id cli");
 
         if (compId <= 0) {
@@ -103,7 +101,6 @@ public class ComputerController {
     @GetMapping("/computers/{page}/{size}")
     public ResponseEntity<List<Computer>> getComputersPage(@RequestParam Map<String, String> requestMap,
             @PathVariable("page") int compPage, @PathVariable("size") int pageSize) {
-        
         logger.info("GET computer page cli");
 
         String orderBy = requestMap.get("order");
@@ -123,5 +120,4 @@ public class ComputerController {
         else
             return new ResponseEntity<List<Computer>>(HttpStatus.NOT_FOUND);
     }
-
 }

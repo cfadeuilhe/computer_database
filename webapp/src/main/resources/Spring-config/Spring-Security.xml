@@ -12,7 +12,7 @@
             login-processing-url="/j_spring_security_check"
             username-parameter="username" password-parameter="password" />
         <logout logout-success-url="/login?logout"
-            logout-url="/computer/j_spring_security_logout" />
+            logout-url="/j_spring_security_logout" />
         <!-- enable csrf protection -->
         <csrf />
     </http>

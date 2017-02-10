@@ -29,7 +29,6 @@ public class ComputerCliService {
     private WebTarget webTarget = client.target(TARGET_URL);
 
     public Computer getComputerById(int id) {
-
         WebTarget computerWebTarget = webTarget.path("computer/" + id);
         Computer c = computerWebTarget.request(MediaType.APPLICATION_JSON_TYPE).get().readEntity(Computer.class);
 
@@ -53,7 +52,6 @@ public class ComputerCliService {
 
         logger.info("ComputerCli delete-------"+s.getStatus());
         logger.info("-------"+s.readEntity(Computer.class));
-
     }
 
     public Response createComputer(Computer computer) {
@@ -77,6 +75,5 @@ public class ComputerCliService {
 
         logger.info("ComputerCli update-------"+s.getStatus());
         logger.info("-------"+c);
-
     }
 }
